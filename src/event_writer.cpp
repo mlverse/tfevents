@@ -15,7 +15,7 @@ EventWriter::EventWriter(const std::string& file) :
 }
 
 EventWriter::~EventWriter() {
-  std::cout << "Deleting event" << std::endl;
+
 }
 
 bool EventWriter::write_event(const tensorboard::Event& event) {

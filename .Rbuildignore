@@ -1,3 +1,16 @@
 ^tfevents\.Rproj$
 ^\.Rproj\.user$
 ^\.github$
+^src/generated$
+^src/build$
+^src/protobuf/java$
+^src/protobuf/csharp$
+^src/protobuf/php$
+^src/protobuf/objectivec$
+^src/protobuf/\.git$
+^src/protobuf/\.bazelignore$
+^src/protobuf/\.readthedocs.yml$
+^src/protobuf/\.github$
+^src/protobuf/src/solaris/libstdc\+\+\.la$
+^\.DS_Store$
+^src/\.DS_Store$

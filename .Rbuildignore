@@ -4,6 +4,7 @@
 ^src/generated$
 ^src/build$
 ^src/libs$
+^src/Makevars$
 ^inst/tp/pb/java$
 ^inst/tp/pb/benchmarks$
 ^inst/tp/pb/kokoro$

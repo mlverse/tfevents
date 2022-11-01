@@ -2,22 +2,27 @@ log_event <- function(..., step = NULL) {
   data <- rlang::dots_list(..., .named = TRUE, .homonyms = "error")
   step <- get_global_step()
   map2(data, write_event, step = step)
+  invisible(data)
 }
 
+#' @export
 write_event <- function(data, name, step) {
   UseMethod("write_event")
 }
 
+#' @export
 write_event.default <- function(data, name, step) {
   cli::cli_abort("Cant write event with type {.cls {class(data)}}.")
 }
 
+#' @export
 write_event.list <- function(data, name, step) {
   with_logdir(file.path(get_default_logdir(), name), {
     map2(data, write_event, step = step)
   })
 }
 
+#' @export
 write_event.numeric <- function(data, name, step) {
   write_scalar(
     writer = get_writer(),

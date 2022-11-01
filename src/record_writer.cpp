@@ -67,6 +67,7 @@ bool RecordWriter::write_record (std::string data) {
   this->writer.write(length_crc, sizeof(length_crc));
   this->writer.write(data.c_str(), data.length());
   this->writer.write(data_crc, sizeof(data_crc));
+  this->writer.flush();
 
   return true;
 }

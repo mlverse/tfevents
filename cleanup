@@ -1,4 +1,2 @@
-rm -r src/build
 rm -r src/generated
-rm -r src/libs
 rm src/Makevars

@@ -40,6 +40,7 @@ RecordWriter::RecordWriter (std::string path) {
 }
 
 RecordWriter::~RecordWriter () {
+  this->writer.flush();
   this->writer.close();
 }
 

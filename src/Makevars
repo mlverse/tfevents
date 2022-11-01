@@ -1,5 +1,5 @@
 PKG_CPPFLAGS = -Iprotobuf/src -Igenerated
-PKG_LIBS = build/libprotobuf.a
+PKG_LIBS = libs/libprotobuf.a
 CXX_STD=CXX11
 
 CPP_SOURCES=$(wildcard *.cpp)

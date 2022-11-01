@@ -3,6 +3,7 @@
 ^\.github$
 ^src/generated$
 ^src/build$
+^src/libs$
 ^src/protobuf/java$
 ^src/protobuf/csharp$
 ^src/protobuf/php$

@@ -10,7 +10,7 @@ LDFLAGS=`"${R_HOME}/bin/R" CMD config LDFLAGS`
 
 cd src
 
-if [ ! -d "build" ]; then
+if [ ! -d "libs" ]; then
   mkdir build && cd build
   cmake ../protobuf \
     -DCMAKE_BUILD_TYPE=Release \
@@ -19,6 +19,10 @@ if [ ! -d "build" ]; then
     -Dprotobuf_BUILD_TESTS=OFF
   ${MAKE} -j8
   cd ..
+  mkdir libs
+  cp build/libprotobuf.a libs/
+  cp build/protoc libs/
+  rm -r build
 else
   echo "Protobuf is already built."
 fi
@@ -26,11 +30,11 @@ fi
 if [ ! -d "generated" ]; then
   mkdir generated
 
-  ./build/protoc -I "proto" --cpp_out="generated" "proto/event.proto"
-  ./build/protoc -I "proto" --cpp_out="generated" "proto/summary.proto"
-  ./build/protoc -I "proto" --cpp_out="generated" "proto/tensor.proto"
-  ./build/protoc -I "proto" --cpp_out="generated" "proto/resource_handle.proto"
-  ./build/protoc -I "proto" --cpp_out="generated" "proto/tensor_shape.proto"
-  ./build/protoc -I "proto" --cpp_out="generated" "proto/types.proto"
-  ./build/protoc -I "proto" --cpp_out="generated" "proto/plugins/scalar/plugin_data.proto"
+  ./libs/protoc -I "proto" --cpp_out="generated" "proto/event.proto"
+  ./libs/protoc -I "proto" --cpp_out="generated" "proto/summary.proto"
+  ./libs/protoc -I "proto" --cpp_out="generated" "proto/tensor.proto"
+  ./libs/protoc -I "proto" --cpp_out="generated" "proto/resource_handle.proto"
+  ./libs/protoc -I "proto" --cpp_out="generated" "proto/tensor_shape.proto"
+  ./libs/protoc -I "proto" --cpp_out="generated" "proto/types.proto"
+  ./libs/protoc -I "proto" --cpp_out="generated" "proto/plugins/scalar/plugin_data.proto"
 fi

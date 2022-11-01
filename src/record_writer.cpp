@@ -1,3 +1,4 @@
+#include <cstring>
 #include "record_writer.h"
 #include "crc.h"
 

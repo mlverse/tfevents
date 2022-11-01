@@ -57,10 +57,17 @@ set_global_step <- function(step) {
 
 .writers <- new.env()
 get_writer <- function(logdir = get_default_logdir()) {
-  rlang::env_cache(
+  writer <- rlang::env_get(.writers, nm = logdir, default = NULL)
+  if (!is.null(writer))
+    return(writer)
+
+  writer <- create_event_writer(logdir)
+  rlang::env_poke(
     .writers,
     logdir,
-    event_writer(logdir)
+    writer,
+    create = TRUE
   )
+  writer
 }
 

@@ -1,0 +1,36 @@
+: ${R_HOME=`R RHOME`}
+if test -z "${R_HOME}"; then
+  echo "could not determine R_HOME"
+  exit 1
+fi
+CC=`"${R_HOME}/bin/R" CMD config CC`
+CFLAGS=`"${R_HOME}/bin/R" CMD config CFLAGS`
+CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
+LDFLAGS=`"${R_HOME}/bin/R" CMD config LDFLAGS`
+
+cd src
+
+if [ ! -d "build" ]; then
+  mkdir build && cd build
+  cmake ../protobuf \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_SHARED_LIBS:bool=OFF \
+    -DCMAKE_POSITION_INDEPENDENT_CODE:bool=ON \
+    -Dprotobuf_BUILD_TESTS=OFF
+  ${MAKE} -j8
+  cd ..
+else
+  echo "Protobuf is already built."
+fi
+
+if [ ! -d "generated" ]; then
+  mkdir generated
+
+  ./build/protoc -I "proto" --cpp_out="generated" "proto/event.proto"
+  ./build/protoc -I "proto" --cpp_out="generated" "proto/summary.proto"
+  ./build/protoc -I "proto" --cpp_out="generated" "proto/tensor.proto"
+  ./build/protoc -I "proto" --cpp_out="generated" "proto/resource_handle.proto"
+  ./build/protoc -I "proto" --cpp_out="generated" "proto/tensor_shape.proto"
+  ./build/protoc -I "proto" --cpp_out="generated" "proto/types.proto"
+  ./build/protoc -I "proto" --cpp_out="generated" "proto/plugins/scalar/plugin_data.proto"
+fi

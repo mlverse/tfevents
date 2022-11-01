@@ -14,3 +14,4 @@
 ^src/protobuf/src/solaris/libstdc\+\+\.la$
 ^\.DS_Store$
 ^src/\.DS_Store$
+^LICENSE\.md$

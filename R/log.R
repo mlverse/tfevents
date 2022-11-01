@@ -5,6 +5,14 @@ log_event <- function(..., step = NULL) {
   invisible(data)
 }
 
+#' Write event data into disk
+#'
+#' @param data Event data.
+#' @param name Name/tag of the event data.
+#' @param step Global step number
+#'
+#' @keywords internal
+#'
 #' @export
 write_event <- function(data, name, step) {
   UseMethod("write_event")

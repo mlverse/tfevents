@@ -1,8 +1,0 @@
-PKG_CPPFLAGS = -Iprotobuf/src -Igenerated
-PKG_LIBS = libs/libprotobuf.a
-CXX_STD=CXX11
-
-CPP_SOURCES=$(wildcard *.cpp)
-CC_SOURCES=$(wildcard generated/*.cc generated/plugins/scalar/*.cc)
-
-OBJECTS=$(CPP_SOURCES:.cpp=.o) $(CC_SOURCES:.cc=.o)

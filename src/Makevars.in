@@ -1,4 +1,4 @@
-PKG_CPPFLAGS = -Iprotobuf/src -Igenerated
+PKG_CPPFLAGS = -I../inst/tp/pb/src -Igenerated
 PKG_LIBS = libs/libprotobuf.a
 CXX_STD=CXX11
 

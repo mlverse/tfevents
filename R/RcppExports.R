@@ -9,8 +9,8 @@ flush_event_writer <- function(writer) {
     invisible(.Call(`_tfevents_flush_event_writer`, writer))
 }
 
-write_scalar <- function(writer, name, data, step, description) {
-    .Call(`_tfevents_write_scalar`, writer, name, data, step, description)
+write_scalar <- function(writer, name, data, step, description, display_name) {
+    .Call(`_tfevents_write_scalar`, writer, name, data, step, description, display_name)
 }
 
 unload_protobuf <- function() {

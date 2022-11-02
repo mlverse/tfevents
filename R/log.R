@@ -31,14 +31,21 @@ write_event.list <- function(data, name, step) {
 }
 
 #' @export
-write_event.numeric <- function(data, name, step) {
+write_event.event_scalar <- function(data, name, step) {
   write_scalar(
     writer = get_writer(),
-    data = data,
+    data = data$data,
     name = name,
     step = step,
-    description = ""
+    description = data$description,
+    display_name = data$display_name
   )
+}
+
+#' @export
+write_event.numeric <- function(data, name, step) {
+  event <- event_scalar(data, description = name)
+  write_event(event, name, step)
 }
 
 .tfevents <- new.env()

@@ -37,7 +37,8 @@ tensorboard::SummaryMetadata create_summary_metadata (std::string display_name,
 namespace core {
 
 tensorboard::Event event_scalar (const std::string& name, float data, int64_t step,
-                                  const std::string& description) {
+                                  const std::string& description,
+                                  const std::string& display_name) {
 
   auto shape = new tensorboard::TensorShapeProto();
 
@@ -54,7 +55,7 @@ tensorboard::Event event_scalar (const std::string& name, float data, int64_t st
   v->set_tag(name);
   v->set_simple_value(data);
   v->mutable_metadata()->CopyFrom(
-      scalar::create_summary_metadata("", description)
+      scalar::create_summary_metadata(display_name, description)
   );
 
   return event;
@@ -75,8 +76,9 @@ void flush_event_writer (Rcpp::XPtr<EventWriter> writer) {
 // [[Rcpp::export]]
 bool write_scalar (Rcpp::XPtr<EventWriter> writer, const std::string& name,
                                       float data, int64_t step,
-                                      const std::string& description) {
-  auto event = core::event_scalar(name, data, step, description);
+                                      const std::string& description,
+                                      const std::string& display_name) {
+  auto event = core::event_scalar(name, data, step, description, display_name);
   return writer->write_event(event);
 }
 

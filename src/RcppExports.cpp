@@ -33,8 +33,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // write_scalar
-bool write_scalar(Rcpp::XPtr<EventWriter> writer, const std::string& name, float data, int64_t step, const std::string& description);
-RcppExport SEXP _tfevents_write_scalar(SEXP writerSEXP, SEXP nameSEXP, SEXP dataSEXP, SEXP stepSEXP, SEXP descriptionSEXP) {
+bool write_scalar(Rcpp::XPtr<EventWriter> writer, const std::string& name, float data, int64_t step, const std::string& description, const std::string& display_name);
+RcppExport SEXP _tfevents_write_scalar(SEXP writerSEXP, SEXP nameSEXP, SEXP dataSEXP, SEXP stepSEXP, SEXP descriptionSEXP, SEXP display_nameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -43,7 +43,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< float >::type data(dataSEXP);
     Rcpp::traits::input_parameter< int64_t >::type step(stepSEXP);
     Rcpp::traits::input_parameter< const std::string& >::type description(descriptionSEXP);
-    rcpp_result_gen = Rcpp::wrap(write_scalar(writer, name, data, step, description));
+    Rcpp::traits::input_parameter< const std::string& >::type display_name(display_nameSEXP);
+    rcpp_result_gen = Rcpp::wrap(write_scalar(writer, name, data, step, description, display_name));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -60,7 +61,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_tfevents_event_writer", (DL_FUNC) &_tfevents_event_writer, 1},
     {"_tfevents_flush_event_writer", (DL_FUNC) &_tfevents_flush_event_writer, 1},
-    {"_tfevents_write_scalar", (DL_FUNC) &_tfevents_write_scalar, 5},
+    {"_tfevents_write_scalar", (DL_FUNC) &_tfevents_write_scalar, 6},
     {"_tfevents_unload_protobuf", (DL_FUNC) &_tfevents_unload_protobuf, 0},
     {NULL, NULL, 0}
 };

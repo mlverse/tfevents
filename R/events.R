@@ -6,7 +6,7 @@ event_scalar <- function(data, description = "", display_name = "") {
     data = data,
     description = description,
     display_name = display_name
-  ))
+  ), class = "event_scalar")
 }
 
 

@@ -31,20 +31,22 @@ write_event.list <- function(data, name, step) {
 }
 
 #' @export
-write_event.event_scalar <- function(data, name, step) {
+write_event.summary_scalar <- function(data, name, step) {
+  metadata <- field(data, "metadata")
+
   write_scalar(
     writer = get_writer(),
-    data = data$data,
     name = name,
     step = step,
-    description = data$description,
-    display_name = data$display_name
+    data = field(data, "value"),
+    description = field(metadata, "description"),
+    display_name = field(metadata, "display_name")
   )
 }
 
 #' @export
 write_event.numeric <- function(data, name, step) {
-  event <- event_scalar(data, description = name)
+  event <- summary_scalar(data)
   write_event(event, name, step)
 }
 

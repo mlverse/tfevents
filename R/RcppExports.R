@@ -17,3 +17,11 @@ unload_protobuf <- function() {
     invisible(.Call(`_tfevents_unload_protobuf`))
 }
 
+create_event_file_iterator <- function(path) {
+    .Call(`_tfevents_create_event_file_iterator`, path)
+}
+
+event_file_iterator_next <- function(iter) {
+    .Call(`_tfevents_event_file_iterator_next`, iter)
+}
+

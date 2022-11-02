@@ -57,12 +57,36 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// create_event_file_iterator
+Rcpp::XPtr<EventFileIterator> create_event_file_iterator(const std::string& path);
+RcppExport SEXP _tfevents_create_event_file_iterator(SEXP pathSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_event_file_iterator(path));
+    return rcpp_result_gen;
+END_RCPP
+}
+// event_file_iterator_next
+tfevents::Event event_file_iterator_next(Rcpp::XPtr<EventFileIterator> iter);
+RcppExport SEXP _tfevents_event_file_iterator_next(SEXP iterSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<EventFileIterator> >::type iter(iterSEXP);
+    rcpp_result_gen = Rcpp::wrap(event_file_iterator_next(iter));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_tfevents_event_writer", (DL_FUNC) &_tfevents_event_writer, 1},
     {"_tfevents_flush_event_writer", (DL_FUNC) &_tfevents_flush_event_writer, 1},
     {"_tfevents_write_scalar", (DL_FUNC) &_tfevents_write_scalar, 6},
     {"_tfevents_unload_protobuf", (DL_FUNC) &_tfevents_unload_protobuf, 0},
+    {"_tfevents_create_event_file_iterator", (DL_FUNC) &_tfevents_create_event_file_iterator, 1},
+    {"_tfevents_event_file_iterator_next", (DL_FUNC) &_tfevents_event_file_iterator_next, 1},
     {NULL, NULL, 0}
 };
 

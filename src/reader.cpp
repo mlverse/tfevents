@@ -94,3 +94,17 @@ Rcpp::XPtr<EventFileIterator> create_event_file_iterator (const std::string& pat
 tfevents::Event event_file_iterator_next (Rcpp::XPtr<EventFileIterator> iter) {
   return iter->get_next();
 }
+
+// [[Rcpp::export]]
+std::vector<tfevents::Event> event_file_iterator_collect (const std::string& path) {
+  auto iterator = EventFileIterator(path);
+  std::vector<tfevents::Event> events;
+  while (true) {
+    try {
+      events.push_back(iterator.get_next());
+    } catch (...) {
+      break;
+    }
+  }
+  return events;
+}

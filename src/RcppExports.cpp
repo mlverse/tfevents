@@ -79,6 +79,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// event_file_iterator_collect
+std::vector<tfevents::Event> event_file_iterator_collect(const std::string& path);
+RcppExport SEXP _tfevents_event_file_iterator_collect(SEXP pathSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
+    rcpp_result_gen = Rcpp::wrap(event_file_iterator_collect(path));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_tfevents_event_writer", (DL_FUNC) &_tfevents_event_writer, 1},
@@ -87,6 +98,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_tfevents_unload_protobuf", (DL_FUNC) &_tfevents_unload_protobuf, 0},
     {"_tfevents_create_event_file_iterator", (DL_FUNC) &_tfevents_create_event_file_iterator, 1},
     {"_tfevents_event_file_iterator_next", (DL_FUNC) &_tfevents_event_file_iterator_next, 1},
+    {"_tfevents_event_file_iterator_collect", (DL_FUNC) &_tfevents_event_file_iterator_collect, 1},
     {NULL, NULL, 0}
 };
 

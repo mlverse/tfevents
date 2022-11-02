@@ -25,3 +25,7 @@ event_file_iterator_next <- function(iter) {
     .Call(`_tfevents_event_file_iterator_next`, iter)
 }
 
+event_file_iterator_collect <- function(path) {
+    .Call(`_tfevents_event_file_iterator_collect`, path)
+}
+

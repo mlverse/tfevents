@@ -2,6 +2,8 @@
 
 S3method(format,tfevents_event)
 S3method(format,tfevents_summary)
+S3method(vec_cast,tfevents_event.tfevents_event)
+S3method(vec_ptype2,tfevents_event.tfevents_event)
 S3method(write_event,default)
 S3method(write_event,list)
 S3method(write_event,numeric)

@@ -1,7 +1,7 @@
 test_that("write image", {
   temp <- tempfile()
   orig_img <- png::readPNG(test_path("resources/img.png"))
-  img <- array(img, dim = c(28, 28, 1))
+  img <- array(orig_img, dim = c(28, 28, 1))
 
   with_logdir(temp, {
     log_event(hello = summary_image(img))
@@ -19,7 +19,7 @@ test_that("write image", {
 test_that("can write nested images", {
   temp <- tempfile()
   orig_img <- png::readPNG(test_path("resources/img.png"))
-  img <- array(img, dim = c(28, 28, 1))
+  img <- array(orig_img, dim = c(28, 28, 1))
 
   with_logdir(temp, {
     log_event(

@@ -60,17 +60,17 @@ summary_scalar <- function(value, ...) {
 
 new_summary_scalar <- function(value = numeric(), ...) {
   metadata <- summary_metadata(plugin_name = "scalars", ...)
-  new_summary(metadata = metadata, value = value)
+  new_summary(metadata = metadata, value = value, class = "summary_scalar")
 }
 
 tfevents_summary <- function(metadata, ..., value = NA) {
   new_summary(metadata = metadata, value = value)
 }
 
-new_summary <- function(metadata = new_summary_metadata(), ..., value = numeric()) {
+new_summary <- function(metadata = new_summary_metadata(), ..., value = numeric(), class = NULL) {
   vctrs::new_rcrd(
     fields = list(metadata = metadata, value = value),
-    class = c("tfevents_summary")
+    class = c(class, "tfevents_summary")
   )
 }
 

@@ -67,14 +67,19 @@ with_logdir <- withr::with_(
   }
 )
 
+.steps <- new.env()
 get_global_step <- function() {
-  if (is.null(.tfevents$step))
+  # a separate global step count is tracked for each root logdir.
+  # the global step is queried once when calling `log_event`.
+  logdir <- get_default_logdir()
+  if (!rlang::env_has(.steps, logdir))
     set_global_step(-1)
-  .tfevents$step <- .tfevents$step + 1L
-  rlang::env_get(.tfevents, "step")
+  cur_step <- rlang::env_get(.steps, logdir) + 1L
+  set_global_step(cur_step)
+  cur_step
 }
 set_global_step <- function(step) {
-  rlang::env_bind(.tfevents, step = as.integer(step))
+  rlang::env_poke(.steps, get_default_logdir(), as.integer(step), create = TRUE)
 }
 
 .writers <- new.env()

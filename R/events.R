@@ -58,6 +58,7 @@ format.tfevents_event <- function(x, ...) {
 #' @param metadata A `metadata` object, as created with [summary_metadata()]. In
 #'   most cases you don't need to change the default.
 #'
+#'
 #' @returns A `scalar_event` object.
 #'
 #' @examples

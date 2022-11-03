@@ -67,10 +67,11 @@ test_that("can log with a specified step", {
     log_event(hello = 1)
     log_event(hello = 1, step = 100)
     log_event(hello = 1)
+    log_event(bye = 1, step = get_global_step(increment = FALSE))
   })
 
   scalars <- collect_scalars(temp)
   expect_true(100 %in% scalars$step)
   expect_true(3 %in% scalars$step)
-
+  expect_equal(scalars$step[scalars$name == "bye"], 3)
 })

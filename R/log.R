@@ -123,6 +123,7 @@ with_logdir <- with_logdir_impl()
 #' Global step counters
 #'
 #' @param step New value for `step`.
+#' @param increment Wether to increment the `step` when getting it.
 #'
 #' @details `tfevents` tracks and automatically increased the step counter whenever
 #' [log_event()] is called. Note that, it maintains a separate step counter for
@@ -147,7 +148,7 @@ get_global_step <- function(increment = TRUE) {
   logdir <- get_default_logdir()
   if (!rlang::env_has(.steps, logdir))
     set_global_step(-1)
-  cur_step <- rlang::env_get(.steps, logdir) + 1L
+  cur_step <- rlang::env_get(.steps, logdir) + as.integer(increment)
   set_global_step(cur_step)
   cur_step
 }

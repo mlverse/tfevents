@@ -10,6 +10,8 @@ get_global_step(increment = TRUE)
 set_global_step(step)
 }
 \arguments{
+\item{increment}{Wether to increment the \code{step} when getting it.}
+
 \item{step}{New value for \code{step}.}
 }
 \value{

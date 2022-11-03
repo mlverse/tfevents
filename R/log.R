@@ -21,9 +21,8 @@
 #'   )
 #' })
 #' @export
-log_event <- function(..., step = NULL) {
+log_event <- function(..., step = get_global_step(increment = TRUE)) {
   data <- rlang::dots_list(..., .named = TRUE, .homonyms = "error")
-  step <- get_global_step()
   map2(data, write_event, step = step)
   invisible(data)
 }
@@ -142,7 +141,7 @@ with_logdir <- with_logdir_impl()
 #' })
 #' print(get_global_step())
 #' @export
-get_global_step <- function() {
+get_global_step <- function(increment = TRUE) {
   # a separate global step count is tracked for each root logdir.
   # the global step is queried once when calling `log_event`.
   logdir <- get_default_logdir()

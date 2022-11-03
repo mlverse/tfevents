@@ -57,3 +57,20 @@ test_that("can log manually created scalars directly", {
   scalars <- collect_scalars(temp)
   expect_equal(scalars[scalars$name == "loss2",]$value, 1:10 + 2)
 })
+
+test_that("can log with a specified step", {
+
+  temp <- tempfile()
+  with_logdir(temp, {
+    log_event(hello = 1)
+    log_event(hello = 1)
+    log_event(hello = 1)
+    log_event(hello = 1, step = 100)
+    log_event(hello = 1)
+  })
+
+  scalars <- collect_scalars(temp)
+  expect_true(100 %in% scalars$step)
+  expect_true(3 %in% scalars$step)
+
+})

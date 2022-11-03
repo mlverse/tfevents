@@ -4,7 +4,7 @@
 \alias{log_event}
 \title{Log event}
 \usage{
-log_event(..., step = NULL)
+log_event(..., step = get_global_step(increment = TRUE))
 }
 \arguments{
 \item{...}{Named values that you want to log. They can be possibly nested,

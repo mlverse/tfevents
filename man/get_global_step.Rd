@@ -5,7 +5,7 @@
 \alias{set_global_step}
 \title{Global step counters}
 \usage{
-get_global_step()
+get_global_step(increment = TRUE)
 
 set_global_step(step)
 }

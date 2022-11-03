@@ -29,6 +29,69 @@ new_event <- function(type = character(),
   )
 }
 
+tfevent <- function(run, wall_time, step, ..., summary = NA, file_version = NA) {
+  new_tfevent(
+    run = vec_cast(run, character()),
+    wall_time = vec_cast(wall_time, integer()),
+    step = vec_cast(step, integer()),
+    summary = vec_cast(summary, new_summary()),
+    file_version = vec_cast(file_version, character())
+  )
+}
+
+new_tfevent <- function(run = character(),
+                        wall_time = integer(),
+                        step = integer(),
+                        ...,
+                        summary = new_summary(),
+                        file_version = character()) {
+  new_rcrd(list(
+    wall_time = wall_time,
+    step = step,
+    summary = summary,
+    file_version = file_version
+  ), class = "tfevent")
+}
+
+
+#' @export
+format.tfevent <- function(x, ...) {
+  paste0("<", field(x, "step"),"/", format(field(x, "summary")), ">")
+}
+
+#' @export
+as_tfevent <- function(x, step, wall_time, ...) {
+  UseMethod("as_tfevent")
+}
+
+#' @export
+as_tfevent.list <- function(x, step, wall_time, ..., name = ".") {
+  ev <- map2(
+    x,
+    function(obj, nm) {
+      as_tfevent(obj, step = step, wall_time = wall_time, name = c(name, nm))
+    }
+  )
+  vec_c(!!!rlang::squash_if(unname(ev), vec_is_list))
+}
+
+#' @export
+as_tfevent.numeric <- function(x, step, wall_time, ..., name) {
+  x <- summary_scalar(x)
+  as_tfevent(x, step = step, wall_time = wall_time, name = name)
+}
+
+#' @export
+as_tfevent.tfevents_summary <- function(x, step, wall_time, ..., name) {
+  field(x, "tag") <- tail(name, 1)
+  tfevent(
+    run = paste0(name[-length(name)], collapse = "/"),
+    wall_time = wall_time,
+    step = step,
+    summary = x
+  )
+}
+
 #' @export
 vec_ptype2.tfevents_event.tfevents_event <- function(x, y, ...) {
   x
@@ -69,7 +132,7 @@ format.tfevents_event <- function(x, ...) {
 #' @export
 summary_scalar <- function(value, ..., metadata = NULL) {
   ellipsis::check_dots_empty()
-  new_summary_scalar(value, metadata = metadata)
+  new_summary_scalar(value, metadata = metadata, tag = NA)
 }
 
 new_summary_scalar <- function(value = numeric(), ..., metadata = NULL) {
@@ -79,16 +142,17 @@ new_summary_scalar <- function(value = numeric(), ..., metadata = NULL) {
   tfevents_summary(metadata = metadata, value = value, class = "summary_scalar")
 }
 
-tfevents_summary <- function(metadata, ..., value = NA, image = NA, class = NULL) {
+tfevents_summary <- function(metadata, tag = NA, ..., value = NA, image = NA, class = NULL) {
   value <- vec_cast(value, numeric())
   image <- vec_cast(image, new_image_impl())
-  new_summary(metadata = metadata, value = value, image = image, class = class)
+  new_summary(metadata = metadata, tag = tag, value = value, image = image, class = class)
 }
 
-new_summary <- function(metadata = new_summary_metadata(), ..., value = numeric(),
-                        image = new_image_impl(), class = NULL) {
+new_summary <- function(metadata = new_summary_metadata(), tag = character(), ...,
+                        value = numeric(), image = new_image_impl(),
+                        class = NULL) {
   vctrs::new_rcrd(
-    fields = list(metadata = metadata, value = value, image = image),
+    fields = list(metadata = metadata, tag = tag, value = value, image = image),
     class = c(class, "tfevents_summary")
   )
 }
@@ -102,6 +166,32 @@ vec_ptype2.tfevents_summary.tfevents_summary <- function(x, y, ...) {
 vec_cast.tfevents_summary.tfevents_summary <- function(x, to, ...) {
   x
 }
+
+#' @export
+vec_ptype2.tfevent.tfevent <- function(x, y, ...) {
+  x
+}
+
+#' @export
+vec_cast.tfevent.tfevent <- function(x, to, ...) {
+  x
+}
+
+#' @export
+vec_ptype2.summary_scalar.tfevents_summary <- function(x, y, ...) {
+  y
+}
+
+#' @export
+vec_cast.tfevents_summary.summary_scalar <- function(x, to, ...) {
+  x
+}
+
+#' @export
+vec_ptype2.summary_image.tfevents_summary <- vec_ptype2.summary_scalar.tfevents_summary
+
+#' @export
+vec_cast.tfevents_summary.summary_image <- vec_cast.tfevents_summary.summary_scalar
 
 #' Summary metadata
 #'

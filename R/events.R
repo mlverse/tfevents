@@ -76,18 +76,31 @@ new_summary_scalar <- function(value = numeric(), ..., metadata = NULL) {
   if (is.null(metadata)) {
     metadata <- summary_metadata(plugin_name = "scalars")
   }
-  new_summary(metadata = metadata, value = value, class = "summary_scalar")
+  tfevents_summary(metadata = metadata, value = value, class = "summary_scalar")
 }
 
-tfevents_summary <- function(metadata, ..., value = NA) {
-  new_summary(metadata = metadata, value = value)
+tfevents_summary <- function(metadata, ..., value = NA, image = NA, class = NULL) {
+  value <- vec_cast(value, numeric())
+  image <- vec_cast(image, new_image_impl())
+  new_summary(metadata = metadata, value = value, image = image, class = class)
 }
 
-new_summary <- function(metadata = new_summary_metadata(), ..., value = numeric(), class = NULL) {
+new_summary <- function(metadata = new_summary_metadata(), ..., value = numeric(),
+                        image = new_image_impl(), class = NULL) {
   vctrs::new_rcrd(
-    fields = list(metadata = metadata, value = value),
+    fields = list(metadata = metadata, value = value, image = image),
     class = c(class, "tfevents_summary")
   )
+}
+
+#' @export
+vec_ptype2.tfevents_summary.tfevents_summary <- function(x, y, ...) {
+  x
+}
+
+#' @export
+vec_cast.tfevents_summary.tfevents_summary <- function(x, to, ...) {
+  x
 }
 
 #' Summary metadata

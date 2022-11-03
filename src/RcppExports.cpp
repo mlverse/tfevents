@@ -48,6 +48,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// write_image
+bool write_image(Rcpp::XPtr<EventWriter> writer, const std::string& name, int64_t step, const Rcpp::RawVector& buffer, const int& width, const int& height, const int& depth, const std::string& description, const std::string& display_name);
+RcppExport SEXP _tfevents_write_image(SEXP writerSEXP, SEXP nameSEXP, SEXP stepSEXP, SEXP bufferSEXP, SEXP widthSEXP, SEXP heightSEXP, SEXP depthSEXP, SEXP descriptionSEXP, SEXP display_nameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<EventWriter> >::type writer(writerSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type name(nameSEXP);
+    Rcpp::traits::input_parameter< int64_t >::type step(stepSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::RawVector& >::type buffer(bufferSEXP);
+    Rcpp::traits::input_parameter< const int& >::type width(widthSEXP);
+    Rcpp::traits::input_parameter< const int& >::type height(heightSEXP);
+    Rcpp::traits::input_parameter< const int& >::type depth(depthSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type description(descriptionSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type display_name(display_nameSEXP);
+    rcpp_result_gen = Rcpp::wrap(write_image(writer, name, step, buffer, width, height, depth, description, display_name));
+    return rcpp_result_gen;
+END_RCPP
+}
 // unload_protobuf
 void unload_protobuf();
 RcppExport SEXP _tfevents_unload_protobuf() {
@@ -95,6 +114,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_tfevents_event_writer", (DL_FUNC) &_tfevents_event_writer, 1},
     {"_tfevents_flush_event_writer", (DL_FUNC) &_tfevents_flush_event_writer, 1},
     {"_tfevents_write_scalar", (DL_FUNC) &_tfevents_write_scalar, 6},
+    {"_tfevents_write_image", (DL_FUNC) &_tfevents_write_image, 9},
     {"_tfevents_unload_protobuf", (DL_FUNC) &_tfevents_unload_protobuf, 0},
     {"_tfevents_create_event_file_iterator", (DL_FUNC) &_tfevents_create_event_file_iterator, 1},
     {"_tfevents_event_file_iterator_next", (DL_FUNC) &_tfevents_event_file_iterator_next, 1},

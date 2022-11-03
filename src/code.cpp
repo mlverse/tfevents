@@ -61,6 +61,32 @@ tensorboard::Event event_scalar (const std::string& name, float data, int64_t st
   return event;
 }
 
+tensorboard::Event event_image (const std::string& name, int64_t step,
+                                const std::string& buffer,
+                                const int& width, const int& height,
+                                const int& depth,
+                                const std::string& description,
+                                const std::string& display_name) {
+  tensorboard::Event event;
+  event.set_step(step);
+  event.set_wall_time(get_wall_time());
+
+  auto v = event.mutable_summary()->add_value();
+  v->set_tag(name + "/image");
+
+  auto image = v->mutable_image();
+  image->set_height(height);
+  image->set_width(width);
+  image->set_colorspace(depth);
+  image->set_encoded_image_string(buffer);
+
+  v->mutable_metadata()->CopyFrom(
+      scalar::create_summary_metadata(display_name, description)
+  );
+
+  return event;
+}
+
 }
 
 // [[Rcpp::export]]
@@ -79,6 +105,18 @@ bool write_scalar (Rcpp::XPtr<EventWriter> writer, const std::string& name,
                                       const std::string& description,
                                       const std::string& display_name) {
   auto event = core::event_scalar(name, data, step, description, display_name);
+  return writer->write_event(event);
+}
+
+// [[Rcpp::export]]
+bool write_image (Rcpp::XPtr<EventWriter> writer,
+                  const std::string& name, int64_t step,
+                  const Rcpp::RawVector& buffer,
+                  const int& width, const int& height,
+                  const int& depth,
+                  const std::string& description,
+                  const std::string& display_name) {
+  auto event = core::event_image(name, step, std::string(buffer.begin(), buffer.end()), width, height, depth, description, display_name);
   return writer->write_event(event);
 }
 

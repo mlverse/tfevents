@@ -13,6 +13,10 @@ write_scalar <- function(writer, name, data, step, description, display_name) {
     .Call(`_tfevents_write_scalar`, writer, name, data, step, description, display_name)
 }
 
+write_image <- function(writer, name, step, buffer, width, height, depth, description, display_name) {
+    .Call(`_tfevents_write_image`, writer, name, step, buffer, width, height, depth, description, display_name)
+}
+
 unload_protobuf <- function() {
     invisible(.Call(`_tfevents_unload_protobuf`))
 }

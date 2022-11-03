@@ -35,6 +35,10 @@ Event::Event (const tensorboard::Event& e) {
   event.CopyFrom(e);
 }
 
+ImageImpl::ImageImpl (const tensorboard::Summary::Image& im) {
+  img.CopyFrom(im);
+}
+
 Rcpp::Environment pkg = Rcpp::Environment::namespace_env("tfevents");
 auto event_fn = Rcpp::Function(pkg["event"]);
 auto r_summary_metadata = Rcpp::Function(pkg["summary_metadata"]);
@@ -66,9 +70,22 @@ Event::operator SEXP () const {
       Rcpp::Named("description", summary_metadata.summary_description())
     );
 
+    std::string r_arg_name;
+    SEXP r_value;
+    if (value.has_simple_value()) {
+      r_arg_name = "value";
+      r_value = Rcpp::wrap(value.simple_value());
+    } else if (value.has_image()) {
+      r_arg_name = "image";
+      r_value = Rcpp::wrap(ImageImpl(value.image()));
+    } else {
+      Rcpp::stop("Can't handle this argument type");
+    }
+
     auto r_summary = r_tfevents_summary(
       r_metadata,
-      Rcpp::Named("value", value.simple_value())
+      r_value,
+      Rcpp::Named(r_arg_name, r_value)
     );
 
     return event_fn(
@@ -81,6 +98,17 @@ Event::operator SEXP () const {
   }
 
   Rcpp::stop("Can't handle this type of event");
+}
+
+auto r_new_image_impl = Rcpp::Function(pkg["new_image_impl"]);
+ImageImpl::operator SEXP () const {
+  auto img_string = img.encoded_image_string();
+  return r_new_image_impl(
+    Rcpp::Named("buffer", Rcpp::RawVector(img_string.begin(), img_string.end())),
+    Rcpp::Named("width", img.width()),
+    Rcpp::Named("height", img.height()),
+    Rcpp::Named("colorspace", img.colorspace())
+  );
 }
 
 }

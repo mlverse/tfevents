@@ -7,7 +7,7 @@ write_event.summary_image <- function(data, name, step) {
     writer = get_writer(),
     name = name,
     step = step,
-    buffer = field(image, "buffer"),
+    buffer = as.raw(field(image, "buffer")[[1]]),
     width = field(image, "width"),
     height = field(image, "height"),
     depth = field(image, "colorspace"),
@@ -44,8 +44,8 @@ summary_image.array <- function(img, ..., metadata = NULL) {
   height <- dim(img)[1]
   width <- dim(img)[2]
   colorspace <- dim(img)[3]
-  summary_image.raw(
-    img,
+  summary_image(
+    img_buf,
     height = height, width = width, colorspace = colorspace,
     metadata = metadata
   )
@@ -57,8 +57,8 @@ summary_image.array <- function(img, ..., metadata = NULL) {
 #' @export
 summary_image.raw <- function(img, ..., width, height, colorspace, metadata = NULL) {
   image <- new_image_impl(
-    img = img,
-    with = width,
+    buffer = img,
+    width = width,
     height = height,
     colorspace = colorspace
   )
@@ -69,10 +69,13 @@ new_summary_image <- function(img = new_image_impl(), ..., metadata = NULL) {
   if (is.null(metadata)) {
     metadata <- summary_metadata(plugin_name = "images")
   }
-  tfevents_summary(metadata = metadata, image = image, class = "summary_image")
+  tfevents_summary(metadata = metadata, image = img, class = "summary_image")
 }
 
-new_image_impl <- function(buffer = raw(), width = integer(), height = integer(), colorspace = integer()) {
+
+#' @importFrom blob blob
+new_image_impl <- function(buffer = blob(), width = integer(), height = integer(), colorspace = integer()) {
+  buffer <- vec_cast(buffer, blob())
   vctrs::new_rcrd(
     fields = list(
       buffer = buffer,

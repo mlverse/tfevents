@@ -19,7 +19,9 @@ Imports:
     cli,
     rlang,
     vctrs,
-    ellipsis
+    ellipsis,
+    blob,
+    png
 Suggests: 
     testthat (>= 3.0.0),
     tibble

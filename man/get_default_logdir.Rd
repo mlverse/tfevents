@@ -20,6 +20,10 @@ with_logdir(new, code)
 \item{code}{Expressions that will be evaluated in a context with the \code{new}
 \code{logdir} as the default \code{logdir}.}
 }
+\value{
+The \code{logdir} for \code{get_default_logdir()} otherwise invisibly returns
+\code{NULL}
+}
 \description{
 \code{\link[=log_event]{log_event()}} has a notion of default logdir, so you don't need to specify it
 at every call. These functions allow you to query and the current logdir.

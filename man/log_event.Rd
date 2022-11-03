@@ -13,6 +13,9 @@ in this case, the enclosing names are considered 'run' names by TensorBoard.}
 \item{step}{The step associated the logs. If \code{NULL}, a managed step counter
 will be used, and the global step is increased in every call to \code{\link[=log_event]{log_event()}}.}
 }
+\value{
+Invisibly returns the logged data.
+}
 \description{
 Log event
 }

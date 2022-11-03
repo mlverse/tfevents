@@ -12,6 +12,10 @@ set_global_step(step)
 \arguments{
 \item{step}{New value for \code{step}.}
 }
+\value{
+The global step value for the default logdir, when \code{get_global_step},
+otherwise returns \code{NULL} invisibly.
+}
 \description{
 Global step counters
 }

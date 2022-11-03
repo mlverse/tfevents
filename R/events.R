@@ -53,13 +53,28 @@ format.tfevents_event <- function(x, ...) {
 
 #' Scalar event
 #'
+#' @param value A numeric scalar value to be logged.
+#' @param ... Currently unused. To allow future expansion.
+#' @param metadata A `metadata` object, as created with [summary_metadata()]. In
+#'   most cases you don't need to change the default.
+#'
+#' @returns A `scalar_event` object.
+#'
+#' @examples
+#' temp <- tempfile()
+#' with_logdir(ttemp, {
+#'   log_event(loss = summary_scalar(1))
+#' })
 #' @export
-summary_scalar <- function(value, ...) {
-  new_summary_scalar(value, ...)
+summary_scalar <- function(value, ..., metadata = NULL) {
+  ellipsis::check_dots_empty()
+  new_summary_scalar(value, metadata = metadata)
 }
 
-new_summary_scalar <- function(value = numeric(), ...) {
-  metadata <- summary_metadata(plugin_name = "scalars", ...)
+new_summary_scalar <- function(value = numeric(), ..., metadata = NULL) {
+  if (is.null(metadata)) {
+    metadata <- summary_metadata(plugin_name = "scalars")
+  }
   new_summary(metadata = metadata, value = value, class = "summary_scalar")
 }
 
@@ -74,6 +89,20 @@ new_summary <- function(metadata = new_summary_metadata(), ..., value = numeric(
   )
 }
 
+#' Summary metadata
+#'
+#' Creates a summary metadata that can be passed to multiple `summary_` functions.
+#'
+#' @param plugin_name The name of the TensorBoard plugin that might use the summary.
+#' @param display_name Display name for the summary.
+#' @param description A description of the summary.
+#'
+#' @returns A `summary_metadata` object.
+#'
+#' @examples
+#' summary <- summary_scalar(1, metadata = summary_metadata("scalars"))
+#'
+#' @export
 summary_metadata <- function(
     plugin_name,
     display_name = NA_character_,

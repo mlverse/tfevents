@@ -4,8 +4,25 @@
 \alias{summary_scalar}
 \title{Scalar event}
 \usage{
-summary_scalar(value, ...)
+summary_scalar(value, ..., metadata = NULL)
+}
+\arguments{
+\item{value}{A numeric scalar value to be logged.}
+
+\item{...}{Currently unused. To allow future expansion.}
+
+\item{metadata}{A \code{metadata} object, as created with \code{\link[=summary_metadata]{summary_metadata()}}. In
+most cases you don't need to change the default.}
+}
+\value{
+A \code{scalar_event} object.
 }
 \description{
 Scalar event
+}
+\examples{
+temp <- tempfile()
+with_logdir(ttemp, {
+  log_event(loss = summary_scalar(1))
+})
 }

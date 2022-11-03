@@ -46,7 +46,7 @@ test_that("can log manually created scalars directly", {
       log_event(
         train = list(loss = i, acc = i^2),
         valid = list(loss = i+1, acc = (i+1)^2),
-        test = list(loss2 = summary_scalar(i+2, description = "A new description"))
+        test = list(loss2 = summary_scalar(i+2))
       )
     }
   })

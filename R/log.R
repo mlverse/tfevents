@@ -10,6 +10,8 @@
 #'  [set_default_logdir()]. You can also use the [with_logdir()] context switcher
 #'  to temporarily modify the logdir.
 #'
+#' @return Invisibly returns the logged data.
+#'
 #' @examples
 #' temp <- tempfile()
 #' with_logdir(temp, {
@@ -83,6 +85,9 @@ write_event.numeric <- function(data, name, step) {
 #' @param code Expressions that will be evaluated in a context with the `new`
 #'   `logdir` as the default `logdir`.
 #'
+#' @returns The `logdir` for `get_default_logdir()` otherwise invisibly returns
+#'   `NULL`
+#'
 #' @examples
 #' temp <- tempfile()
 #' get_default_logdir()
@@ -117,6 +122,9 @@ with_logdir <- withr::with_(
 #' [log_event()] is called. Note that, it maintains a separate step counter for
 #' each root `logdir`, thus if you change the `logdir` using [set_default_logdir()]
 #' or [with_logdir()], a different step counter will be used.
+#'
+#' @returns The global step value for the default logdir, when `get_global_step`,
+#'  otherwise returns `NULL` invisibly.
 #'
 #' @examples
 #' temp <- tempfile()

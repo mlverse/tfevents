@@ -75,3 +75,19 @@ test_that("can log with a specified step", {
   expect_true(3 %in% scalars$step)
   expect_equal(scalars$step[scalars$name == "bye"], 3)
 })
+
+test_that("local_logdir", {
+  temp1 <- tempfile()
+  temp2 <- tempfile()
+  f <- function() {
+    local_logdir(temp2)
+    get_default_logdir()
+  }
+
+  with_logdir(temp1, {
+    expect_equal(temp1, get_default_logdir())
+    expect_equal(temp2, f())
+    expect_equal(temp1, get_default_logdir())
+  })
+
+})

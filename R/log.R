@@ -82,6 +82,7 @@ write_event.numeric <- function(data, name, step) {
 #' @param logdir The `logdir` that you want to set as default.
 #' @param code Expressions that will be evaluated in a context with the `new`
 #'   `logdir` as the default `logdir`.
+#' @param .env Environment that controls scope of changes. For expert use only.
 #'
 #' @returns The `logdir` for `get_default_logdir()` otherwise invisibly returns
 #'   `NULL`
@@ -119,6 +120,14 @@ with_logdir_impl <- function() {
 #' @describeIn get_default_logdir Temporarily modify the default `logdir`.
 #' @export
 with_logdir <- with_logdir_impl()
+
+#' @describeIn get_default_logdir Temporarily modify thedefault `logdir`.
+#' @export
+local_logdir <- function(logdir, .env = parent.frame()) {
+  old <- get_default_logdir()
+  set_default_logdir(logdir)
+  withr::defer(set_default_logdir(old), envir = .env)
+}
 
 #' Global step counters
 #'

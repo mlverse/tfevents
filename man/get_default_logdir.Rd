@@ -4,6 +4,7 @@
 \alias{get_default_logdir}
 \alias{set_default_logdir}
 \alias{with_logdir}
+\alias{local_logdir}
 \title{Query and modify the logdir}
 \usage{
 get_default_logdir()
@@ -11,12 +12,16 @@ get_default_logdir()
 set_default_logdir(logdir = "logs")
 
 with_logdir(logdir, code)
+
+local_logdir(logdir, .env = parent.frame())
 }
 \arguments{
 \item{logdir}{The \code{logdir} that you want to set as default.}
 
 \item{code}{Expressions that will be evaluated in a context with the \code{new}
 \code{logdir} as the default \code{logdir}.}
+
+\item{.env}{Environment that controls scope of changes. For expert use only.}
 }
 \value{
 The \code{logdir} for \code{get_default_logdir()} otherwise invisibly returns
@@ -31,6 +36,8 @@ at every call. These functions allow you to query and the current logdir.
 \item \code{set_default_logdir()}: Modifies the default \code{logdir}.
 
 \item \code{with_logdir()}: Temporarily modify the default \code{logdir}.
+
+\item \code{local_logdir()}: Temporarily modify thedefault \code{logdir}.
 
 }}
 \examples{

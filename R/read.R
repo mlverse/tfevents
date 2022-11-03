@@ -1,4 +1,5 @@
 collect_events <- function(logdir = get_default_logdir()) {
+  rlang::check_installed("tibble")
   files <- fs::dir_ls(logdir, type = "file", regexp = ".*tfevents.*",
                       recurse = TRUE)
   events <- lapply(files, event_file_iterator_collect)

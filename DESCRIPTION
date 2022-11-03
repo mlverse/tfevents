@@ -18,7 +18,8 @@ Imports:
     fs,
     cli,
     rlang,
-    vctrs
+    vctrs,
+    ellipsis
 Suggests: 
     testthat (>= 3.0.0),
     tibble

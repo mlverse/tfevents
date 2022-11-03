@@ -81,7 +81,6 @@ write_event.numeric <- function(data, name, step) {
 #' at every call. These functions allow you to query and the current logdir.
 #'
 #' @param logdir The `logdir` that you want to set as default.
-#' @param new The `logdir` that you want to set as default, used in [with_logdir()].
 #' @param code Expressions that will be evaluated in a context with the `new`
 #'   `logdir` as the default `logdir`.
 #'
@@ -105,14 +104,22 @@ get_default_logdir <- function() {
 set_default_logdir <- function(logdir = "logs") {
   rlang::env_bind(.tfevents, logdir = path.expand(logdir))
 }
+
+with_logdir_impl <- function() {
+  with_logdir_ <- withr::with_(
+    set = set_default_logdir,
+    get = function(logdir) {
+      get_default_logdir()
+    }
+  )
+  function(logdir, code) {
+    with_logdir_(logdir, code)
+  }
+}
+
 #' @describeIn get_default_logdir Temporarily modify the default `logdir`.
 #' @export
-with_logdir <- withr::with_(
-  set = set_default_logdir,
-  get = function(logdir) {
-    get_default_logdir()
-  }
-)
+with_logdir <- with_logdir_impl()
 
 #' Global step counters
 #'

@@ -10,12 +10,10 @@ get_default_logdir()
 
 set_default_logdir(logdir = "logs")
 
-with_logdir(new, code)
+with_logdir(logdir, code)
 }
 \arguments{
 \item{logdir}{The \code{logdir} that you want to set as default.}
-
-\item{new}{The \code{logdir} that you want to set as default, used in \code{\link[=with_logdir]{with_logdir()}}.}
 
 \item{code}{Expressions that will be evaluated in a context with the \code{new}
 \code{logdir} as the default \code{logdir}.}

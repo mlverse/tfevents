@@ -34,7 +34,7 @@ or \code{\link[=with_logdir]{with_logdir()}}, a different step counter will be u
 temp <- tempfile()
 with_logdir(temp, {
   print(get_global_step())
-  set_default_step(100)
+  set_global_step(100)
   print(get_global_step())
 })
 print(get_global_step())

@@ -130,7 +130,7 @@ with_logdir <- withr::with_(
 #' temp <- tempfile()
 #' with_logdir(temp, {
 #'   print(get_global_step())
-#'   set_default_step(100)
+#'   set_global_step(100)
 #'   print(get_global_step())
 #' })
 #' print(get_global_step())

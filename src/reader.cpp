@@ -84,7 +84,7 @@ Event::operator SEXP () const {
 
     auto r_summary = r_tfevents_summary(
       r_metadata,
-      r_value,
+      value.tag(),
       Rcpp::Named(r_arg_name, r_value)
     );
 

@@ -145,6 +145,7 @@ new_summary_scalar <- function(value = numeric(), ..., metadata = NULL) {
 tfevents_summary <- function(metadata, tag = NA, ..., value = NA, image = NA, class = NULL) {
   value <- vec_cast(value, numeric())
   image <- vec_cast(image, new_image_impl())
+  tag <- vec_cast(tag, character())
   new_summary(metadata = metadata, tag = tag, value = value, image = image, class = class)
 }
 

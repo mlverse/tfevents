@@ -22,7 +22,7 @@ Scalar event
 }
 \examples{
 temp <- tempfile()
-with_logdir(ttemp, {
+with_logdir(temp, {
   log_event(loss = summary_scalar(1))
 })
 }

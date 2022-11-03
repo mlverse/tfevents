@@ -62,7 +62,7 @@ format.tfevents_event <- function(x, ...) {
 #'
 #' @examples
 #' temp <- tempfile()
-#' with_logdir(ttemp, {
+#' with_logdir(temp, {
 #'   log_event(loss = summary_scalar(1))
 #' })
 #' @export

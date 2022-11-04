@@ -95,6 +95,14 @@ new_summary_summary_image <- function(buffer = blob(), width = integer(), height
   )
 }
 
+#' @export
+vec_cast.tfevents_summary_values.tfevents_summary_image <- function(x, to, ...) {
+  klass <- class(x)
+  klass <- klass[-which(klass == "summary_image")]
+  class(x) <- klass
+  x
+}
+
 
 function() {
   writer <- get_writer()

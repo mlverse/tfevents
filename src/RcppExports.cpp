@@ -76,6 +76,17 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// testfun
+tensorboard::Event testfun(std::vector<tensorboard::Event> x);
+RcppExport SEXP _tfevents_testfun(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<tensorboard::Event> >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(testfun(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // create_event_file_iterator
 Rcpp::XPtr<EventFileIterator> create_event_file_iterator(const std::string& path);
 RcppExport SEXP _tfevents_create_event_file_iterator(SEXP pathSEXP) {
@@ -116,6 +127,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_tfevents_write_scalar", (DL_FUNC) &_tfevents_write_scalar, 6},
     {"_tfevents_write_image", (DL_FUNC) &_tfevents_write_image, 9},
     {"_tfevents_unload_protobuf", (DL_FUNC) &_tfevents_unload_protobuf, 0},
+    {"_tfevents_testfun", (DL_FUNC) &_tfevents_testfun, 1},
     {"_tfevents_create_event_file_iterator", (DL_FUNC) &_tfevents_create_event_file_iterator, 1},
     {"_tfevents_event_file_iterator_next", (DL_FUNC) &_tfevents_event_file_iterator_next, 1},
     {"_tfevents_event_file_iterator_collect", (DL_FUNC) &_tfevents_event_file_iterator_collect, 1},

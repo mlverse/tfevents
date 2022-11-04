@@ -34,7 +34,7 @@ tfevent <- function(run, wall_time, step, ..., summary = NA, file_version = NA) 
     run = vec_cast(run, character()),
     wall_time = vec_cast(wall_time, integer()),
     step = vec_cast(step, integer()),
-    summary = vec_cast(summary, new_summary()),
+    summary = vec_cast(vec_cast(summary, new_summary_values()), new_summary()),
     file_version = vec_cast(file_version, character())
   )
 }
@@ -82,7 +82,7 @@ as_tfevent.numeric <- function(x, step, wall_time, ..., name) {
 }
 
 #' @export
-as_tfevent.tfevents_summary <- function(x, step, wall_time, ..., name) {
+as_tfevent.summary_values <- function(x, step, wall_time, ..., name) {
   field(x, "tag") <- tail(name, 1)
   tfevent(
     run = paste0(name[-length(name)], collapse = "/"),
@@ -139,60 +139,83 @@ new_summary_scalar <- function(value = numeric(), ..., metadata = NULL) {
   if (is.null(metadata)) {
     metadata <- summary_metadata(plugin_name = "scalars")
   }
-  tfevents_summary(metadata = metadata, value = value, class = "summary_scalar")
+  summary_values(metadata = metadata, value = value, class = "summary_scalar")
 }
 
-tfevents_summary <- function(metadata, tag = NA, ..., value = NA, image = NA, class = NULL) {
+summary_values <- function(metadata, tag = NA, ..., value = NA, image = NA, class = NULL) {
   value <- vec_cast(value, numeric())
-  image <- vec_cast(image, new_image_impl())
+  image <- vec_cast(image, new_summary_summary_image())
   tag <- vec_cast(tag, character())
-  new_summary(metadata = metadata, tag = tag, value = value, image = image, class = class)
+  new_summary_values(metadata = metadata, tag = tag, value = value, image = image, class = class)
 }
 
-new_summary <- function(metadata = new_summary_metadata(), tag = character(), ...,
-                        value = numeric(), image = new_image_impl(),
+new_summary_values <- function(metadata = new_summary_metadata(), tag = character(), ...,
+                        value = numeric(), image = new_summary_summary_image(),
                         class = NULL) {
   vctrs::new_rcrd(
     fields = list(metadata = metadata, tag = tag, value = value, image = image),
-    class = c(class, "tfevents_summary")
+    class = c(class, "summary_values")
   )
 }
 
+summary <- function(values) {
+  new_summary_values(values)
+}
+
+new_summary <- function(values = list(new_summary_values())) {
+  new_list_of(values, ptype=new_summary_values(), class = "summary")
+}
+
 #' @export
-vec_ptype2.tfevents_summary.tfevents_summary <- function(x, y, ...) {
+vec_ptype2.summary_values.summary_values <- function(x, y, ...) {
+  new_summary_values()
+}
+#' @export
+vec_ptype2.summary_scalar.summary_values <- function(x, y, ...) {
+  new_summary_values()
+}
+#' @export
+vec_ptype2.summary_values.summary_scalar <- function(x, y, ...) {
+  new_summary_values()
+}
+#' @export
+vec_ptype2.summary_values.summary <- function(x, y, ...) {
+  new_summary()
+}
+#' @export
+vec_ptype2.summary.summary_values <- function(x, y, ...) {
+  new_summary()
+}
+
+# vec_cast.vctrs_percent.double <- function(x, to, ...) percent(x)
+# vec_cast.double.vctrs_percent <- function(x, to, ...) vec_data(x)
+
+#' @export
+vec_cast.summary_values.summary_values <- function(x, to, ...) {
   x
 }
 
 #' @export
-vec_cast.tfevents_summary.tfevents_summary <- function(x, to, ...) {
+vec_cast.summary.summary_values <- function(x, to, ...) {
+  new_summary(list(x))
+}
+
+#' @export
+vec_cast.summary_values.summary_scalar <- function(x, to, ...) {
+  klass <- class(x)
+  klass <- klass[-which(klass == "summary_scalar")]
+  class(x) <- klass
   x
 }
 
 #' @export
-vec_ptype2.tfevent.tfevent <- function(x, y, ...) {
+vec_cast.summary_values.summary_image <- function(x, to, ...) {
+  klass <- class(x)
+  klass <- klass[-which(klass == "summary_image")]
+  class(x) <- klass
   x
 }
 
-#' @export
-vec_cast.tfevent.tfevent <- function(x, to, ...) {
-  x
-}
-
-#' @export
-vec_ptype2.summary_scalar.tfevents_summary <- function(x, y, ...) {
-  y
-}
-
-#' @export
-vec_cast.tfevents_summary.summary_scalar <- function(x, to, ...) {
-  x
-}
-
-#' @export
-vec_ptype2.summary_image.tfevents_summary <- vec_ptype2.summary_scalar.tfevents_summary
-
-#' @export
-vec_cast.tfevents_summary.summary_image <- vec_cast.tfevents_summary.summary_scalar
 
 #' Summary metadata
 #'
@@ -232,3 +255,9 @@ new_summary_metadata <- function(plugin_name = character(), display_name = chara
 format.tfevents_summary <- function(x, ...) {
   format(vctrs::field(x, "value"))
 }
+
+vec_c_list <- function(x) {
+  vec_c(!!!x)
+}
+
+na <- NA

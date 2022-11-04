@@ -126,3 +126,8 @@ void unload_protobuf()
   google::protobuf::ShutdownProtobufLibrary();
 }
 
+
+// [[Rcpp::export]]
+tensorboard::Event testfun (std::vector<tensorboard::Event> x) {
+  return x[0];
+}

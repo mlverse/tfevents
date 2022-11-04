@@ -69,7 +69,7 @@ new_summary_image <- function(img = new_summary_summary_image(), ..., metadata =
   if (is.null(metadata)) {
     metadata <- summary_metadata(plugin_name = "images")
   }
-  summary_values(metadata = metadata, image = img, class = "summary_image")
+  summary_values(metadata = metadata, image = img, class = "tfevents_summary_image")
 }
 
 summary_summary_image <- function(buffer, width, height, colorspace) {
@@ -98,7 +98,7 @@ new_summary_summary_image <- function(buffer = blob(), width = integer(), height
 #' @export
 vec_cast.tfevents_summary_values.tfevents_summary_image <- function(x, to, ...) {
   klass <- class(x)
-  klass <- klass[-which(klass == "summary_image")]
+  klass <- klass[-which(klass == "tfevents_summary_image")]
   class(x) <- klass
   x
 }

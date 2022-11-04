@@ -13,6 +13,7 @@ tensorboard::SummaryMetadata::PluginData make_plugin_data (std::string plugin_na
   return plugin_data;
 }
 
+// [[Rcpp::export]]
 long get_wall_time () {
   return std::chrono::duration_cast<std::chrono::seconds>(
     std::chrono::system_clock::now().time_since_epoch()

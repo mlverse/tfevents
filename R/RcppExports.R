@@ -37,3 +37,11 @@ event_file_iterator_collect <- function(path) {
     .Call(`_tfevents_event_file_iterator_collect`, path)
 }
 
+get_wall_time <- function() {
+    .Call(`_tfevents_get_wall_time`)
+}
+
+write_events <- function(events, writers) {
+    .Call(`_tfevents_write_events`, events, writers)
+}
+

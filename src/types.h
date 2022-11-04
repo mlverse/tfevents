@@ -69,16 +69,15 @@ tensorboard::Summary Rcpp::as<tensorboard::Summary> (SEXP x) {
     value->mutable_metadata()->CopyFrom(r_metadata[i]);
 
     // If the value is NA, we don't save it
-    if (!R_IsNA(r_value[i])) {
-      value->set_simple_value(r_value[i]);
+    if (!Rcpp::NumericVector::is_na(r_value[i])) {
+      value->set_simple_value((float)r_value[i]);
     }
 
     // images can be NA, and thus they wont have a width on them
     auto image = r_image[i];
-    if (image.height() == -1) {
+    if (!image.height() == -1) {
       value->mutable_image()->CopyFrom(image);
     }
-
   }
   return summary;
 }
@@ -98,7 +97,7 @@ std::vector<tensorboard::Event> Rcpp::as<std::vector<tensorboard::Event>> (SEXP 
   auto r_event = Rcpp::as<Rcpp::List>(x);
 
   auto r_wall_time = Rcpp::as<std::vector<std::int64_t>>(r_event["wall_time"]);
-  auto r_step = Rcpp::as<std::vector<std::int64_t>>(r_event["wall_time"]);
+  auto r_step = Rcpp::as<std::vector<std::int64_t>>(r_event["step"]);
   auto r_summary = Rcpp::as<std::vector<tensorboard::Summary>>(r_event["summary"]);
   std::vector<tensorboard::Event> event;
   for (size_t i = 0; i < r_wall_time.size(); i++) {

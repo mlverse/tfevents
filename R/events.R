@@ -14,7 +14,6 @@
 #' We don't export the `event` constructor though, so you should implement it
 #' in terms of other `as_event` methods.
 #'
-#'
 #' @examples
 #' as_event(list(hello = 1), step = 1, wall_time = 1)
 #'
@@ -41,7 +40,7 @@ as_event.numeric <- function(x, step, wall_time, ..., name) {
 }
 
 #' @export
-as_event.summary_values <- function(x, step, wall_time, ..., name) {
+as_event.tfevents_summary_values <- function(x, step, wall_time, ..., name) {
   field(x, "tag") <- tail(name, 1)
   event(
     run = paste0(name[-length(name)], collapse = "/"),
@@ -92,6 +91,7 @@ new_event <- function(run = character(),
                         summary = new_summary(),
                         file_version = character()) {
   new_rcrd(list(
+    run = run,
     wall_time = wall_time,
     step = step,
     summary = summary,

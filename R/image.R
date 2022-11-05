@@ -1,21 +1,3 @@
-#' @export
-write_event.summary_image <- function(data, name, step) {
-  metadata <- field(data, "metadata")
-  image <- field(data, "image")
-
-  write_image(
-    writer = get_writer(),
-    name = name,
-    step = step,
-    buffer = as.raw(field(image, "buffer")[[1]]),
-    width = field(image, "width"),
-    height = field(image, "height"),
-    depth = field(image, "colorspace"),
-    description = field(metadata, "description"),
-    display_name = field(metadata, "display_name")
-  )
-}
-
 #' Creates a image summary
 #'
 #' @param img An object that can be converted to an image.
@@ -101,21 +83,4 @@ vec_cast.tfevents_summary_values.tfevents_summary_image <- function(x, to, ...) 
   klass <- klass[-which(klass == "tfevents_summary_image")]
   class(x) <- klass
   x
-}
-
-
-function() {
-  writer <- get_writer()
-  value <- png::writePNG(png::readPNG("tests/testthat/resources/img.png"))
-  write_image(
-    writer,
-    name = "helo",
-    step = 2,
-    buffer = value,
-    width = 28,
-    height = 28,
-    depth = 1,
-    description = "",
-    display_name = ""
-  )
 }

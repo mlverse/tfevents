@@ -16,7 +16,6 @@ Imports:
     Rcpp,
     withr,
     fs,
-    cli,
     rlang,
     vctrs,
     ellipsis,

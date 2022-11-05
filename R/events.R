@@ -5,6 +5,7 @@
 #'   by TensorBoard when showing data.
 #' @param wall_time The all time the event will appended to the event. This field
 #'   is used by TensorBoard when displaying information based on actual time.
+#' @param ... currently unused.
 #'
 #' @returns A event vctr with class <tfevents_event>.
 #'
@@ -39,6 +40,7 @@ as_event.numeric <- function(x, step, wall_time, ..., name) {
   as_event(x, step = step, wall_time = wall_time, name = name)
 }
 
+#' @importFrom utils tail
 #' @export
 as_event.tfevents_summary_values <- function(x, step, wall_time, ..., name) {
   field(x, "tag") <- tail(name, 1)

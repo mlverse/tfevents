@@ -14,6 +14,8 @@ by TensorBoard when showing data.}
 
 \item{wall_time}{The all time the event will appended to the event. This field
 is used by TensorBoard when displaying information based on actual time.}
+
+\item{...}{currently unused.}
 }
 \value{
 A event vctr with class <tfevents_event>.

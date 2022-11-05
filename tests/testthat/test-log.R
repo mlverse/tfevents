@@ -14,7 +14,7 @@ test_that("write a few simple scalars", {
   expect_equal(nrow(events), 10 + 1)
   expect_equal(scalars$value, (1:10)^2)
   expect_equal(scalars$step, 0:9)
-  expect_equal(scalars$name, rep("hello", 10))
+  expect_equal(scalars$tag, rep("hello", 10))
 })
 
 test_that("write nested scalar for multiple runs", {
@@ -34,7 +34,7 @@ test_that("write nested scalar for multiple runs", {
 
   scalars <- collect_scalars(temp)
   expect_equal(nrow(scalars), 4*10)
-  expect_equal(unique(scalars$name), c("loss", "acc"))
+  expect_equal(unique(scalars$tag), c("loss", "acc"))
   expect_true(all(unique(scalars$step) %in% 0:9))
 })
 
@@ -55,7 +55,7 @@ test_that("can log manually created scalars directly", {
   expect_equal(nrow(events), 4*10 + 10 + 3)
 
   scalars <- collect_scalars(temp)
-  expect_equal(scalars[scalars$name == "loss2",]$value, 1:10 + 2)
+  expect_equal(scalars[scalars$tag == "loss2",]$value, 1:10 + 2)
 })
 
 test_that("can log with a specified step", {
@@ -73,7 +73,7 @@ test_that("can log with a specified step", {
   scalars <- collect_scalars(temp)
   expect_true(100 %in% scalars$step)
   expect_true(3 %in% scalars$step)
-  expect_equal(scalars$step[scalars$name == "bye"], 3)
+  expect_equal(scalars$step[scalars$tag == "bye"], 3)
 })
 
 test_that("local_logdir", {

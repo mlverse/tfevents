@@ -43,7 +43,7 @@ std::vector<tensorboard::Summary_Image> Rcpp::as<std::vector<tensorboard::Summar
 
       // buffer is a blob object, that itself is a list of raw vectors.
       // here it should be list of a sigle element.
-      auto buf = Rcpp::as<RawVector>(Rcpp::as<Rcpp::List>(r_buffer[i])[0]);
+      auto buf = Rcpp::as<RawVector>(r_buffer[i]);
 
       img.set_encoded_image_string(std::string(buf.begin(), buf.end()));
     }
@@ -73,9 +73,10 @@ tensorboard::Summary Rcpp::as<tensorboard::Summary> (SEXP x) {
       value->set_simple_value((float)r_value[i]);
     }
 
-    // images can be NA, and thus they wont have a width on them
+    // images can be NA, in this case we make ttheir height -1 when creating
+    // tthe pb message
     auto image = r_image[i];
-    if (!image.height() == -1) {
+    if (image.height() > 0) {
       value->mutable_image()->CopyFrom(image);
     }
   }

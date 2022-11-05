@@ -102,7 +102,7 @@ new_event <- function(run = character(),
 
 #' @export
 format.tfevents_event <- function(x, ...) {
-  paste0("<", field(x, "step"),"/", format(field(x, "summary")), ">")
+  paste0("<", field(x, "run"),"/", format(field(x, "step")), ">")
 }
 
 #' @export
@@ -162,6 +162,7 @@ vec_cast.tfevents_summary_values.tfevents_summary_values <- function(x, to, ...)
 }
 #' @export
 vec_cast.tfevents_summary.tfevents_summary_values <- function(x, to, ...) {
+  if (is.na(x)) return(vec_cast(NA, new_summary()))
   new_summary(list(x))
 }
 
@@ -203,6 +204,11 @@ new_summary_metadata <- function(plugin_name = character(), display_name = chara
 #' @export
 format.tfevents_summary <- function(x, ...) {
   format(vctrs::field(x, "value"))
+}
+
+#' @export
+format.tfevents_summary_values <- function(x, ...) {
+  paste0("<", field(x, "tag"), ">")
 }
 
 # These values are used from the C++ code

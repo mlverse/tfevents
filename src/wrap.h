@@ -6,7 +6,7 @@ static auto pkg = Rcpp::Environment::namespace_env("tfevents");
 static auto r_summary_metadata = Rcpp::Function(pkg["summary_metadata"]);
 static auto r_summary_values = Rcpp::Function(pkg["summary_values"]);
 static auto r_vec_c_list = Rcpp::Function(pkg["vec_c_list"]);
-static auto r_tfevent = Rcpp::Function(pkg["tfevent"]);
+static auto r_event = Rcpp::Function(pkg["event"]);
 static auto r_summary_summary_image = Rcpp::Function(pkg["summary_summary_image"]);
 
 template <>
@@ -49,11 +49,20 @@ SEXP Rcpp::wrap(const tensorboard::Summary& object) {
 
 template <>
 SEXP Rcpp::wrap(const tensorboard::Event& object) {
-  return r_tfevent(
-    Rcpp::Named("run", ""),
+  return r_event(
+    Rcpp::Named("run", pkg["na"]),
     Rcpp::Named("wall_time", object.wall_time()),
     Rcpp::Named("step", object.step()),
     Rcpp::Named("summary", object.has_summary() ? Rcpp::wrap(object.summary()) : pkg["na"]),
     Rcpp::Named("file_version", object.has_file_version() ? Rcpp::wrap(object.file_version()) : pkg["na"])
   );
+}
+
+template <>
+SEXP Rcpp::wrap(const std::vector<tensorboard::Event>& object) {
+  Rcpp::List events;
+  for (size_t i = 0; i < object.size(); i++) {
+    events.push_back(object[i]);
+  }
+  return r_vec_c_list(events);
 }

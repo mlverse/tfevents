@@ -8,20 +8,3 @@ public:
   tensorboard::Event get_next ();
 };
 
-namespace tfevents {
-
-class Event {
-public:
-  tensorboard::Event event;
-  Event (const tensorboard::Event& e);
-  operator SEXP () const;
-};
-
-class ImageImpl {
-public:
-  tensorboard::Summary::Image img;
-  ImageImpl (const tensorboard::Summary::Image& im);
-  operator SEXP () const;
-};
-
-}

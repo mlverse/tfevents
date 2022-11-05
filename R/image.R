@@ -1,21 +1,3 @@
-#' @export
-write_event.summary_image <- function(data, name, step) {
-  metadata <- field(data, "metadata")
-  image <- field(data, "image")
-
-  write_image(
-    writer = get_writer(),
-    name = name,
-    step = step,
-    buffer = as.raw(field(image, "buffer")[[1]]),
-    width = field(image, "width"),
-    height = field(image, "height"),
-    depth = field(image, "colorspace"),
-    description = field(metadata, "description"),
-    display_name = field(metadata, "display_name")
-  )
-}
-
 #' Creates a image summary
 #'
 #' @param img An object that can be converted to an image.
@@ -56,7 +38,7 @@ summary_image.array <- function(img, ..., metadata = NULL) {
 #'   `colorspace` arguments.
 #' @export
 summary_image.raw <- function(img, ..., width, height, colorspace, metadata = NULL) {
-  image <- new_image_impl(
+  image <- summary_summary_image(
     buffer = img,
     width = width,
     height = height,
@@ -65,16 +47,24 @@ summary_image.raw <- function(img, ..., width, height, colorspace, metadata = NU
   new_summary_image(image, metadata = metadata)
 }
 
-new_summary_image <- function(img = new_image_impl(), ..., metadata = NULL) {
+new_summary_image <- function(img = new_summary_summary_image(), ..., metadata = NULL) {
   if (is.null(metadata)) {
     metadata <- summary_metadata(plugin_name = "images")
   }
-  tfevents_summary(metadata = metadata, image = img, class = "summary_image")
+  summary_values(metadata = metadata, image = img, class = "tfevents_summary_image")
 }
 
+summary_summary_image <- function(buffer, width, height, colorspace) {
+  new_summary_summary_image(
+    buffer = vec_cast(buffer, blob()),
+    width = width,
+    height = height,
+    colorspace = colorspace
+  )
+}
 
 #' @importFrom blob blob
-new_image_impl <- function(buffer = blob(), width = integer(), height = integer(), colorspace = integer()) {
+new_summary_summary_image <- function(buffer = blob(), width = integer(), height = integer(), colorspace = integer()) {
   buffer <- vec_cast(buffer, blob())
   vctrs::new_rcrd(
     fields = list(
@@ -83,23 +73,14 @@ new_image_impl <- function(buffer = blob(), width = integer(), height = integer(
       height = height,
       colorspace = colorspace
     ),
-    class = "image_impl"
+    class = "summary_summary_image"
   )
 }
 
-
-function() {
-  writer <- get_writer()
-  value <- png::writePNG(png::readPNG("tests/testthat/resources/img.png"))
-  write_image(
-    writer,
-    name = "helo",
-    step = 2,
-    buffer = value,
-    width = 28,
-    height = 28,
-    depth = 1,
-    description = "",
-    display_name = ""
-  )
+#' @export
+vec_cast.tfevents_summary_values.tfevents_summary_image <- function(x, to, ...) {
+  klass <- class(x)
+  klass <- klass[-which(klass == "tfevents_summary_image")]
+  class(x) <- klass
+  x
 }

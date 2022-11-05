@@ -23,53 +23,13 @@
 #' @export
 log_event <- function(..., step = get_global_step(increment = TRUE)) {
   data <- rlang::dots_list(..., .named = TRUE, .homonyms = "error")
-  map2(data, write_event, step = step)
+  write_event(as_event(data, step = step, wall_time = get_wall_time()))
   invisible(data)
 }
 
-#' Write event data into disk
-#'
-#' @param data Event data.
-#' @param name Name/tag of the event data.
-#' @param step Global step number
-#'
-#' @keywords internal
-#'
-#' @export
-write_event <- function(data, name, step) {
-  UseMethod("write_event")
-}
-
-#' @export
-write_event.default <- function(data, name, step) {
-  cli::cli_abort("Cant write event with type {.cls {class(data)}}.")
-}
-
-#' @export
-write_event.list <- function(data, name, step) {
-  with_logdir(file.path(get_default_logdir(), name), {
-    map2(data, write_event, step = step)
-  })
-}
-
-#' @export
-write_event.summary_scalar <- function(data, name, step) {
-  metadata <- field(data, "metadata")
-
-  write_scalar(
-    writer = get_writer(),
-    name = name,
-    step = step,
-    data = field(data, "value"),
-    description = field(metadata, "description"),
-    display_name = field(metadata, "display_name")
-  )
-}
-
-#' @export
-write_event.numeric <- function(data, name, step) {
-  event <- summary_scalar(data)
-  write_event(event, name, step)
+write_event <- function(event) {
+  writers <- lapply(fs::path(get_default_logdir(), field(event, "run")), get_writer)
+  write_events(event, writers)
 }
 
 .tfevents <- new.env()
@@ -170,6 +130,7 @@ set_global_step <- function(step) {
 
 .writers <- new.env()
 get_writer <- function(logdir = get_default_logdir()) {
+  logdir <- fs::path_norm(logdir)
   writer <- rlang::env_get(.writers, nm = logdir, default = NULL)
   if (!is.null(writer))
     return(writer)

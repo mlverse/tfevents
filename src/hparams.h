@@ -46,16 +46,18 @@ std::vector<tl::optional<tensorboard::hparams::Interval>>
 Rcpp::as<std::vector<tl::optional<tensorboard::hparams::Interval>>> (SEXP x) {
     std::vector<tl::optional<tensorboard::hparams::Interval>> out;
     auto r_intervals = Rcpp::as<Rcpp::List>(x);
-    for (auto r_interval : r_intervals) {
-        if (Rf_isNull(r_interval)) {
-            out.push_back(tl::nullopt);
-        } else {
-            tensorboard::hparams::Interval interval;
-            auto r_interval_vec = Rcpp::as<Rcpp::List>(r_interval);
-            interval.set_min_value(r_interval_vec["min_value"]);
-            interval.set_max_value(r_interval_vec["max_value"]);
-            out.push_back(interval);
-        }
+
+    auto r_min_value = Rcpp::as<Rcpp::NumericVector>(r_intervals["min_value"]);
+    auto r_max_value = Rcpp::as<Rcpp::NumericVector>(r_intervals["max_value"]);
+    for (size_t i = 0; i < r_min_value.size(); i++) {
+      if (Rcpp::NumericVector::is_na(r_min_value[i])) {
+          out.push_back(tl::nullopt);
+      } else {
+          tensorboard::hparams::Interval interval;
+          interval.set_min_value(r_min_value[i]);
+          interval.set_max_value(r_max_value[i]);
+          out.push_back(interval);
+      }
     }
     return out;
 }
@@ -147,36 +149,57 @@ Rcpp::as<std::vector<tensorboard::hparams::MetricInfo>> (SEXP x) {
 }
 
 template <>
-tensorboard::hparams::Experiment Rcpp::as<tensorboard::hparams::Experiment> (SEXP x) {
-  auto r_experiment = Rcpp::as<Rcpp::List>(x);
-  tensorboard::hparams::Experiment experiment;
+std::vector<tensorboard::hparams::Experiment>
+Rcpp::as<std::vector<tensorboard::hparams::Experiment>> (SEXP x) {
+  auto r_experiments = Rcpp::as<Rcpp::List>(x);
 
-  experiment.set_name(Rcpp::as<std::string>(r_experiment["name"]));
-  experiment.set_description(Rcpp::as<std::string>(r_experiment["description"]));
-  experiment.set_user(Rcpp::as<std::string>(r_experiment["user"]));
-  experiment.set_time_created_secs(Rcpp::as<int64_t>(r_experiment["time_created_secs"]));
+  auto r_name = Rcpp::as<std::vector<std::string>>(r_experiments["name"]);
+  auto r_description = Rcpp::as<std::vector<std::string>>(r_experiments["description"]);
+  auto r_user = Rcpp::as<std::vector<std::string>>(r_experiments["user"]);
+  auto r_time_created_secs = Rcpp::as<std::vector<int64_t>>(r_experiments["time_created_secs"]);
+  auto r_hparam_infos = Rcpp::as<Rcpp::List>(r_experiments["hparam_infos"]);
+  auto r_metric_infos = Rcpp::as<Rcpp::List>(r_experiments["metric_infos"]);
 
-  auto r_hparam_infos = Rcpp::as<std::vector<tensorboard::hparams::HParamInfo>>(r_experiment["hparam_infos"]);
-  for (auto hparam_info : r_hparam_infos) {
-    experiment.add_hparam_infos()->CopyFrom(hparam_info);
+  std::vector<tensorboard::hparams::Experiment> out;
+  for (size_t i = 0; i < r_name.size(); i++) {
+    tensorboard::hparams::Experiment experiment;
+
+    experiment.set_name(r_name[i]);
+    experiment.set_description(r_description[i]);
+    experiment.set_user(r_user[i]);
+    experiment.set_time_created_secs(r_time_created_secs[i]);
+
+    auto hparam_infos = Rcpp::as<std::vector<tensorboard::hparams::HParamInfo>>(r_hparam_infos[i]);
+    for (auto hparam_info : hparam_infos) {
+      experiment.add_hparam_infos()->CopyFrom(hparam_info);
+    }
+
+    auto metric_infos = Rcpp::as<std::vector<tensorboard::hparams::MetricInfo>>(r_metric_infos[i]);
+    for (auto metric_info : metric_infos) {
+      experiment.add_metric_infos()->CopyFrom(metric_info);
+    }
+
+    out.push_back(experiment);
   }
 
-  auto r_metric_infos = Rcpp::as<std::vector<tensorboard::hparams::MetricInfo>>(r_experiment["metric_infos"]);
-  for (auto metric_info : r_metric_infos) {
-    experiment.add_metric_infos()->CopyFrom(metric_info);
-  }
-
-  return experiment;
+  return out;
 }
 
 template <>
-tensorboard::hparams::HParamsPluginData Rcpp::as<tensorboard::hparams::HParamsPluginData> (SEXP x) {
+std::vector<tensorboard::hparams::HParamsPluginData>
+Rcpp::as<std::vector<tensorboard::hparams::HParamsPluginData>> (SEXP x) {
   auto r_plugin_data = Rcpp::as<Rcpp::List>(x);
 
-  tensorboard::hparams::HParamsPluginData plugin_data;
-  plugin_data.set_version(Rcpp::as<int64_t>(r_plugin_data["version"]));
-  plugin_data.mutable_experiment()->CopyFrom(
-      Rcpp::as<tensorboard::hparams::Experiment>(r_plugin_data["experiment"])
-  );
-  return plugin_data;
+  auto r_version = Rcpp::as<std::vector<std::int64_t>>(r_plugin_data["version"]);
+  auto r_experiment = Rcpp::as<std::vector<tensorboard::hparams::Experiment>>(r_plugin_data["experiment"]);
+
+  std::vector<tensorboard::hparams::HParamsPluginData> out;
+  for (size_t i = 0; i < r_version.size(); i++) {
+    tensorboard::hparams::HParamsPluginData plugin_data;
+    plugin_data.set_version(r_version[i]);
+    plugin_data.mutable_experiment()->CopyFrom(r_experiment[i]);
+    out.push_back(plugin_data);
+  }
+
+  return out;
 }

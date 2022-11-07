@@ -2,3 +2,4 @@
 #include "reader.h"
 #include "as.h"
 #include "wrap.h"
+#include "hparams.h"

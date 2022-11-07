@@ -1,3 +1,42 @@
+hparams_config <- function(hparams, metrics, time_created_secs = NA) {
+  hparam_infos <- lapply(hparam_infos, function(x) {
+    new_hparams_hparam_info(
+      name = x$name,
+      description = x$description,
+      display_name = x$display_name
+    )
+  })
+
+  hparam_infos <- vec_c(!!!lapply(hparams, function(x) {
+
+  }))
+}
+
+hparams_hparam <- function (name, domain = NA, display_name = NA, description = NA) {
+  structure(data = list(
+    name = name,
+    domain = domain,
+    display_name = display_name,
+    description = description
+  ), class = "hparams_hparam")
+}
+
+hparams_metric <- function(tag, group = NA,
+                           display_name = NA,
+                           description = NA,
+                           dataset_type = NA) {
+  structure(list(
+    tag = tag, group = group,
+    display_name = display_name,
+    description = description,
+    dataset_type = dataset_type
+  ), class = "hparams_metric")
+}
+
+hparams_hparams <- function() {
+
+}
+
 new_hparams_hparams_plugin_data <- function(version = integer(),
                                             experiment = new_hparams_experiment()) {
   new_rcrd(

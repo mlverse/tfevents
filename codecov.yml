@@ -1,0 +1,3 @@
+ignore:
+  - inst/tp
+  - src/generated

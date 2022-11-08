@@ -20,7 +20,8 @@ Imports:
     vctrs,
     ellipsis,
     blob,
-    png
+    png,
+    digest
 Suggests: 
     testthat (>= 3.0.0),
     tibble,

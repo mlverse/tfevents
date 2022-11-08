@@ -19,6 +19,8 @@ summary_metadata(
 
 \item{description}{A description of the summary.}
 
+\item{...}{Currently unused. For future expansion.}
+
 \item{plugin_content}{An optional plugin content. Note that it will only be
 used if the C++ function \code{make_plugin_data} is aware of \code{plugin_content}
 for the specified plugin name. For advanced use only.}

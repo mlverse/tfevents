@@ -179,6 +179,7 @@ vec_cast.tfevents_summary.tfevents_summary_values <- function(x, to, ...) {
 #' @param plugin_content An optional plugin content. Note that it will only be
 #'  used if the C++ function `make_plugin_data` is aware of `plugin_content`
 #'  for the specified plugin name. For advanced use only.
+#' @param ... Currently unused. For future expansion.
 #'
 #' @returns A `summary_metadata` object.
 #'

@@ -25,7 +25,8 @@ collect_summaries <- function(logdir = get_default_logdir()) {
 
 collect_scalars <- function(logdir = get_default_logdir()) {
   summaries <- collect_summaries(logdir)
+  plugin_name <- field(field(summaries$summary, "metadata"), "plugin_name")
+  summaries <- summaries[plugin_name=="scalars",]
   summaries$value <- field(summaries$summary, "value")
-  summaries[!is.na(summaries$value),]
   summaries
 }

@@ -28,4 +28,8 @@ test_that("simple hparams experiment", {
   expect_equal(reader$hparams$tag, c("dropout", "optimizer"))
   expect_equal(reader$hparams$value, list(0.1, "adam"))
   expect_equal(nrow(reader$scalars), 10)
+
+  expect_equal(nrow(collect_events(temp)), 10 + 3)
+  expect_equal(nrow(collect_summaries(temp)), 10 + 2)
+  expect_equal(nrow(collect_scalars(temp)), 10)
 })

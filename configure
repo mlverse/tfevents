@@ -29,8 +29,8 @@ fi
 
 if [ ! -d "generated" ]; then
   mkdir generated
-  find proto -name *.proto -exec bash -c '
-    ./libs/protoc -I "proto" -I "../inst/tp/pb/src" --cpp_out="generated" {}' \;
+  find proto -name *.proto -exec bash -c \
+    './libs/protoc -I "proto" -I "../inst/tp/pb/src" --cpp_out="generated" {}' \;
 fi
 
 # copied from protolite:

@@ -18,6 +18,10 @@ summary_metadata(
 \item{display_name}{Display name for the summary.}
 
 \item{description}{A description of the summary.}
+
+\item{plugin_content}{An optional plugin content. Note that it will only be
+used if the C++ function \code{make_plugin_data} is aware of \code{plugin_content}
+for the specified plugin name. For advanced use only.}
 }
 \value{
 A \code{summary_metadata} object.

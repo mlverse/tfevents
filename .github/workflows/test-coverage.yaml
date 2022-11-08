@@ -28,6 +28,11 @@ jobs:
           extra-packages: any::covr
           needs: coverage
 
+      - name: Install libraries used for testing
+        run: |
+          reticulate::py_install("tbparse", pip = TRUE)
+        shell: Rscript {0}
+
       - name: Test coverage
         run: |
           covr::codecov(

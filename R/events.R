@@ -176,6 +176,9 @@ vec_cast.tfevents_summary.tfevents_summary_values <- function(x, to, ...) {
 #' @param plugin_name The name of the TensorBoard plugin that might use the summary.
 #' @param display_name Display name for the summary.
 #' @param description A description of the summary.
+#' @param plugin_content An optional plugin content. Note that it will only be
+#'  used if the C++ function `make_plugin_data` is aware of `plugin_content`
+#'  for the specified plugin name. For advanced use only.
 #'
 #' @returns A `summary_metadata` object.
 #'

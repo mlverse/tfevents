@@ -1,4 +1,3 @@
-skip_if_not(reticulate::py_available())
 skip_if(inherits(try(reticulate::import("tbparse"), silent = TRUE), "try-error"))
 
 tbparse <- reticulate::import("tbparse")

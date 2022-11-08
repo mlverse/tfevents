@@ -79,6 +79,7 @@ inline std::vector<tensorboard::hparams::HParamInfo> Rcpp::as<std::vector<tensor
   std::vector<tensorboard::hparams::HParamInfo> out;
   for (size_t i = 0; i < r_name.size(); i++) {
     tensorboard::hparams::HParamInfo hparam_info;
+
     hparam_info.set_name(r_name[i]);
     hparam_info.set_display_name(r_display_name[i]);
     hparam_info.set_description(r_description[i]);
@@ -99,14 +100,16 @@ inline std::vector<tensorboard::hparams::MetricName>
 Rcpp::as<std::vector<tensorboard::hparams::MetricName>> (SEXP x) {
   auto r_metric_name = Rcpp::as<Rcpp::List>(x);
 
-  auto r_tag = Rcpp::as<std::vector<std::string>>(r_metric_name["tag"]);
-  auto r_group = Rcpp::as<std::vector<std::string>>(r_metric_name["group"]);
+  auto r_tag = Rcpp::as<Rcpp::CharacterVector>(r_metric_name["tag"]);
+  auto r_group = Rcpp::as<Rcpp::CharacterVector>(r_metric_name["group"]);
 
   std::vector<tensorboard::hparams::MetricName> out;
   for (size_t i = 0; i < r_tag.size(); i++) {
     tensorboard::hparams::MetricName metric_name;
     metric_name.set_tag(r_tag[i]);
-    metric_name.set_group(r_group[i]);
+    if (!Rcpp::CharacterVector::is_na(r_group[i])) {
+      metric_name.set_group(r_group[i]);
+    }
     out.push_back(metric_name);
   }
   return out;
@@ -122,6 +125,8 @@ Rcpp::as<std::vector<tensorboard::hparams::DatasetType>> (SEXP x) {
       out.push_back(tensorboard::hparams::DatasetType::DATASET_TRAINING);
     } else if (r_type == "validation") {
       out.push_back(tensorboard::hparams::DatasetType::DATASET_VALIDATION);
+    } else if (r_type == "unknown") {
+      out.push_back(tensorboard::hparams::DatasetType::DATASET_UNKNOWN);
     } else {
       Rcpp::stop("Unknown dataset type: %s", r_type);
     }
@@ -165,7 +170,7 @@ Rcpp::as<std::vector<tl::optional<tensorboard::hparams::Experiment>>> (SEXP x) {
 
   std::vector<tl::optional<tensorboard::hparams::Experiment>> out;
   for (size_t i = 0; i < r_name.size(); i++) {
-    if (r_is_na(r_experiments[i])) {
+    if (r_is_na(r_hparam_infos[i])) {
       out.push_back(tl::nullopt);
     } else {
       tensorboard::hparams::Experiment experiment;
@@ -176,13 +181,13 @@ Rcpp::as<std::vector<tl::optional<tensorboard::hparams::Experiment>>> (SEXP x) {
       experiment.set_time_created_secs(r_time_created_secs[i]);
 
       auto hparam_infos = Rcpp::as<std::vector<tensorboard::hparams::HParamInfo>>(r_hparam_infos[i]);
-      for (auto hparam_info : hparam_infos) {
-        experiment.add_hparam_infos()->CopyFrom(hparam_info);
+      for (size_t j = 0; j < hparam_infos.size(); j++) {
+        experiment.add_hparam_infos()->CopyFrom(hparam_infos[j]);
       }
 
       auto metric_infos = Rcpp::as<std::vector<tensorboard::hparams::MetricInfo>>(r_metric_infos[i]);
-      for (auto metric_info : metric_infos) {
-        experiment.add_metric_infos()->CopyFrom(metric_info);
+      for (size_t j = 0; j < metric_infos.size(); j++) {
+        experiment.add_metric_infos()->CopyFrom(metric_infos[j]);
       }
 
       out.push_back(experiment);
@@ -199,6 +204,9 @@ inline google::protobuf::Value
     switch(TYPEOF(x)) {
     case REALSXP:
       out.set_number_value(Rcpp::as<double>(x));
+      break;
+    case STRSXP:
+      out.set_string_value(Rcpp::as<std::string>(x));
       break;
     default:
       Rcpp::stop("Unsupported type");
@@ -273,6 +281,7 @@ Rcpp::as<tensorboard::hparams::HParamsPluginData> (SEXP x) {
   auto r_plugin_data = Rcpp::as<Rcpp::List>(x);
 
   auto r_version = Rcpp::as<std::vector<std::int64_t>>(r_plugin_data["version"]);
+
   auto r_experiment = Rcpp::as<std::vector<tl::optional<tensorboard::hparams::Experiment>>>(r_plugin_data["experiment"]);
   auto r_session_start_info = Rcpp::as<std::vector<tl::optional<tensorboard::hparams::SessionStartInfo>>>(r_plugin_data["session_start_info"]);
 

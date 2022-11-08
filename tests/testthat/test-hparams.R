@@ -1,3 +1,8 @@
+skip_if_not(reticulate::py_available())
+skip_if(inherits(try(reticulate::import("tbparse"), silent = TRUE), "try-error"))
+
+tbparse <- reticulate::import("tbparse")
+
 test_that("simple hparams experiment", {
 
   hparams <- list(
@@ -6,21 +11,22 @@ test_that("simple hparams experiment", {
   )
 
   metrics <- list(
-    hparams_metric(tag = "loss", group = "train"),
-    hparams_metric(tag = "loss", group = "valid")
+    hparams_metric(tag = "loss")
   )
 
   temp <- tempfile()
   with_logdir(temp, {
     hparams_config(hparams, metrics)
-  })
-
-  with_logdir(temp, {
     hparams_hparams(hparams = list(dropout = 0.1, optimizer = "adam"))
-    log_event(train = list(loss = runif(1)), valid = list(loss = runif(1)))
-    log_event(train = list(loss = runif(1)), valid = list(loss = runif(1)))
-    log_event(train = list(loss = runif(1)), valid = list(loss = runif(1)))
+
+    for (i in 1:10) {
+      log_event(loss = runif(1))
+    }
   })
 
-  expect_true(TRUE)
+  reader <- tbparse$SummaryReader(temp)
+
+  expect_equal(reader$hparams$tag, c("dropout", "optimizer"))
+  expect_equal(reader$hparams$value, list(0.1, "adam"))
+  expect_equal(nrow(reader$scalars), 10)
 })

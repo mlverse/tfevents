@@ -11,7 +11,7 @@ summary_hparams_config <- function(hparams, metrics, time_created_secs = get_wal
     summary_metadata(
       plugin_name = "hparams",
       plugin_content = new_hparams_hparams_plugin_data(
-        version = 1,
+        version = 0,
         experiment = as_hparams_experiment(hparams, metrics, time_created_secs),
         session_start_info = NA
       )
@@ -59,7 +59,7 @@ as_hparams_experiment <- function(hparams, metrics, time_created_secs) {
   )
 }
 
-hparams_hparam <- function (name, domain = NA, display_name = NA, description = NA) {
+hparams_hparam <- function (name, domain = NA, display_name = name, description = NA) {
   structure(list(
     name = name,
     domain = domain,
@@ -69,9 +69,14 @@ hparams_hparam <- function (name, domain = NA, display_name = NA, description = 
 }
 
 hparams_metric <- function(tag, group = NA,
-                           display_name = NA,
+                           display_name = tag,
                            description = NA,
                            dataset_type = NA) {
+
+  if (is.na(dataset_type)) {
+    dataset_type <- "unknown"
+  }
+
   structure(list(
     tag = tag, group = group,
     display_name = display_name,
@@ -97,7 +102,7 @@ summary_hparams <- function(hparams, trial_id = NA, start_time_secs = NA) {
     metadata = summary_metadata(
       plugin_name = "hparams",
       plugin_content = new_hparams_hparams_plugin_data(
-        version = 1,
+        version = 0,
         session_start_info = new_hparams_session_start_info(
           group_name = trial_id,
           start_time_secs = get_wall_time(),
@@ -132,11 +137,11 @@ new_hparams_session_start_info <- function(group_name = character(),
                                            monitor_url = character()) {
   new_rcrd(
     fields = list(
-      group_name = group_name,
-      start_time_secs = start_time_secs,
-      hparams = hparams,
-      model_uri = model_uri,
-      monitor_url = monitor_url
+      group_name = vec_cast(group_name, character()),
+      start_time_secs = vec_cast(start_time_secs, integer()),
+      hparams = vec_cast(hparams, list()),
+      model_uri = vec_cast(model_uri, character()),
+      monitor_url = vec_cast(monitor_url, character())
     ),
     class = "hparams_session_start_info"
   )
@@ -148,10 +153,10 @@ new_hparams_experiment <- function(name = character(), description = character()
                            metric_infos = new_list_of(ptype=new_hparams_metric_info())) {
   new_rcrd(
     fields = list(
-      name = name,
-      description = description,
-      user = user,
-      time_created_secs = time_created_secs,
+      name = vec_cast(name, character()),
+      description = vec_cast(description, character()),
+      user = vec_cast(user, character()),
+      time_created_secs = vec_cast(time_created_secs, integer()),
       hparam_infos = hparam_infos,
       metric_infos = metric_infos
     ),
@@ -166,9 +171,9 @@ new_hparams_metric_info <- function(name = new_hparams_metric_name(),
   new_rcrd(
     fields = list(
       name = name,
-      display_name = display_name,
-      description = description,
-      dataset_type = dataset_type
+      display_name = vec_cast(display_name, character()),
+      description = vec_cast(description, character()),
+      dataset_type = vec_cast(dataset_type, character())
     ),
     class = "hparams_metric_info"
   )
@@ -177,8 +182,8 @@ new_hparams_metric_info <- function(name = new_hparams_metric_name(),
 new_hparams_metric_name <- function(group = character(), tag = character()) {
   new_rcrd(
     fields = list(
-      group = group,
-      tag = tag
+      group = vec_cast(group, character()),
+      tag = vec_cast(tag, character())
     ),
     class = "hparams_metric_name"
   )
@@ -188,6 +193,17 @@ hparams_hparam_info <- function(name, display_name = rep("", length(name)),
                                 description = rep("", length(name)),
                                 type = NA, ..., domain_discrete = NA,
                                 domain_interval = NA) {
+
+  stopifnot(!is.na(name))
+
+  if (is.na(type)) {
+    if (!is.na(domain_interval)) {
+      type <- "float64"
+    } else if (!is.na(domain_discrete)) {
+      type <- "string"
+    }
+  }
+
   new_hparams_hparam_info(
     name = vec_cast(name, character()),
     display_name = vec_cast(display_name, character()),

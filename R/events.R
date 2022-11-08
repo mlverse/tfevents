@@ -188,8 +188,11 @@ summary_metadata <- function(
     display_name = NA_character_,
     description = NA_character_, ...,
     plugin_content = NA) {
+  ellipsis::check_dots_empty()
+  plugin_content <- vec_cast(plugin_content, list())
   new_summary_metadata(plugin_name = plugin_name, display_name = display_name,
-                       description = description, plugin_content = vec_cast(plugin_content, list()))
+                       description = description,
+                       plugin_content = plugin_content)
 }
 
 new_summary_metadata <- function(plugin_name = character(), display_name = character(),
@@ -220,3 +223,11 @@ vec_c_list <- function(x) {
   vec_c(!!!x)
 }
 na <- NA
+is_na <- function(x) {
+  if (inherits(x, "vctrs_vctr"))
+    vec_any_missing(x)
+  else if (is.null(x))
+    TRUE
+  else
+    rlang::is_na(x)
+}

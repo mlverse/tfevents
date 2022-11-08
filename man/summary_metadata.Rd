@@ -7,7 +7,9 @@
 summary_metadata(
   plugin_name,
   display_name = NA_character_,
-  description = NA_character_
+  description = NA_character_,
+  ...,
+  plugin_content = NA
 )
 }
 \arguments{

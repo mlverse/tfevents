@@ -4,64 +4,65 @@
 #include "generated/plugins/hparams/plugin_data.pb.h"
 #include "generated/plugins/hparams/api.pb.h"
 #include "tl/optional.hpp"
+#include "na.h"
 
 template <>
 inline std::vector<tensorboard::hparams::DataType> Rcpp::as<std::vector<tensorboard::hparams::DataType>> (SEXP x) {
-    std::vector<tensorboard::hparams::DataType> out;
-    auto r_data_types = Rcpp::as<std::vector<std::string>>(x);
-    for (auto r_data_type : r_data_types) {
-        if (r_data_type == "float64") {
-            out.push_back(tensorboard::hparams::DataType::DATA_TYPE_FLOAT64);
-        } else if (r_data_type == "string") {
-            out.push_back(tensorboard::hparams::DataType::DATA_TYPE_STRING);
-        } else if (r_data_type == "bool") {
-            out.push_back(tensorboard::hparams::DataType::DATA_TYPE_BOOL);
-        } else {
-            Rcpp::stop("Unknown data type: %s", r_data_type);
-        }
+  std::vector<tensorboard::hparams::DataType> out;
+  auto r_data_types = Rcpp::as<std::vector<std::string>>(x);
+  for (auto r_data_type : r_data_types) {
+    if (r_data_type == "float64") {
+      out.push_back(tensorboard::hparams::DataType::DATA_TYPE_FLOAT64);
+    } else if (r_data_type == "string") {
+      out.push_back(tensorboard::hparams::DataType::DATA_TYPE_STRING);
+    } else if (r_data_type == "bool") {
+      out.push_back(tensorboard::hparams::DataType::DATA_TYPE_BOOL);
+    } else {
+      Rcpp::stop("Unknown data type: %s", r_data_type);
     }
-    return out;
+  }
+  return out;
 }
 
 template <>
 inline std::vector<tl::optional<google::protobuf::ListValue>>
 Rcpp::as<std::vector<tl::optional<google::protobuf::ListValue>>> (SEXP x) {
-    std::vector<tl::optional<google::protobuf::ListValue>> out;
-    auto r_values = Rcpp::as<Rcpp::List>(x);
-    for (auto r_value : r_values) {
-        if (Rf_isNull(r_value)) {
-            out.push_back(tl::nullopt);
-        } else {
-            google::protobuf::ListValue list_value;
-            auto r_value_vec = Rcpp::as<std::vector<std::string>>(r_value);
-            for (auto value : r_value_vec) {
-                list_value.add_values()->set_string_value(value);
-            }
-            out.push_back(list_value);
-        }
+  std::vector<tl::optional<google::protobuf::ListValue>> out;
+  auto r_values = Rcpp::as<Rcpp::List>(x);
+  for (auto r_value : r_values) {
+    if (Rf_isNull(r_value)) {
+      out.push_back(tl::nullopt);
+    } else {
+      google::protobuf::ListValue list_value;
+      auto r_value_vec = Rcpp::as<std::vector<std::string>>(r_value);
+      for (auto value : r_value_vec) {
+        list_value.add_values()->set_string_value(value);
+      }
+      out.push_back(list_value);
     }
-    return out;
+  }
+  return out;
 }
 
 template <>
 inline std::vector<tl::optional<tensorboard::hparams::Interval>>
 Rcpp::as<std::vector<tl::optional<tensorboard::hparams::Interval>>> (SEXP x) {
-    std::vector<tl::optional<tensorboard::hparams::Interval>> out;
-    auto r_intervals = Rcpp::as<Rcpp::List>(x);
+  std::vector<tl::optional<tensorboard::hparams::Interval>> out;
+  auto r_intervals = Rcpp::as<Rcpp::List>(x);
 
-    auto r_min_value = Rcpp::as<Rcpp::NumericVector>(r_intervals["min_value"]);
-    auto r_max_value = Rcpp::as<Rcpp::NumericVector>(r_intervals["max_value"]);
-    for (size_t i = 0; i < r_min_value.size(); i++) {
-      if (Rcpp::NumericVector::is_na(r_min_value[i])) {
-          out.push_back(tl::nullopt);
-      } else {
-          tensorboard::hparams::Interval interval;
-          interval.set_min_value(r_min_value[i]);
-          interval.set_max_value(r_max_value[i]);
-          out.push_back(interval);
-      }
+  auto r_min_value = Rcpp::as<Rcpp::NumericVector>(r_intervals["min_value"]);
+  auto r_max_value = Rcpp::as<Rcpp::NumericVector>(r_intervals["max_value"]);
+  for (size_t i = 0; i < r_min_value.size(); i++) {
+    if (Rcpp::NumericVector::is_na(r_min_value[i])) {
+      out.push_back(tl::nullopt);
+    } else {
+      tensorboard::hparams::Interval interval;
+      interval.set_min_value(r_min_value[i]);
+      interval.set_max_value(r_max_value[i]);
+      out.push_back(interval);
     }
-    return out;
+  }
+  return out;
 }
 
 template <>
@@ -151,8 +152,8 @@ Rcpp::as<std::vector<tensorboard::hparams::MetricInfo>> (SEXP x) {
 }
 
 template <>
-inline std::vector<tensorboard::hparams::Experiment>
-Rcpp::as<std::vector<tensorboard::hparams::Experiment>> (SEXP x) {
+inline std::vector<tl::optional<tensorboard::hparams::Experiment>>
+Rcpp::as<std::vector<tl::optional<tensorboard::hparams::Experiment>>> (SEXP x) {
   auto r_experiments = Rcpp::as<Rcpp::List>(x);
 
   auto r_name = Rcpp::as<std::vector<std::string>>(r_experiments["name"]);
@@ -162,28 +163,107 @@ Rcpp::as<std::vector<tensorboard::hparams::Experiment>> (SEXP x) {
   auto r_hparam_infos = Rcpp::as<Rcpp::List>(r_experiments["hparam_infos"]);
   auto r_metric_infos = Rcpp::as<Rcpp::List>(r_experiments["metric_infos"]);
 
-  std::vector<tensorboard::hparams::Experiment> out;
+  std::vector<tl::optional<tensorboard::hparams::Experiment>> out;
   for (size_t i = 0; i < r_name.size(); i++) {
-    tensorboard::hparams::Experiment experiment;
+    if (r_is_na(r_experiments[i])) {
+      out.push_back(tl::nullopt);
+    } else {
+      tensorboard::hparams::Experiment experiment;
 
-    experiment.set_name(r_name[i]);
-    experiment.set_description(r_description[i]);
-    experiment.set_user(r_user[i]);
-    experiment.set_time_created_secs(r_time_created_secs[i]);
+      experiment.set_name(r_name[i]);
+      experiment.set_description(r_description[i]);
+      experiment.set_user(r_user[i]);
+      experiment.set_time_created_secs(r_time_created_secs[i]);
 
-    auto hparam_infos = Rcpp::as<std::vector<tensorboard::hparams::HParamInfo>>(r_hparam_infos[i]);
-    for (auto hparam_info : hparam_infos) {
-      experiment.add_hparam_infos()->CopyFrom(hparam_info);
+      auto hparam_infos = Rcpp::as<std::vector<tensorboard::hparams::HParamInfo>>(r_hparam_infos[i]);
+      for (auto hparam_info : hparam_infos) {
+        experiment.add_hparam_infos()->CopyFrom(hparam_info);
+      }
+
+      auto metric_infos = Rcpp::as<std::vector<tensorboard::hparams::MetricInfo>>(r_metric_infos[i]);
+      for (auto metric_info : metric_infos) {
+        experiment.add_metric_infos()->CopyFrom(metric_info);
+      }
+
+      out.push_back(experiment);
     }
-
-    auto metric_infos = Rcpp::as<std::vector<tensorboard::hparams::MetricInfo>>(r_metric_infos[i]);
-    for (auto metric_info : metric_infos) {
-      experiment.add_metric_infos()->CopyFrom(metric_info);
-    }
-
-    out.push_back(experiment);
   }
 
+  return out;
+}
+
+template<>
+inline google::protobuf::Value
+  Rcpp::as<google::protobuf::Value> (SEXP x) {
+    google::protobuf::Value out;
+    switch(TYPEOF(x)) {
+    case REALSXP:
+      out.set_number_value(Rcpp::as<double>(x));
+      break;
+    default:
+      Rcpp::stop("Unsupported type");
+    }
+    return out;
+  }
+
+template<>
+inline google::protobuf::Map<std::string, google::protobuf::Value>
+Rcpp::as<google::protobuf::Map<std::string, google::protobuf::Value>> (SEXP x) {
+  auto r_list = Rcpp::as<Rcpp::List>(x);
+  auto r_name = Rcpp::as<std::vector<std::string>>(r_list.names());
+
+  google::protobuf::Map<std::string, google::protobuf::Value> out;
+  for (size_t i=0; i< r_list.size(); i++) {
+    out.insert(google::protobuf::MapPair<std::string,google::protobuf::Value>(
+        r_name[i],
+              Rcpp::as<google::protobuf::Value>(r_list[i])
+    ));
+  }
+  return out;
+}
+
+template<>
+inline std::vector<tl::optional<google::protobuf::Map<std::string, google::protobuf::Value>>>
+Rcpp::as<std::vector<tl::optional<google::protobuf::Map<std::string, google::protobuf::Value>>>> (SEXP x) {
+  auto r_list = Rcpp::as<Rcpp::List>(x);
+  std::vector<tl::optional<google::protobuf::Map<std::string, google::protobuf::Value>>> out;
+  for (size_t i = 0; i < r_list.size(); i++) {
+    if (r_is_na(r_list[i])) {
+      out.push_back(tl::nullopt);
+    } else {
+      out.push_back(Rcpp::as<google::protobuf::Map<std::string, google::protobuf::Value>>(r_list[i]));
+    }
+  }
+  return out;
+}
+
+template<>
+inline std::vector<tl::optional<tensorboard::hparams::SessionStartInfo>>
+Rcpp::as<std::vector<tl::optional<tensorboard::hparams::SessionStartInfo>>> (SEXP x) {
+  auto r_session_start = Rcpp::as<Rcpp::List>(x);
+
+  auto r_hparams = Rcpp::as<std::vector<tl::optional<google::protobuf::Map<std::string, google::protobuf::Value>>>>(r_session_start["hparams"]);
+  auto r_model_uri = Rcpp::as<std::vector<std::string>>(r_session_start["model_uri"]);
+  auto r_monitor_url = Rcpp::as<std::vector<std::string>>(r_session_start["monitor_url"]);
+  auto r_group_name = Rcpp::as<std::vector<std::string>>(r_session_start["group_name"]);
+  auto r_start_time_secs = Rcpp::as<std::vector<std::int64_t>>(r_session_start["start_time_secs"]);
+
+  std::vector<tl::optional<tensorboard::hparams::SessionStartInfo>> out;
+  for (size_t i = 0; i< r_hparams.size(); i++) {
+    if (!r_hparams[i].has_value()) {
+      out.push_back(tl::nullopt);
+    } else {
+      tensorboard::hparams::SessionStartInfo info;
+      auto hparams = r_hparams[i].value();
+
+      info.mutable_hparams()->insert(hparams.begin(), hparams.end());
+      info.set_model_uri(r_model_uri[i]);
+      info.set_monitor_url(r_monitor_url[i]);
+      info.set_group_name(r_group_name[i]);
+      info.set_start_time_secs(r_start_time_secs[i]);
+      out.push_back(info);
+    }
+  }
   return out;
 }
 
@@ -192,12 +272,45 @@ inline tensorboard::hparams::HParamsPluginData
 Rcpp::as<tensorboard::hparams::HParamsPluginData> (SEXP x) {
   auto r_plugin_data = Rcpp::as<Rcpp::List>(x);
 
-  auto r_version = Rcpp::as<std::int64_t>(r_plugin_data["version"]);
-  auto r_experiment = Rcpp::as<std::vector<tensorboard::hparams::Experiment>>(r_plugin_data["experiment"])[0];
+  auto r_version = Rcpp::as<std::vector<std::int64_t>>(r_plugin_data["version"]);
+  auto r_experiment = Rcpp::as<std::vector<tl::optional<tensorboard::hparams::Experiment>>>(r_plugin_data["experiment"]);
+  auto r_session_start_info = Rcpp::as<std::vector<tl::optional<tensorboard::hparams::SessionStartInfo>>>(r_plugin_data["session_start_info"]);
 
   tensorboard::hparams::HParamsPluginData plugin_data;
-  plugin_data.set_version(r_version);
-  plugin_data.mutable_experiment()->CopyFrom(r_experiment);
+  plugin_data.set_version(r_version[0]);
+
+  if (r_experiment[0].has_value()) {
+    plugin_data.mutable_experiment()->CopyFrom(r_experiment[0].value());
+  }
+
+  if (r_session_start_info[0].has_value()) {
+    plugin_data.mutable_session_start_info()->CopyFrom(r_session_start_info[0].value());
+  }
 
   return plugin_data;
 }
+
+// message SessionStartInfo {
+//   // A map describing the hyperparameter values for the session.
+//   // Maps each hyperparameter name to its value.
+//   // Currently only scalars are supported.
+//   map<string, google.protobuf.Value> hparams = 1;
+//
+//   // A URI for where checkpoints are saved.
+//   string model_uri = 2;
+//
+//   // An optional URL to a website monitoring the session.
+//   string monitor_url = 3;
+//
+//   // The name of the session group containing this session. If empty, the
+//   // group name is taken to be the session id (so this session is the only
+//   // member of its group).
+//   string group_name = 4;
+//
+//   // The time the session started in seconds since epoch.
+//   double start_time_secs = 5;
+// }
+
+
+
+

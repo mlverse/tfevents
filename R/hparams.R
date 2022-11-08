@@ -6,20 +6,22 @@ hparams_config <- function(hparams, metrics, time_created_secs = get_wall_time()
   )
 }
 
-summary_hparams_config <- function(hparams, metrics) {
-  new_summary_values(
+summary_hparams_config <- function(hparams, metrics, time_created_secs = get_wall_time()) {
+  summary_values(
     summary_metadata(
       plugin_name = "hparams",
       plugin_content = new_hparams_hparams_plugin_data(
         version = 1,
-        experiment = as_hparams_experiment(hparams, metrics, time_created_secs)
+        experiment = as_hparams_experiment(hparams, metrics, time_created_secs),
+        session_start_info = NA
       )
-    )
+    ),
+    class = "summary_hparams_config"
   )
 }
 
 as_hparams_experiment <- function(hparams, metrics, time_created_secs) {
-  hparams <- lapply(x$hparams, function(hparam) {
+  hparams <- lapply(hparams, function(hparam) {
     info <- list(
       name = hparam$name,
       display_name = hparam$display_name,
@@ -27,7 +29,7 @@ as_hparams_experiment <- function(hparams, metrics, time_created_secs) {
     )
 
     if (is.character(hparam$domain)) {
-      info$domain_discrete <- hparam$domain
+      info$domain_discrete <- list(hparam$domain)
     } else {
       info$domain_interval <- new_hparams_interval(
         min_value = hparam$domain[1],
@@ -35,13 +37,13 @@ as_hparams_experiment <- function(hparams, metrics, time_created_secs) {
       )
     }
 
-    do.call(new_hparams_hparam_info, info)
+    do.call(hparams_hparam_info, info)
   })
 
-  metrics <- lapply(x$metrics, function(metric) {
+  metrics <- lapply(metrics, function(metric) {
     new_hparams_metric_info(
       name = new_hparams_metric_name(group = metric$group, tag = metric$tag),
-      display_name = metric$name,
+      display_name = metric$display_name,
       description = metric$description,
       dataset_type = metric$dataset_type
     )
@@ -51,14 +53,14 @@ as_hparams_experiment <- function(hparams, metrics, time_created_secs) {
     name = NA,
     description = NA,
     user = NA,
-    time_created_secs = wall_time,
-    hparam_infos = vec_c(!!!hparams),
-    metric_infos = vec_c(!!!metrics)
+    time_created_secs = time_created_secs,
+    hparam_infos = list(vec_c(!!!hparams)),
+    metric_infos = list(vec_c(!!!metrics))
   )
 }
 
 hparams_hparam <- function (name, domain = NA, display_name = NA, description = NA) {
-  structure(data = list(
+  structure(list(
     name = name,
     domain = domain,
     display_name = display_name,
@@ -78,17 +80,65 @@ hparams_metric <- function(tag, group = NA,
   ), class = "hparams_metric")
 }
 
-hparams_hparams <- function() {
+hparams_hparams <- function(hparams, trial_id = NA, time_created_secs = get_wall_time()) {
+  log_event(
+    "_hparams_/session_start_info" =
+      summary_hparams(hparams, trial_id, time_created_secs),
+    step = 0
+  )
+}
+
+summary_hparams <- function(hparams, trial_id = NA, start_time_secs = NA) {
+  stopifnot(rlang::is_named(hparams))
+  if (is.na(trial_id)) {
+    trial_id <- digest::digest(hparams, algo = "sha256")
+  }
+  summary_values(
+    metadata = summary_metadata(
+      plugin_name = "hparams",
+      plugin_content = new_hparams_hparams_plugin_data(
+        version = 1,
+        session_start_info = new_hparams_session_start_info(
+          group_name = trial_id,
+          start_time_secs = get_wall_time(),
+          hparams = list(hparams),
+          model_uri = NA,
+          monitor_url = NA
+        ),
+        experiment = NA
+      )
+    ),
+    class = "summary_hparams_config"
+  )
 }
 
 new_hparams_hparams_plugin_data <- function(version = integer(),
-                                            experiment = new_hparams_experiment()) {
+                                            experiment = new_hparams_experiment(),
+                                            session_start_info = new_hparams_session_start_info()) {
   new_rcrd(
     fields = list(
       version = version,
-      experiment = experiment
+      experiment = vec_cast(experiment, new_hparams_experiment()),
+      session_start_info = vec_cast(session_start_info, new_hparams_session_start_info())
     ),
     class = "hparams_hparams_plugin_data"
+  )
+}
+
+new_hparams_session_start_info <- function(group_name = character(),
+                                           start_time_secs = integer(),
+                                           hparams = list(),
+                                           model_uri = character(),
+                                           monitor_url = character()) {
+  new_rcrd(
+    fields = list(
+      group_name = group_name,
+      start_time_secs = start_time_secs,
+      hparams = hparams,
+      model_uri = model_uri,
+      monitor_url = monitor_url
+    ),
+    class = "hparams_session_start_info"
   )
 }
 
@@ -109,7 +159,7 @@ new_hparams_experiment <- function(name = character(), description = character()
   )
 }
 
-new_hparams_metric_info <- function(name = new_hparams_matric_name(),
+new_hparams_metric_info <- function(name = new_hparams_metric_name(),
                                     display_name = character(),
                                     description = character(),
                                     dataset_type = character()) {
@@ -117,7 +167,7 @@ new_hparams_metric_info <- function(name = new_hparams_matric_name(),
     fields = list(
       name = name,
       display_name = display_name,
-      description = decription,
+      description = description,
       dataset_type = dataset_type
     ),
     class = "hparams_metric_info"
@@ -156,7 +206,7 @@ new_hparams_hparam_info <- function(name = character(), display_name = character
   new_rcrd(
     fields = list(
       name = name,
-      display_name = displpay_name,
+      display_name = display_name,
       description = description,
       type = type,
       domain_discrete = domain_discrete,
@@ -174,5 +224,53 @@ new_hparams_interval <- function(min_value = numeric(), max_value = numeric()) {
     ),
     class = "hparams_internal"
   )
+}
+
+#' @export
+vec_ptype2.hparams_session_start_info.hparams_session_start_info <- function(x, y, ...) {
+  new_hparams_session_start_info()
+}
+#' @export
+vec_cast.hparams_session_start_info.hparams_session_start_info <- function(x, to, ...) {
+  x
+}
+
+#' @export
+vec_ptype2.hparams_hparams_plugin_data.list <- function(x, y, ...) {
+  list()
+}
+#' @export
+vec_cast.list.hparams_hparams_plugin_data <- function(x, to, ...) {
+  if (is.na(x))
+    return(NA)
+
+  if (vec_size(x) == 1)
+    return(list(x))
+}
+
+#' @export
+vec_ptype2.hparams_experiment.hparams_experiment <- function(x, y, ...) {
+  new_hparams_session_start_info()
+}
+#' @export
+vec_cast.hparams_experiment.hparams_experiment <- function(x, to, ...) {
+  x
+}
+
+#' @export
+vec_ptype2.tfevents_summary_values.summary_hparams_config <- function(x, y, ...) {
+  new_summary_values()
+}
+#' @export
+vec_ptype2.summary_hparams_config.tfevents_summary_values <- function(x, y, ...) {
+  new_summary_values()
+}
+#' @export
+vec_cast.tfevents_summary_values.summary_hparams_config <- function(x, to, ...) {
+  # return the same object removing the summary_scalar class.
+  klass <- class(x)
+  klass <- klass[-which(klass == "summary_hparams_config")]
+  class(x) <- klass
+  x
 }
 

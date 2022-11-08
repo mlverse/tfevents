@@ -24,6 +24,26 @@ inline std::vector<tensorboard::hparams::DataType> Rcpp::as<std::vector<tensorbo
   return out;
 }
 
+template<>
+inline google::protobuf::Value
+  Rcpp::as<google::protobuf::Value> (SEXP x) {
+    google::protobuf::Value out;
+    switch(TYPEOF(x)) {
+    case REALSXP:
+      out.set_number_value(Rcpp::as<double>(x));
+      break;
+    case STRSXP:
+      out.set_string_value(Rcpp::as<std::string>(x));
+      break;
+    case LGLSXP:
+      out.set_bool_value(Rcpp::as<bool>(x));
+      break;
+    default:
+      Rcpp::stop("Unsupported type");
+    }
+    return out;
+  }
+
 template <>
 inline std::vector<tl::optional<google::protobuf::ListValue>>
 Rcpp::as<std::vector<tl::optional<google::protobuf::ListValue>>> (SEXP x) {
@@ -34,9 +54,9 @@ Rcpp::as<std::vector<tl::optional<google::protobuf::ListValue>>> (SEXP x) {
       out.push_back(tl::nullopt);
     } else {
       google::protobuf::ListValue list_value;
-      auto r_value_vec = Rcpp::as<std::vector<std::string>>(r_value);
+      auto r_value_vec = Rcpp::as<Rcpp::List>(r_value);
       for (auto value : r_value_vec) {
-        list_value.add_values()->set_string_value(value);
+        list_value.add_values()->CopyFrom(Rcpp::as<google::protobuf::Value>(value));
       }
       out.push_back(list_value);
     }
@@ -196,23 +216,6 @@ Rcpp::as<std::vector<tl::optional<tensorboard::hparams::Experiment>>> (SEXP x) {
 
   return out;
 }
-
-template<>
-inline google::protobuf::Value
-  Rcpp::as<google::protobuf::Value> (SEXP x) {
-    google::protobuf::Value out;
-    switch(TYPEOF(x)) {
-    case REALSXP:
-      out.set_number_value(Rcpp::as<double>(x));
-      break;
-    case STRSXP:
-      out.set_string_value(Rcpp::as<std::string>(x));
-      break;
-    default:
-      Rcpp::stop("Unsupported type");
-    }
-    return out;
-  }
 
 template<>
 inline google::protobuf::Map<std::string, google::protobuf::Value>

@@ -28,12 +28,12 @@ as_hparams_experiment <- function(hparams, metrics, time_created_secs) {
       description = hparam$description
     )
 
-    if (is.character(hparam$domain)) {
-      info$domain_discrete <- list(hparam$domain)
+    if (!rlang::is_named(hparam$domain)) {
+      info$domain_discrete <- hparam$domain
     } else {
       info$domain_interval <- new_hparams_interval(
-        min_value = hparam$domain[1],
-        max_value = hparam$domain[2]
+        min_value = hparam$domain["min_value"],
+        max_value = hparam$domain["max_value"]
       )
     }
 
@@ -195,13 +195,22 @@ hparams_hparam_info <- function(name, display_name = rep("", length(name)),
                                 domain_interval = NA) {
 
   stopifnot(!is.na(name))
-
   if (is.na(type)) {
     if (!is.na(domain_interval)) {
       type <- "float64"
-    } else if (!is.na(domain_discrete)) {
-      type <- "string"
+    } else if (!rlang::is_na(domain_discrete)) {
+      if (is.character(domain_discrete)) {
+        type <- "string"
+      } else if (is.numeric(domain_discrete)) {
+        type <- "float64"
+      } else if (is.logical(domain_discrete)) {
+        type <- "bool"
+      }
     }
+  }
+
+  if (!rlang::is_na(domain_discrete)) {
+    domain_discrete <- list(domain_discrete)
   }
 
   new_hparams_hparam_info(
@@ -209,7 +218,7 @@ hparams_hparam_info <- function(name, display_name = rep("", length(name)),
     display_name = vec_cast(display_name, character()),
     description = vec_cast(description, character()),
     type = vec_cast(type, character()),
-    domain_discrete = vec_cast(domain_discrete, new_list_of(ptype = character())),
+    domain_discrete = vec_cast(domain_discrete, list()),
     domain_interval = vec_cast(domain_interval, new_hparams_interval())
   )
 }
@@ -217,7 +226,7 @@ hparams_hparam_info <- function(name, display_name = rep("", length(name)),
 new_hparams_hparam_info <- function(name = character(), display_name = character(),
                                     description = character(), type = character(),
                                     ...,
-                                    domain_discrete = new_list_of(ptype = character()),
+                                    domain_discrete = list(),
                                     domain_interval = new_hparams_interval()) {
   new_rcrd(
     fields = list(
@@ -238,7 +247,7 @@ new_hparams_interval <- function(min_value = numeric(), max_value = numeric()) {
       min_value = min_value,
       max_value = max_value
     ),
-    class = "hparams_internal"
+    class = "hparams_interval"
   )
 }
 
@@ -287,6 +296,24 @@ vec_cast.tfevents_summary_values.summary_hparams_config <- function(x, to, ...) 
   klass <- class(x)
   klass <- klass[-which(klass == "summary_hparams_config")]
   class(x) <- klass
+  x
+}
+
+#' @export
+vec_ptype2.hparams_interval.hparams_interval <- function(x, y, ...) {
+  new_hparams_interval()
+}
+#' @export
+vec_cast.hparams_interval.hparams_interval <- function(x, to, ...) {
+  x
+}
+
+#' @export
+vec_ptype2.hparams_hparam_info.hparams_hparam_info <- function(x, y, ...) {
+  new_hparams_hparam_info()
+}
+#' @export
+vec_cast.hparams_hparam_info.hparams_hparam_info <- function(x, to, ...) {
   x
 }
 

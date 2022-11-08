@@ -186,18 +186,20 @@ vec_cast.tfevents_summary.tfevents_summary_values <- function(x, to, ...) {
 summary_metadata <- function(
     plugin_name,
     display_name = NA_character_,
-    description = NA_character_) {
+    description = NA_character_, ...,
+    plugin_content = NA) {
   new_summary_metadata(plugin_name = plugin_name, display_name = display_name,
-                       description = description)
+                       description = description, plugin_content = vec_cast(plugin_content, list()))
 }
 
 new_summary_metadata <- function(plugin_name = character(), display_name = character(),
-                                 description = character()) {
+                                 description = character(), plugin_content = list()) {
   vctrs::new_rcrd(
     fields = list(
       plugin_name = plugin_name,
       display_name = display_name,
-      description = description
+      description = description,
+      plugin_content = plugin_content
     ),
     class = "tfevents_summary_metadata"
   )

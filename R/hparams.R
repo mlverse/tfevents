@@ -1,15 +1,60 @@
-hparams_config <- function(hparams, metrics, time_created_secs = NA) {
-  hparam_infos <- lapply(hparam_infos, function(x) {
-    new_hparams_hparam_info(
-      name = x$name,
-      description = x$description,
-      display_name = x$display_name
+hparams_config <- function(hparams, metrics, time_created_secs = get_wall_time()) {
+  log_event(
+    "_hparams_/experiment" =
+      summary_hparams_config(hparams, metrics, time_created_secs),
+    step = 0
+  )
+}
+
+summary_hparams_config <- function(hparams, metrics) {
+  new_summary_values(
+    summary_metadata(
+      plugin_name = "hparams",
+      plugin_content = new_hparams_hparams_plugin_data(
+        version = 1,
+        experiment = as_hparams_experiment(hparams, metrics, time_created_secs)
+      )
+    )
+  )
+}
+
+as_hparams_experiment <- function(hparams, metrics, time_created_secs) {
+  hparams <- lapply(x$hparams, function(hparam) {
+    info <- list(
+      name = hparam$name,
+      display_name = hparam$display_name,
+      description = hparam$description
+    )
+
+    if (is.character(hparam$domain)) {
+      info$domain_discrete <- hparam$domain
+    } else {
+      info$domain_interval <- new_hparams_interval(
+        min_value = hparam$domain[1],
+        max_value = hparam$domain[2]
+      )
+    }
+
+    do.call(new_hparams_hparam_info, info)
+  })
+
+  metrics <- lapply(x$metrics, function(metric) {
+    new_hparams_metric_info(
+      name = new_hparams_metric_name(group = metric$group, tag = metric$tag),
+      display_name = metric$name,
+      description = metric$description,
+      dataset_type = metric$dataset_type
     )
   })
 
-  hparam_infos <- vec_c(!!!lapply(hparams, function(x) {
-
-  }))
+  new_hparams_experiment(
+    name = NA,
+    description = NA,
+    user = NA,
+    time_created_secs = wall_time,
+    hparam_infos = vec_c(!!!hparams),
+    metric_infos = vec_c(!!!metrics)
+  )
 }
 
 hparams_hparam <- function (name, domain = NA, display_name = NA, description = NA) {
@@ -34,7 +79,6 @@ hparams_metric <- function(tag, group = NA,
 }
 
 hparams_hparams <- function() {
-
 }
 
 new_hparams_hparams_plugin_data <- function(version = integer(),

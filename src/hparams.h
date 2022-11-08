@@ -1,10 +1,12 @@
+#pragma once
+
 #include <Rcpp.h>
 #include "generated/plugins/hparams/plugin_data.pb.h"
 #include "generated/plugins/hparams/api.pb.h"
 #include "tl/optional.hpp"
 
 template <>
-std::vector<tensorboard::hparams::DataType> Rcpp::as<std::vector<tensorboard::hparams::DataType>> (SEXP x) {
+inline std::vector<tensorboard::hparams::DataType> Rcpp::as<std::vector<tensorboard::hparams::DataType>> (SEXP x) {
     std::vector<tensorboard::hparams::DataType> out;
     auto r_data_types = Rcpp::as<std::vector<std::string>>(x);
     for (auto r_data_type : r_data_types) {
@@ -22,7 +24,7 @@ std::vector<tensorboard::hparams::DataType> Rcpp::as<std::vector<tensorboard::hp
 }
 
 template <>
-std::vector<tl::optional<google::protobuf::ListValue>>
+inline std::vector<tl::optional<google::protobuf::ListValue>>
 Rcpp::as<std::vector<tl::optional<google::protobuf::ListValue>>> (SEXP x) {
     std::vector<tl::optional<google::protobuf::ListValue>> out;
     auto r_values = Rcpp::as<Rcpp::List>(x);
@@ -42,7 +44,7 @@ Rcpp::as<std::vector<tl::optional<google::protobuf::ListValue>>> (SEXP x) {
 }
 
 template <>
-std::vector<tl::optional<tensorboard::hparams::Interval>>
+inline std::vector<tl::optional<tensorboard::hparams::Interval>>
 Rcpp::as<std::vector<tl::optional<tensorboard::hparams::Interval>>> (SEXP x) {
     std::vector<tl::optional<tensorboard::hparams::Interval>> out;
     auto r_intervals = Rcpp::as<Rcpp::List>(x);
@@ -63,7 +65,7 @@ Rcpp::as<std::vector<tl::optional<tensorboard::hparams::Interval>>> (SEXP x) {
 }
 
 template <>
-std::vector<tensorboard::hparams::HParamInfo> Rcpp::as<std::vector<tensorboard::hparams::HParamInfo>>(SEXP x) {
+inline std::vector<tensorboard::hparams::HParamInfo> Rcpp::as<std::vector<tensorboard::hparams::HParamInfo>>(SEXP x) {
   auto r_hparams_info = Rcpp::as<Rcpp::List>(x);
 
   auto r_name = Rcpp::as<std::vector<std::string>>(r_hparams_info["name"]);
@@ -92,7 +94,7 @@ std::vector<tensorboard::hparams::HParamInfo> Rcpp::as<std::vector<tensorboard::
 }
 
 template <>
-std::vector<tensorboard::hparams::MetricName>
+inline std::vector<tensorboard::hparams::MetricName>
 Rcpp::as<std::vector<tensorboard::hparams::MetricName>> (SEXP x) {
   auto r_metric_name = Rcpp::as<Rcpp::List>(x);
 
@@ -110,7 +112,7 @@ Rcpp::as<std::vector<tensorboard::hparams::MetricName>> (SEXP x) {
 }
 
 template <>
-std::vector<tensorboard::hparams::DatasetType>
+inline std::vector<tensorboard::hparams::DatasetType>
 Rcpp::as<std::vector<tensorboard::hparams::DatasetType>> (SEXP x) {
   auto r_dataset_type = Rcpp::as<std::vector<std::string>>(x);
   std::vector<tensorboard::hparams::DatasetType> out;
@@ -127,7 +129,7 @@ Rcpp::as<std::vector<tensorboard::hparams::DatasetType>> (SEXP x) {
 }
 
 template <>
-std::vector<tensorboard::hparams::MetricInfo>
+inline std::vector<tensorboard::hparams::MetricInfo>
 Rcpp::as<std::vector<tensorboard::hparams::MetricInfo>> (SEXP x) {
   auto r_metric_info = Rcpp::as<Rcpp::List>(x);
 
@@ -149,7 +151,7 @@ Rcpp::as<std::vector<tensorboard::hparams::MetricInfo>> (SEXP x) {
 }
 
 template <>
-std::vector<tensorboard::hparams::Experiment>
+inline std::vector<tensorboard::hparams::Experiment>
 Rcpp::as<std::vector<tensorboard::hparams::Experiment>> (SEXP x) {
   auto r_experiments = Rcpp::as<Rcpp::List>(x);
 
@@ -186,20 +188,16 @@ Rcpp::as<std::vector<tensorboard::hparams::Experiment>> (SEXP x) {
 }
 
 template <>
-std::vector<tensorboard::hparams::HParamsPluginData>
-Rcpp::as<std::vector<tensorboard::hparams::HParamsPluginData>> (SEXP x) {
+inline tensorboard::hparams::HParamsPluginData
+Rcpp::as<tensorboard::hparams::HParamsPluginData> (SEXP x) {
   auto r_plugin_data = Rcpp::as<Rcpp::List>(x);
 
-  auto r_version = Rcpp::as<std::vector<std::int64_t>>(r_plugin_data["version"]);
-  auto r_experiment = Rcpp::as<std::vector<tensorboard::hparams::Experiment>>(r_plugin_data["experiment"]);
+  auto r_version = Rcpp::as<std::int64_t>(r_plugin_data["version"]);
+  auto r_experiment = Rcpp::as<std::vector<tensorboard::hparams::Experiment>>(r_plugin_data["experiment"])[0];
 
-  std::vector<tensorboard::hparams::HParamsPluginData> out;
-  for (size_t i = 0; i < r_version.size(); i++) {
-    tensorboard::hparams::HParamsPluginData plugin_data;
-    plugin_data.set_version(r_version[i]);
-    plugin_data.mutable_experiment()->CopyFrom(r_experiment[i]);
-    out.push_back(plugin_data);
-  }
+  tensorboard::hparams::HParamsPluginData plugin_data;
+  plugin_data.set_version(r_version);
+  plugin_data.mutable_experiment()->CopyFrom(r_experiment);
 
-  return out;
+  return plugin_data;
 }

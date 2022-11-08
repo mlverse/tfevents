@@ -9,11 +9,12 @@ std::vector<tensorboard::SummaryMetadata> Rcpp::as<std::vector<tensorboard::Summ
   auto r_plugin_name = Rcpp::as<std::vector<std::string>>(r_summary_metadata["plugin_name"]);
   auto r_display_name = Rcpp::as<std::vector<std::string>>(r_summary_metadata["display_name"]);
   auto r_description = Rcpp::as<std::vector<std::string>>(r_summary_metadata["description"]);
+  auto r_plugin_content = Rcpp::as<Rcpp::List>(r_summary_metadata["plugin_content"]);
 
   std::vector<tensorboard::SummaryMetadata> metadata;
   for (size_t i = 0; i < r_plugin_name.size(); i++) {
     tensorboard::SummaryMetadata meta;
-    meta.mutable_plugin_data()->CopyFrom(make_plugin_data(r_plugin_name[i]));
+    meta.mutable_plugin_data()->CopyFrom(make_plugin_data(r_plugin_name[i], r_plugin_content[i]));
     meta.set_display_name(r_display_name[i]);
     meta.set_summary_description(r_description[i]);
     metadata.push_back(meta);

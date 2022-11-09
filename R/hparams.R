@@ -174,7 +174,7 @@ hparams_metric <- function(tag, group = NA,
 
 #' Log hyperaparameters
 #'
-#' @param hparams A named list of hyperparameter values.
+#' @param ... Named values of hyperparameters.
 #' @param trial_id A name for the current trail. by default it's the hash of the
 #'   hparams names and values.
 #' @param time_created_secs The time the experiment is created in seconds
@@ -197,15 +197,15 @@ hparams_metric <- function(tag, group = NA,
 #' })
 #' @export
 log_hparams <- function(..., trial_id = NA, time_created_secs = get_wall_time()) {
-  hparams <- rlang::dots_list(...)
-  log_event(summary_hparams(hparams, trial_id, time_created_secs), step = 0)
+  log_event(summary_hparams(..., trial_id = trial_id, time_created_secs = time_created_secs), step = 0)
 }
 
 #' @describeIn log_hparams For advanced users only. It's recommended to use the `log_hparams()`
 #' function instead. Creates a hyperparameter summary that can be written with `log_event()`.
 #'
 #' @export
-summary_hparams <- function(hparams, trial_id = NA, start_time_secs = NA) {
+summary_hparams <- function(..., trial_id = NA, time_created_secs = get_wall_time()) {
+  hparams <- rlang::dots_list(..., .homonyms = "error")
   stopifnot(rlang::is_named(hparams))
   if (is.na(trial_id)) {
     trial_id <- digest::digest(hparams, algo = "sha256")
@@ -217,7 +217,7 @@ summary_hparams <- function(hparams, trial_id = NA, start_time_secs = NA) {
         version = 0,
         session_start_info = new_hparams_session_start_info(
           group_name = trial_id,
-          start_time_secs = get_wall_time(),
+          start_time_secs = time_created_secs,
           hparams = list(hparams),
           model_uri = NA,
           monitor_url = NA

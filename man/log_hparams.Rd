@@ -7,16 +7,16 @@
 \usage{
 log_hparams(..., trial_id = NA, time_created_secs = get_wall_time())
 
-summary_hparams(hparams, trial_id = NA, start_time_secs = NA)
+summary_hparams(..., trial_id = NA, time_created_secs = get_wall_time())
 }
 \arguments{
+\item{...}{Named values of hyperparameters.}
+
 \item{trial_id}{A name for the current trail. by default it's the hash of the
 hparams names and values.}
 
 \item{time_created_secs}{The time the experiment is created in seconds
 since the UNIX epoch.}
-
-\item{hparams}{A named list of hyperparameter values.}
 }
 \value{
 A hyperparameter summary. USed for the side effects of logging the

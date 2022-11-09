@@ -4,6 +4,8 @@
 #' @param ... Currently unused. To allow future expansion.
 #' @param metadata A `metadata` object, as created with [summary_metadata()]. In
 #'   most cases you don't need to change the default.
+#' @param tag A tag that within the TensorBoard UI. See [log_event()] for other
+#'   ways of specifying the tag attribute.
 #'
 #' @returns A `<scalar_event>` object.
 #'

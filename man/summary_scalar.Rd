@@ -4,7 +4,7 @@
 \alias{summary_scalar}
 \title{Scalar event}
 \usage{
-summary_scalar(value, ..., metadata = NULL)
+summary_scalar(value, ..., metadata = NULL, tag = NA)
 }
 \arguments{
 \item{value}{A numeric scalar value to be logged.}
@@ -13,6 +13,9 @@ summary_scalar(value, ..., metadata = NULL)
 
 \item{metadata}{A \code{metadata} object, as created with \code{\link[=summary_metadata]{summary_metadata()}}. In
 most cases you don't need to change the default.}
+
+\item{tag}{A tag that within the TensorBoard UI. See \code{\link[=log_event]{log_event()}} for other
+ways of specifying the tag attribute.}
 }
 \value{
 A \verb{<scalar_event>} object.

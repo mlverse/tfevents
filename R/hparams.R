@@ -1,10 +1,48 @@
-hparams_config <- function(hparams, metrics, time_created_secs = get_wall_time()) {
+#' Logs hyperparameters configuration
+#'
+#' Logs the hyperaparameter configuration for a HyperParameter tuning experiment.
+#' It allows you to define the domain for each hyperparameters and what are the
+#' metrics that should be shown in the TensorBoard UI, along with configuring
+#' their display name and descriptions.
+#'
+#' @section Recommendations:
+#'
+#' When loging hyperparameter tuning experiments, the log directory organization
+#' is:
+#'
+#' ```
+#' - root:
+#'  - log_hparams_config(...)
+#'  - run1:
+#'    - log_hparams(...)
+#'    - log_event(...)
+#'  - run2:
+#'    - log_hparams(...)
+#'    - log_event(...)
+#' ```
+#' Ie you should have a root logdir that will only contain the hyperaparameter
+#' config log, as created with [log_hparams_config()]. Then each run in the
+#' experiment will have it's own logdir as a child directory of the root logdir.
+#'
+#' @param hparams A list of `hparams` objects as created by [hparams_hparam()].
+#' @param metrics A list of `metrics` objects as created by [hparams_metric()].
+#'   These metrics will be tracked by TensorBoard UI when displaying the
+#'   hyperparameter tuning table.
+#' @inheritParams log_hparams
+#'
+#' @seealso [log_hparams()]
+#'
+#' @export
+log_hparams_config <- function(hparams, metrics, time_created_secs = get_wall_time()) {
   log_event(
     summary_hparams_config(hparams, metrics, time_created_secs),
     step = 0
   )
 }
 
+#' @describeIn log_hparams_config For advanced users only. Creates a hyperaparameter
+#'   configuration summary that can be logged with [log_event()].
+#' @export
 summary_hparams_config <- function(hparams, metrics, time_created_secs = get_wall_time()) {
   summary_values(
     summary_metadata(
@@ -85,10 +123,39 @@ hparams_metric <- function(tag, group = NA,
   ), class = "hparams_metric")
 }
 
-hparams_hparams <- function(hparams, trial_id = NA, time_created_secs = get_wall_time()) {
+#' Log hyperaparameters
+#'
+#' @param hparams A named list of hyperparameter values.
+#' @param trial_id A name for the current trail. by default it's the hash of the
+#'   hparams names and values.
+#' @param time_created_secs The time the experiment is created in seconds
+#'   since the UNIX epoch.
+#'
+#' @details This function should only be called once in a logdir and it will
+#' record the set of hyperparameters used in that run. Undefined behavior can
+#' happen if it's called more than once in a logdir - specially how TensorBoard
+#' behaves during visualization.
+#'
+#' @returns A hyperparameter summary. USed for the side effects of logging the
+#'   hyperparameter to the logdir.
+#'
+#' @seealso [log_hparams_config()]
+#'
+#' @examples
+#' temp <- tempfile()
+#' with_logdir(temp, {
+#'   log_hparams(optimizer = "adam", num_units = 16)
+#' })
+#' @export
+log_hparams <- function(..., trial_id = NA, time_created_secs = get_wall_time()) {
+  hparams <- rlang::dots_list(...)
   log_event(summary_hparams(hparams, trial_id, time_created_secs), step = 0)
 }
 
+#' @describeIn log_hparams For advanced users only. It's recommended to use the `log_hparams()`
+#' function instead. Creates a hyperparameter summary that can be written with `log_event()`.
+#'
+#' @export
 summary_hparams <- function(hparams, trial_id = NA, start_time_secs = NA) {
   stopifnot(rlang::is_named(hparams))
   if (is.na(trial_id)) {

@@ -14,14 +14,14 @@
 #'   `6 - BGRA`
 #'
 #' @export
-summary_image <- function(img, ..., metadata = NULL) {
+summary_image <- function(img, ..., metadata = NULL, tag = NA) {
   UseMethod("summary_image")
 }
 
 #' @describeIn summary_image Creates an image from an R array. The array should be
 #'   numeric, with values between 0 and 1.
 #' @export
-summary_image.array <- function(img, ..., metadata = NULL) {
+summary_image.array <- function(img, ..., metadata = NULL, tag = NA) {
   img_buf <- png::writePNG(img)
   height <- dim(img)[1]
   width <- dim(img)[2]
@@ -29,7 +29,8 @@ summary_image.array <- function(img, ..., metadata = NULL) {
   summary_image(
     img_buf,
     height = height, width = width, colorspace = colorspace,
-    metadata = metadata
+    metadata = metadata,
+    tag = tag
   )
 }
 
@@ -37,21 +38,21 @@ summary_image.array <- function(img, ..., metadata = NULL) {
 #'   with [png::writePNG()]. In this case you need to provide `width`, `height` and
 #'   `colorspace` arguments.
 #' @export
-summary_image.raw <- function(img, ..., width, height, colorspace, metadata = NULL) {
+summary_image.raw <- function(img, ..., width, height, colorspace, metadata = NULL, tag = NA) {
   image <- summary_summary_image(
     buffer = img,
     width = width,
     height = height,
     colorspace = colorspace
   )
-  new_summary_image(image, metadata = metadata)
+  new_summary_image(image, metadata = metadata, tag = tag)
 }
 
-new_summary_image <- function(img = new_summary_summary_image(), ..., metadata = NULL) {
+new_summary_image <- function(img = new_summary_summary_image(), ..., metadata = NULL, tag = character()) {
   if (is.null(metadata)) {
     metadata <- summary_metadata(plugin_name = "images")
   }
-  summary_values(metadata = metadata, image = img, class = "tfevents_summary_image")
+  summary_values(metadata = metadata, image = img, class = "tfevents_summary_image", tag = tag)
 }
 
 summary_summary_image <- function(buffer, width, height, colorspace) {

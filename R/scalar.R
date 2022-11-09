@@ -13,16 +13,18 @@
 #'   log_event(loss = summary_scalar(1))
 #' })
 #' @export
-summary_scalar <- function(value, ..., metadata = NULL) {
+summary_scalar <- function(value, ..., metadata = NULL, tag = NA) {
   ellipsis::check_dots_empty()
-  new_summary_scalar(value, metadata = metadata, tag = NA)
+  new_summary_scalar(value, metadata = metadata, tag = tag)
 }
 
-new_summary_scalar <- function(value = numeric(), ..., metadata = NULL) {
+new_summary_scalar <- function(value = numeric(), ..., metadata = NULL,
+                               tag = character()) {
   if (is.null(metadata)) {
     metadata <- summary_metadata(plugin_name = "scalars")
   }
-  summary_values(metadata = metadata, value = value, class = "tfevents_summary_scalar")
+  summary_values(metadata = metadata, value = value, tag = tag,
+                 class = "tfevents_summary_scalar")
 }
 
 #' @export

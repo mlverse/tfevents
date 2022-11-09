@@ -1,7 +1,6 @@
 hparams_config <- function(hparams, metrics, time_created_secs = get_wall_time()) {
   log_event(
-    "_hparams_/experiment" =
-      summary_hparams_config(hparams, metrics, time_created_secs),
+    summary_hparams_config(hparams, metrics, time_created_secs),
     step = 0
   )
 }
@@ -16,6 +15,7 @@ summary_hparams_config <- function(hparams, metrics, time_created_secs = get_wal
         session_start_info = NA
       )
     ),
+    tag = "_hparams_/experiment", # this tag is recognized by tensorboard, can't change
     class = "summary_hparams_config"
   )
 }
@@ -86,11 +86,7 @@ hparams_metric <- function(tag, group = NA,
 }
 
 hparams_hparams <- function(hparams, trial_id = NA, time_created_secs = get_wall_time()) {
-  log_event(
-    "_hparams_/session_start_info" =
-      summary_hparams(hparams, trial_id, time_created_secs),
-    step = 0
-  )
+  log_event(summary_hparams(hparams, trial_id, time_created_secs), step = 0)
 }
 
 summary_hparams <- function(hparams, trial_id = NA, start_time_secs = NA) {
@@ -113,6 +109,7 @@ summary_hparams <- function(hparams, trial_id = NA, start_time_secs = NA) {
         experiment = NA
       )
     ),
+    tag = "_hparams_/session_start_info", # this tag is read by TensorBoard, don't change.
     class = "summary_hparams_config"
   )
 }

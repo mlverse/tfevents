@@ -43,13 +43,33 @@ as_event.numeric <- function(x, step, wall_time, ..., name) {
 #' @importFrom utils tail
 #' @export
 as_event.tfevents_summary_values <- function(x, step, wall_time, ..., name) {
-  field(x, "tag") <- tail(name, 1)
+  field(x, "tag") <- make_tag(field(x, "tag"), tail(name, 1))
   event(
     run = paste0(name[-length(name)], collapse = "/"),
     wall_time = wall_time,
     step = step,
     summary = x
   )
+}
+
+make_tag <- function(cur_tag, name) {
+  if (any(name[!is.na(cur_tag)] != "")) {
+    cli::cli_abort(c(
+      x = "Two tags were provided for the same summary.",
+      i = "You can only a specify tags once for a summary."
+    ))
+  }
+
+  cur_tag[is.na(cur_tag)] <- name[is.na(cur_tag)]
+
+  if (any(cur_tag == "")) {
+    cli::cli_abort(c(
+      x = "All summaries must have a tag, but found at least one without one.",
+      i = "See {.help log_event} to find out how to specify tags for summaries."
+    ))
+  }
+
+  cur_tag
 }
 
 #' Creates events

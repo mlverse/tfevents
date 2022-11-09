@@ -302,26 +302,6 @@ Rcpp::as<tensorboard::hparams::HParamsPluginData> (SEXP x) {
   return plugin_data;
 }
 
-// message SessionStartInfo {
-//   // A map describing the hyperparameter values for the session.
-//   // Maps each hyperparameter name to its value.
-//   // Currently only scalars are supported.
-//   map<string, google.protobuf.Value> hparams = 1;
-//
-//   // A URI for where checkpoints are saved.
-//   string model_uri = 2;
-//
-//   // An optional URL to a website monitoring the session.
-//   string monitor_url = 3;
-//
-//   // The name of the session group containing this session. If empty, the
-//   // group name is taken to be the session id (so this session is the only
-//   // member of its group).
-//   string group_name = 4;
-//
-//   // The time the session started in seconds since epoch.
-//   double start_time_secs = 5;
-// }
 
 
 

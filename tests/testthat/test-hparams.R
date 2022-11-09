@@ -12,7 +12,9 @@ test_that("simple hparams experiment", {
   )
 
   metrics <- list(
-    hparams_metric(tag = "loss")
+    hparams_metric(tag = "loss"),
+    hparams_metric(tag = "accuracy", group = "valid"),
+    hparams_metric(tag = "f1", dataset_type = "training")
   )
 
   temp <- tempfile()
@@ -26,7 +28,8 @@ test_that("simple hparams experiment", {
     )
 
     for (i in 1:10) {
-      log_event(loss = runif(1))
+      log_event(loss = runif(1), valid = list(accuracy = runif(1)),
+                f1 = runif(1))
     }
   })
 
@@ -34,10 +37,10 @@ test_that("simple hparams experiment", {
 
   expect_equal(reader$hparams$tag, c("dropout", "num_units", "optimizer", "use_cnn"))
   expect_equal(reader$hparams$value, list(0.1, 8, "adam", TRUE))
-  expect_equal(nrow(reader$scalars), 10)
+  expect_equal(nrow(reader$scalars), 30)
 
-  expect_equal(nrow(collect_events(temp)), 10 + 3)
-  expect_equal(nrow(collect_summaries(temp)), 10 + 2)
-  expect_equal(nrow(collect_scalars(temp)), 10)
+  expect_equal(nrow(collect_events(temp)), 30 + 4)
+  expect_equal(nrow(collect_summaries(temp)), 30 + 2)
+  expect_equal(nrow(collect_scalars(temp)), 30)
 })
 

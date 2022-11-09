@@ -70,7 +70,7 @@ hparams_hparam <- function (name, domain = NA, display_name = name, description 
 
 hparams_metric <- function(tag, group = NA,
                            display_name = tag,
-                           description = NA,
+                           description = tag,
                            dataset_type = NA) {
 
   if (is.na(dataset_type)) {

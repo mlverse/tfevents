@@ -97,7 +97,32 @@ as_hparams_experiment <- function(hparams, metrics, time_created_secs) {
   )
 }
 
-hparams_hparam <- function (name, domain = NA, display_name = name, description = NA) {
+#' Defines a HParam
+#'
+#' Hparam object are used to describe names and domains of hyperparameters so
+#' TensorBoard UI can show additional information about them.
+#'
+#' @param name Name of the hyperparameter.
+#' @param domain A list of values that can be assumed by the hyperparameter.
+#'   It can be `character()`, `numeric()` or `logical()` vector. You can also
+#'   pass a named numeric vector with eg `c(min_value = 0, max_value = 10)` in
+#'   this case, any value in this range is accepted.
+#' @param display_name Display name of the hparameter for the TensorBoard UI.
+#'   By default it's identical to the name.
+#' @param description Parameter description. Shown in tooltips around the
+#'   TensorBoard UI.
+#'
+#' @note A list of `hparam` values can be passed to [log_hparams_config()] so
+#'   you define the hyperparameters that are tracked by the experiment.
+#'
+#' @returns A `hparams_hparam` object.
+#' @examples
+#' hparams_hparam("optimizer", domain = c("adam", "sgd"))
+#' hparams_hparam("num_units", domain = c(128, 512, 1024))
+#' hparams_hparam("use_cnn", domain = c(TRUE, FALSE))
+#' hparams_hparam("dropout", domain = c(min_value = 0, max_value = 0.5))
+#' @export
+hparams_hparam <- function (name, domain = NA, display_name = name, description = name) {
   structure(list(
     name = name,
     domain = domain,
@@ -106,6 +131,30 @@ hparams_hparam <- function (name, domain = NA, display_name = name, description 
   ), class = "hparams_hparam")
 }
 
+#' Defines a Metric
+#'
+#' Metric objects are passed to [log_hparams_config()] in order to define the
+#' collection of scalars that will be displayed in the HParams tab in TensorBoard.
+#'
+#' @param tag The tag name of the scalar summary that corresponds to this
+#'  metric.
+#' @param group An optional string listing the subdirectory under the
+#'   session's log directory containing summaries for this metric.
+#'   For instance, if summaries for training runs are written to
+#'   events files in `ROOT_LOGDIR/SESSION_ID/train`, then `group`
+#'   should be `"train"`. Defaults to the empty string: i.e.,
+#'   summaries are expected to be written to the session logdir.
+#' @param display_name An optional human-readable display name.
+#' @param description An optional Markdown string with a human-readable
+#'   description of this metric, to appear in TensorBoard.
+#' @param dataset_type dataset_type: Either `"training"` or `"validation`, or
+#'   `NA`.
+#'
+#' @returns A `hparams_metric` object.
+#' @examples
+#' hparams_metric("loss", group = "train")
+#' hparams_metric("acc")
+#' @export
 hparams_metric <- function(tag, group = NA,
                            display_name = tag,
                            description = tag,

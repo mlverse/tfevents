@@ -20,12 +20,12 @@ test_that("simple hparams experiment", {
 
   temp <- tempfile()
   with_logdir(temp, {
-    hparams_config(hparams, metrics)
-    hparams_hparams(hparams = list(
+    log_hparams_config(hparams, metrics)
+    log_hparams(
       dropout = 0.1,
       optimizer = "adam",
       use_cnn = TRUE,
-      num_units = 8)
+      num_units = 8
     )
 
     for (i in 1:10) {
@@ -63,17 +63,17 @@ test_that("multiple runs, each in a different logdir", {
   temp <- tempfile()
 
   with_logdir(temp, {
-    hparams_config(hparams, metrics)
+    log_hparams_config(hparams, metrics)
   })
 
   for(run in 1:10) {
     with_logdir(file.path(temp, paste0("run", run)), {
-      hparams_hparams(hparams = list(
+      log_hparams(
         dropout = runif(1, min = 0.1, max = 0.5),
         optimizer = sample(c("adam", "sgd"), 1),
         use_cnn = sample(c(TRUE, FALSE), 1),
         num_units = sample(c(8, 12, 16), 1)
-      ))
+      )
 
       for (i in 1:10) {
         log_event(loss = runif(1), valid = list(accuracy = runif(1)),
@@ -92,12 +92,12 @@ test_that("write only hparams without the config", {
   temp <- tempfile()
   for(run in 1:10) {
     with_logdir(file.path(temp, paste0("run", run)), {
-      hparams_hparams(hparams = list(
+      log_hparams(
         dropout = runif(1, min = 0.1, max = 0.5),
         optimizer = sample(c("adam", "sgd"), 1),
         use_cnn = sample(c(TRUE, FALSE), 1),
         num_units = sample(c(8, 12, 16), 1)
-      ))
+      )
 
       for (i in 1:10) {
         log_event(loss = runif(1), valid = list(accuracy = runif(1)),

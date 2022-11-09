@@ -26,3 +26,4 @@
 ^vignettes/articles$
 ^logs$
 ^.vscode$
+^README\.Rmd$

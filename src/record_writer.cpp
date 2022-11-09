@@ -1,6 +1,6 @@
 #include <cstring>
 #include "record_writer.h"
-#include "crc.h"
+#include "crc/crc.h"
 
 // helper functions
 

@@ -24,3 +24,5 @@
 ^LICENSE\.md$
 ^codecov\.yml$
 ^vignettes/articles$
+^logs$
+^.vscode$

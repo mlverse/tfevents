@@ -4,6 +4,8 @@
 #' @param ... Currently unused. To allow future expansion.
 #' @param metadata A `metadata` object, as created with [summary_metadata()]. In
 #'   most cases you don't need to change the default.
+#' @param tag A tag that within the TensorBoard UI. See [log_event()] for other
+#'   ways of specifying the tag attribute.
 #'
 #' @returns A `<scalar_event>` object.
 #'
@@ -13,16 +15,18 @@
 #'   log_event(loss = summary_scalar(1))
 #' })
 #' @export
-summary_scalar <- function(value, ..., metadata = NULL) {
+summary_scalar <- function(value, ..., metadata = NULL, tag = NA) {
   ellipsis::check_dots_empty()
-  new_summary_scalar(value, metadata = metadata, tag = NA)
+  new_summary_scalar(value, metadata = metadata, tag = tag)
 }
 
-new_summary_scalar <- function(value = numeric(), ..., metadata = NULL) {
+new_summary_scalar <- function(value = numeric(), ..., metadata = NULL,
+                               tag = character()) {
   if (is.null(metadata)) {
     metadata <- summary_metadata(plugin_name = "scalars")
   }
-  summary_values(metadata = metadata, value = value, class = "tfevents_summary_scalar")
+  summary_values(metadata = metadata, value = value, tag = tag,
+                 class = "tfevents_summary_scalar")
 }
 
 #' @export

@@ -22,7 +22,7 @@
 #' })
 #' @export
 log_event <- function(..., step = get_global_step(increment = TRUE)) {
-  data <- rlang::dots_list(..., .named = TRUE, .homonyms = "error")
+  data <- rlang::dots_list(..., .named = FALSE, .homonyms = "error")
   write_event(as_event(data, step = step, wall_time = get_wall_time()))
   invisible(data)
 }

@@ -22,3 +22,5 @@
 ^\.DS_Store$
 ^src/\.DS_Store$
 ^LICENSE\.md$
+^codecov\.yml$
+^vignettes/articles$

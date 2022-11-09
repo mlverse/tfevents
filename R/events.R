@@ -43,13 +43,33 @@ as_event.numeric <- function(x, step, wall_time, ..., name) {
 #' @importFrom utils tail
 #' @export
 as_event.tfevents_summary_values <- function(x, step, wall_time, ..., name) {
-  field(x, "tag") <- tail(name, 1)
+  field(x, "tag") <- make_tag(field(x, "tag"), tail(name, 1))
   event(
     run = paste0(name[-length(name)], collapse = "/"),
     wall_time = wall_time,
     step = step,
     summary = x
   )
+}
+
+make_tag <- function(cur_tag, name) {
+  if (any(name[!is.na(cur_tag)] != "")) {
+    cli::cli_abort(c(
+      x = "Two tags were provided for the same summary.",
+      i = "You can only a specify tags once for a summary."
+    ))
+  }
+
+  cur_tag[is.na(cur_tag)] <- name[is.na(cur_tag)]
+
+  if (any(cur_tag == "")) {
+    cli::cli_abort(c(
+      x = "All summaries must have a tag, but found at least one without one.",
+      i = "See {.help log_event} to find out how to specify tags for summaries."
+    ))
+  }
+
+  cur_tag
 }
 
 #' Creates events
@@ -176,6 +196,10 @@ vec_cast.tfevents_summary.tfevents_summary_values <- function(x, to, ...) {
 #' @param plugin_name The name of the TensorBoard plugin that might use the summary.
 #' @param display_name Display name for the summary.
 #' @param description A description of the summary.
+#' @param plugin_content An optional plugin content. Note that it will only be
+#'  used if the C++ function `make_plugin_data` is aware of `plugin_content`
+#'  for the specified plugin name. For advanced use only.
+#' @param ... Currently unused. For future expansion.
 #'
 #' @returns A `summary_metadata` object.
 #'
@@ -186,18 +210,23 @@ vec_cast.tfevents_summary.tfevents_summary_values <- function(x, to, ...) {
 summary_metadata <- function(
     plugin_name,
     display_name = NA_character_,
-    description = NA_character_) {
+    description = NA_character_, ...,
+    plugin_content = NA) {
+  ellipsis::check_dots_empty()
+  plugin_content <- vec_cast(plugin_content, list())
   new_summary_metadata(plugin_name = plugin_name, display_name = display_name,
-                       description = description)
+                       description = description,
+                       plugin_content = plugin_content)
 }
 
 new_summary_metadata <- function(plugin_name = character(), display_name = character(),
-                                 description = character()) {
+                                 description = character(), plugin_content = list()) {
   vctrs::new_rcrd(
     fields = list(
       plugin_name = plugin_name,
       display_name = display_name,
-      description = description
+      description = description,
+      plugin_content = plugin_content
     ),
     class = "tfevents_summary_metadata"
   )
@@ -218,3 +247,11 @@ vec_c_list <- function(x) {
   vec_c(!!!x)
 }
 na <- NA
+is_na <- function(x) {
+  if (inherits(x, "vctrs_vctr"))
+    vec_any_missing(x)
+  else if (is.null(x))
+    TRUE
+  else
+    rlang::is_na(x)
+}

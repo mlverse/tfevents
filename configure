@@ -29,14 +29,8 @@ fi
 
 if [ ! -d "generated" ]; then
   mkdir generated
-
-  ./libs/protoc -I "proto" --cpp_out="generated" "proto/event.proto"
-  ./libs/protoc -I "proto" --cpp_out="generated" "proto/summary.proto"
-  ./libs/protoc -I "proto" --cpp_out="generated" "proto/tensor.proto"
-  ./libs/protoc -I "proto" --cpp_out="generated" "proto/resource_handle.proto"
-  ./libs/protoc -I "proto" --cpp_out="generated" "proto/tensor_shape.proto"
-  ./libs/protoc -I "proto" --cpp_out="generated" "proto/types.proto"
-  ./libs/protoc -I "proto" --cpp_out="generated" "proto/plugins/scalar/plugin_data.proto"
+  find proto -name *.proto -exec bash -c \
+    './libs/protoc -I "proto" -I "../inst/tp/pb/src" --cpp_out="generated" {}' \;
 fi
 
 # copied from protolite:

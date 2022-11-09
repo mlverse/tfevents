@@ -6,11 +6,11 @@
 \alias{summary_image.raw}
 \title{Creates a image summary}
 \usage{
-summary_image(img, ..., metadata = NULL)
+summary_image(img, ..., metadata = NULL, tag = NA)
 
-\method{summary_image}{array}(img, ..., metadata = NULL)
+\method{summary_image}{array}(img, ..., metadata = NULL, tag = NA)
 
-\method{summary_image}{raw}(img, ..., width, height, colorspace, metadata = NULL)
+\method{summary_image}{raw}(img, ..., width, height, colorspace, metadata = NULL, tag = NA)
 }
 \arguments{
 \item{img}{An object that can be converted to an image.}
@@ -19,6 +19,9 @@ summary_image(img, ..., metadata = NULL)
 
 \item{metadata}{A \code{metadata} object, as created with \code{\link[=summary_metadata]{summary_metadata()}}. In
 most cases you don't need to change the default.}
+
+\item{tag}{A tag that within the TensorBoard UI. See \code{\link[=log_event]{log_event()}} for other
+ways of specifying the tag attribute.}
 
 \item{width}{Width of the image.}
 

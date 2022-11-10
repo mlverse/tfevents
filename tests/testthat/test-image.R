@@ -49,6 +49,7 @@ test_that("can write a batch of images", {
   reader <- tbparse$SummaryReader(temp)
   tags <- reader$tags
   expect_equal(as.character(tags$images), "hello")
+  expect_equal(nrow(reader$images), 10)
 })
 
 test_that("can write a ggplot", {

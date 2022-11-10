@@ -57,8 +57,14 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">summary_image</span><span class="op">(</span><span class="va">img</span>, <span class="va">...</span>, metadata <span class="op">=</span> <span class="cn">NULL</span>, tag <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># S3 method for ggplot</span></span>
+<span><span class="fu">summary_image</span><span class="op">(</span><span class="va">img</span>, <span class="va">...</span>, width <span class="op">=</span> <span class="cn">NA</span>, height <span class="op">=</span> <span class="cn">NA</span>, metadata <span class="op">=</span> <span class="cn">NULL</span>, tag <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># S3 method for array</span></span>
 <span><span class="fu">summary_image</span><span class="op">(</span><span class="va">img</span>, <span class="va">...</span>, metadata <span class="op">=</span> <span class="cn">NULL</span>, tag <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for blob</span></span>
+<span><span class="fu">summary_image</span><span class="op">(</span><span class="va">img</span>, <span class="va">...</span>, <span class="va">width</span>, <span class="va">height</span>, <span class="va">colorspace</span>, metadata <span class="op">=</span> <span class="cn">NULL</span>, tag <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for raw</span></span>
 <span><span class="fu">summary_image</span><span class="op">(</span><span class="va">img</span>, <span class="va">...</span>, <span class="va">width</span>, <span class="va">height</span>, <span class="va">colorspace</span>, metadata <span class="op">=</span> <span class="cn">NULL</span>, tag <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></code></pre></div>
@@ -105,8 +111,13 @@ ways of specifying the tag attribute.</p></dd>
     <div class="section level2">
     <h2 id="methods-by-class-">Methods (by class)<a class="anchor" aria-label="anchor" href="#methods-by-class-"></a></h2>
     
-<ul><li><p><code>summary_image(array)</code>: Creates an image from an R array. The array should be
-numeric, with values between 0 and 1.</p></li>
+<ul><li><p><code>summary_image(ggplot)</code>: Cretes an image summary from a ggplot2 graph object.
+The <code>...</code> will be forwarded to <code><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggplot2::ggsave()</a></code>.</p></li>
+<li><p><code>summary_image(array)</code>: Creates an image from an R array. The array should be
+numeric, with values between 0 and 1. Dimensions should be <code>(batch, height, width, channels)</code>.</p></li>
+<li><p><code>summary_image(blob)</code>: Creates an image from <code><a href="https://blob.tidyverse.org/reference/blob.html" class="external-link">blob::blob()</a></code> vctr of PNG encoded images,
+(eg using <code><a href="https://rdrr.io/pkg/png/man/writePNG.html" class="external-link">png::writePNG()</a></code>). <code>width</code>, <code>height</code> and <code>colorspace</code> are recycled
+thus they can be a single scalar or a vector the same size of the images blob.</p></li>
 <li><p><code>summary_image(raw)</code>: Creates an image from a png encoded image. Eg, created
 with <code><a href="https://rdrr.io/pkg/png/man/writePNG.html" class="external-link">png::writePNG()</a></code>. In this case you need to provide <code>width</code>, <code>height</code> and
 <code>colorspace</code> arguments.</p></li>

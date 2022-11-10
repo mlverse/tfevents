@@ -189,80 +189,80 @@ sets of hyperparameters.</p>
 <code>temp</code> will be filled with event files.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span><span class="va">temp</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">/tmp/RtmplUH9cG/logdir3da8f8b9ae5</span></span></span>
-<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">bcrndydqdhlnxtz</span></span></span>
-<span><span class="co">#&gt; │   ├── events.out.tfevents.1668048626.v2</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">/tmp/RtmpT29Lyg/logdir3d6d75a95bd9</span></span></span>
+<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">azfkvgdulervtrn</span></span></span>
+<span><span class="co">#&gt; │   ├── events.out.tfevents.1668110577.v2</span></span>
 <span><span class="co">#&gt; │   ├── <span style="color: #0000BB; font-weight: bold;">train</span></span></span>
-<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668048626.v2</span></span>
+<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668110577.v2</span></span>
 <span><span class="co">#&gt; │   └── <span style="color: #0000BB; font-weight: bold;">valid</span></span></span>
-<span><span class="co">#&gt; │       └── events.out.tfevents.1668048626.v2</span></span>
-<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">ehcpjqqsqpgqtli</span></span></span>
-<span><span class="co">#&gt; │   ├── events.out.tfevents.1668048628.v2</span></span>
+<span><span class="co">#&gt; │       └── events.out.tfevents.1668110577.v2</span></span>
+<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">coqzwufvbvchyyn</span></span></span>
+<span><span class="co">#&gt; │   ├── events.out.tfevents.1668110577.v2</span></span>
 <span><span class="co">#&gt; │   ├── <span style="color: #0000BB; font-weight: bold;">train</span></span></span>
-<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668048628.v2</span></span>
+<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668110577.v2</span></span>
 <span><span class="co">#&gt; │   └── <span style="color: #0000BB; font-weight: bold;">valid</span></span></span>
-<span><span class="co">#&gt; │       └── events.out.tfevents.1668048628.v2</span></span>
-<span><span class="co">#&gt; ├── events.out.tfevents.1668048626.v2</span></span>
-<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">hmikqrxcdavpbsu</span></span></span>
-<span><span class="co">#&gt; │   ├── events.out.tfevents.1668048627.v2</span></span>
+<span><span class="co">#&gt; │       └── events.out.tfevents.1668110577.v2</span></span>
+<span><span class="co">#&gt; ├── events.out.tfevents.1668110575.v2</span></span>
+<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">ewonexbkbbrysya</span></span></span>
+<span><span class="co">#&gt; │   ├── events.out.tfevents.1668110576.v2</span></span>
 <span><span class="co">#&gt; │   ├── <span style="color: #0000BB; font-weight: bold;">train</span></span></span>
-<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668048627.v2</span></span>
+<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668110576.v2</span></span>
 <span><span class="co">#&gt; │   └── <span style="color: #0000BB; font-weight: bold;">valid</span></span></span>
-<span><span class="co">#&gt; │       └── events.out.tfevents.1668048627.v2</span></span>
-<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">hpzvbrpwhmfeebb</span></span></span>
-<span><span class="co">#&gt; │   ├── events.out.tfevents.1668048627.v2</span></span>
+<span><span class="co">#&gt; │       └── events.out.tfevents.1668110576.v2</span></span>
+<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">fjodvuryrxokacl</span></span></span>
+<span><span class="co">#&gt; │   ├── events.out.tfevents.1668110576.v2</span></span>
 <span><span class="co">#&gt; │   ├── <span style="color: #0000BB; font-weight: bold;">train</span></span></span>
-<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668048627.v2</span></span>
+<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668110576.v2</span></span>
 <span><span class="co">#&gt; │   └── <span style="color: #0000BB; font-weight: bold;">valid</span></span></span>
-<span><span class="co">#&gt; │       └── events.out.tfevents.1668048627.v2</span></span>
-<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">lqcrccienyrpiyy</span></span></span>
-<span><span class="co">#&gt; │   ├── events.out.tfevents.1668048626.v2</span></span>
+<span><span class="co">#&gt; │       └── events.out.tfevents.1668110576.v2</span></span>
+<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">fowyhwilnekudew</span></span></span>
+<span><span class="co">#&gt; │   ├── events.out.tfevents.1668110577.v2</span></span>
 <span><span class="co">#&gt; │   ├── <span style="color: #0000BB; font-weight: bold;">train</span></span></span>
-<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668048626.v2</span></span>
+<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668110577.v2</span></span>
 <span><span class="co">#&gt; │   └── <span style="color: #0000BB; font-weight: bold;">valid</span></span></span>
-<span><span class="co">#&gt; │       └── events.out.tfevents.1668048626.v2</span></span>
-<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">ncfpzdwpsnkvpun</span></span></span>
-<span><span class="co">#&gt; │   ├── events.out.tfevents.1668048627.v2</span></span>
+<span><span class="co">#&gt; │       └── events.out.tfevents.1668110577.v2</span></span>
+<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">iylopoisdktjjzq</span></span></span>
+<span><span class="co">#&gt; │   ├── events.out.tfevents.1668110576.v2</span></span>
 <span><span class="co">#&gt; │   ├── <span style="color: #0000BB; font-weight: bold;">train</span></span></span>
-<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668048627.v2</span></span>
+<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668110576.v2</span></span>
 <span><span class="co">#&gt; │   └── <span style="color: #0000BB; font-weight: bold;">valid</span></span></span>
-<span><span class="co">#&gt; │       └── events.out.tfevents.1668048627.v2</span></span>
-<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">ngvxuztgttxrumo</span></span></span>
-<span><span class="co">#&gt; │   ├── events.out.tfevents.1668048627.v2</span></span>
+<span><span class="co">#&gt; │       └── events.out.tfevents.1668110576.v2</span></span>
+<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">jlthnsgzyrjstum</span></span></span>
+<span><span class="co">#&gt; │   ├── events.out.tfevents.1668110577.v2</span></span>
 <span><span class="co">#&gt; │   ├── <span style="color: #0000BB; font-weight: bold;">train</span></span></span>
-<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668048627.v2</span></span>
+<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668110577.v2</span></span>
 <span><span class="co">#&gt; │   └── <span style="color: #0000BB; font-weight: bold;">valid</span></span></span>
-<span><span class="co">#&gt; │       └── events.out.tfevents.1668048627.v2</span></span>
-<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">nkvvuzflaotuslx</span></span></span>
-<span><span class="co">#&gt; │   ├── events.out.tfevents.1668048626.v2</span></span>
+<span><span class="co">#&gt; │       └── events.out.tfevents.1668110577.v2</span></span>
+<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">mdleppkaxlkyzgm</span></span></span>
+<span><span class="co">#&gt; │   ├── events.out.tfevents.1668110576.v2</span></span>
 <span><span class="co">#&gt; │   ├── <span style="color: #0000BB; font-weight: bold;">train</span></span></span>
-<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668048626.v2</span></span>
+<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668110576.v2</span></span>
 <span><span class="co">#&gt; │   └── <span style="color: #0000BB; font-weight: bold;">valid</span></span></span>
-<span><span class="co">#&gt; │       └── events.out.tfevents.1668048626.v2</span></span>
-<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">rskvslgkcnvceez</span></span></span>
-<span><span class="co">#&gt; │   ├── events.out.tfevents.1668048627.v2</span></span>
+<span><span class="co">#&gt; │       └── events.out.tfevents.1668110576.v2</span></span>
+<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">mmaxrvcevqtehqq</span></span></span>
+<span><span class="co">#&gt; │   ├── events.out.tfevents.1668110576.v2</span></span>
 <span><span class="co">#&gt; │   ├── <span style="color: #0000BB; font-weight: bold;">train</span></span></span>
-<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668048627.v2</span></span>
+<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668110576.v2</span></span>
 <span><span class="co">#&gt; │   └── <span style="color: #0000BB; font-weight: bold;">valid</span></span></span>
-<span><span class="co">#&gt; │       └── events.out.tfevents.1668048627.v2</span></span>
-<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">scsrjdxqndpjdcv</span></span></span>
-<span><span class="co">#&gt; │   ├── events.out.tfevents.1668048626.v2</span></span>
+<span><span class="co">#&gt; │       └── events.out.tfevents.1668110576.v2</span></span>
+<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">vsvrgaqlhwshnbj</span></span></span>
+<span><span class="co">#&gt; │   ├── events.out.tfevents.1668110576.v2</span></span>
 <span><span class="co">#&gt; │   ├── <span style="color: #0000BB; font-weight: bold;">train</span></span></span>
-<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668048626.v2</span></span>
+<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668110576.v2</span></span>
 <span><span class="co">#&gt; │   └── <span style="color: #0000BB; font-weight: bold;">valid</span></span></span>
-<span><span class="co">#&gt; │       └── events.out.tfevents.1668048626.v2</span></span>
-<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">shvlloimdrqqsvj</span></span></span>
-<span><span class="co">#&gt; │   ├── events.out.tfevents.1668048627.v2</span></span>
+<span><span class="co">#&gt; │       └── events.out.tfevents.1668110576.v2</span></span>
+<span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">xfkaziitlqjeabs</span></span></span>
+<span><span class="co">#&gt; │   ├── events.out.tfevents.1668110577.v2</span></span>
 <span><span class="co">#&gt; │   ├── <span style="color: #0000BB; font-weight: bold;">train</span></span></span>
-<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668048627.v2</span></span>
+<span><span class="co">#&gt; │   │   └── events.out.tfevents.1668110577.v2</span></span>
 <span><span class="co">#&gt; │   └── <span style="color: #0000BB; font-weight: bold;">valid</span></span></span>
-<span><span class="co">#&gt; │       └── events.out.tfevents.1668048627.v2</span></span>
-<span><span class="co">#&gt; └── <span style="color: #0000BB; font-weight: bold;">vycufeulxupdqyx</span></span></span>
-<span><span class="co">#&gt;     ├── events.out.tfevents.1668048627.v2</span></span>
+<span><span class="co">#&gt; │       └── events.out.tfevents.1668110577.v2</span></span>
+<span><span class="co">#&gt; └── <span style="color: #0000BB; font-weight: bold;">ycnsmefbhwsddxx</span></span></span>
+<span><span class="co">#&gt;     ├── events.out.tfevents.1668110577.v2</span></span>
 <span><span class="co">#&gt;     ├── <span style="color: #0000BB; font-weight: bold;">train</span></span></span>
-<span><span class="co">#&gt;     │   └── events.out.tfevents.1668048627.v2</span></span>
+<span><span class="co">#&gt;     │   └── events.out.tfevents.1668110577.v2</span></span>
 <span><span class="co">#&gt;     └── <span style="color: #0000BB; font-weight: bold;">valid</span></span></span>
-<span><span class="co">#&gt;         └── events.out.tfevents.1668048627.v2</span></span></code></pre></div>
+<span><span class="co">#&gt;         └── events.out.tfevents.1668110577.v2</span></span></code></pre></div>
 <p>Finally, we can visualize the experiment results in TensorBoard:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">tensorflow</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tensorflow/man/tensorboard.html" class="external-link">tensorboard</a></span><span class="op">(</span><span class="va">temp</span>, port <span class="op">=</span> <span class="fl">6060</span><span class="op">)</span></span>

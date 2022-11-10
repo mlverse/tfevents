@@ -48,11 +48,13 @@ as_event.tfevents_summary_values <- function(x, step, wall_time, ..., name) {
     run = paste0(name[-length(name)], collapse = "/"),
     wall_time = wall_time,
     step = step,
-    summary = x
+    summary = summary(list(x))
   )
 }
 
 make_tag <- function(cur_tag, name) {
+  name <- rep(name, length(cur_tag))
+
   if (any(name[!is.na(cur_tag)] != "")) {
     cli::cli_abort(c(
       x = "Two tags were provided for the same summary.",
@@ -101,7 +103,7 @@ event <- function(run, wall_time, step, ..., summary = NA, file_version = NA) {
     run = vec_cast(run, character()),
     wall_time = as.integer(wall_time),
     step = as.integer(step),
-    summary = vec_cast(vec_cast(summary, new_summary_values()), new_summary()),
+    summary = vec_cast(summary, new_summary()),
     file_version = vec_cast(file_version, character())
   )
 }
@@ -141,6 +143,9 @@ summary_values <- function(metadata, tag = NA, ..., value = NA, image = NA, clas
   value <- vec_cast(value, numeric())
   image <- vec_cast(image, new_summary_summary_image())
   tag <- vec_cast(tag, character())
+
+  c(metadata, tag, value, image) %<-% vec_recycle_common(metadata, tag, value, image)
+
   new_summary_values(metadata = metadata, tag = tag, value = value, image = image, class = class)
 }
 
@@ -154,7 +159,7 @@ new_summary_values <- function(metadata = new_summary_metadata(), tag = characte
 }
 
 summary <- function(values) {
-  new_summary_values(values)
+  new_summary(values)
 }
 
 new_summary <- function(values = list(new_summary_values())) {

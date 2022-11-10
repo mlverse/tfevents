@@ -78,6 +78,11 @@ tensorboard::Summary Rcpp::as<tensorboard::Summary> (SEXP x) {
     // tthe pb message
     auto image = r_image[i];
     if (image.height() > 0) {
+      // // if we add an image, we modify the tag to image_summary/tag/image/i or tag/image if
+      // // a single image is to be written. this allows TB UI to show 1 of N samples.
+      // // See https://github.com/tensorflow/tensorflow/blob/bede6d9fad632b517b334033fcd444e97527384a/tensorflow/core/kernels/summary_image_op.cc#L151-L161
+      // // See also https://github.com/tensorflow/tensorboard/blob/a74c10dd197e7b2a07219855a61bc62651e80065/tensorboard/plugins/image/summary_v2.py#L104
+      // value->set_tag("image_summary/" + r_tag[i] + "/image" + (r_tag.size() > 1 ? ("/" + std::to_string(i)) : ""));
       value->mutable_image()->CopyFrom(image);
     }
   }

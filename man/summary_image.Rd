@@ -2,12 +2,15 @@
 % Please edit documentation in R/image.R
 \name{summary_image}
 \alias{summary_image}
+\alias{summary_image.ggplot}
 \alias{summary_image.array}
 \alias{summary_image.blob}
 \alias{summary_image.raw}
 \title{Creates a image summary}
 \usage{
 summary_image(img, ..., metadata = NULL, tag = NA)
+
+\method{summary_image}{ggplot}(img, ..., width = NA, height = NA, metadata = NULL, tag = NA)
 
 \method{summary_image}{array}(img, ..., metadata = NULL, tag = NA)
 
@@ -43,6 +46,9 @@ Creates a image summary
 }
 \section{Methods (by class)}{
 \itemize{
+\item \code{summary_image(ggplot)}: Cretes an image summary from a ggplot2 graph object.
+The \code{...} will be forwarded to \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}.
+
 \item \code{summary_image(array)}: Creates an image from an R array. The array should be
 numeric, with values between 0 and 1. Dimensions should be \verb{(batch, height, width, channels)}.
 

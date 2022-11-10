@@ -18,6 +18,44 @@ summary_image <- function(img, ..., metadata = NULL, tag = NA) {
   UseMethod("summary_image")
 }
 
+#' @describeIn summary_image Cretes an image summary from a ggplot2 graph object.
+#'   The `...` will be forwarded to [ggplot2::ggsave()].
+#' @export
+summary_image.ggplot <- function(img, ..., width = NA, height = NA, metadata = NULL, tag = NA) {
+  temp <- tempfile(fileext = ".png")
+  on.exit({unlink(temp)}, add = TRUE)
+
+  txt <- capture.output(type = "message", {
+    ggplot2::ggsave(
+      filename = fs::path_file(temp),
+      path = fs::path_dir(temp),
+      plot = img,
+      units = "px",
+      width = width,
+      height = height,
+      ...
+    )
+  })
+
+  # there's no way to get the dimensions directly from the file
+  # so we parse the message returned by `ggsave`.
+  dims <- regmatches(txt,regexpr("[0-9x ]+",txt))
+  dims <- strsplit(dims, "x")[[1]]
+  dims <- as.integer(dims)
+
+  sze <- fs::file_info(temp)$size
+  raw <- readBin(temp, n = sze, what = "raw")
+
+  summary_image(
+    raw,
+    width = dims[1],
+    height = dims[2],
+    colorspace = 4,
+    metadata = metadata,
+    tag = tag
+  )
+}
+
 #' @describeIn summary_image Creates an image from an R array. The array should be
 #'   numeric, with values between 0 and 1. Dimensions should be `(batch, height, width, channels)`.
 #' @export
@@ -111,5 +149,14 @@ vec_cast.tfevents_summary_values.tfevents_summary_image <- function(x, to, ...) 
   klass <- class(x)
   klass <- klass[-which(klass == "tfevents_summary_image")]
   class(x) <- klass
+  x
+}
+
+#' @export
+vec_ptyp2.summary_summary_image.summary_summary_image <- function(x, y, ...) {
+  new_summary_summary_image()
+}
+#' @export
+vec_cast.summary_summary_image.summary_summary_image <- function(x, to, ...) {
   x
 }

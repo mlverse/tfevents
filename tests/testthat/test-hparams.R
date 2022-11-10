@@ -1,6 +1,4 @@
-skip_if(inherits(try(reticulate::import("tbparse"), silent = TRUE), "try-error"))
-
-tbparse <- reticulate::import("tbparse")
+skip_if_tbparse_not_available()
 
 test_that("simple hparams experiment", {
 

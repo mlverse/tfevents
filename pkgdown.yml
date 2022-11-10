@@ -1,0 +1,10 @@
+pandoc: 2.19.2
+pkgdown: 2.0.6
+pkgdown_sha: ~
+articles:
+  hparams: hparams.html
+last_built: 2022-11-10T02:50Z
+urls:
+  reference: https://mlverse.github.io/tfevents/reference
+  article: https://mlverse.github.io/tfevents/articles
+

@@ -25,7 +25,7 @@ summary_image.ggplot <- function(img, ..., width = NA, height = NA, metadata = N
   temp <- tempfile(fileext = ".png")
   on.exit({unlink(temp)}, add = TRUE)
 
-  txt <- capture.output(type = "message", {
+  txt <- utils::capture.output(type = "message", {
     ggplot2::ggsave(
       filename = fs::path_file(temp),
       path = fs::path_dir(temp),

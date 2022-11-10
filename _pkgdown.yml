@@ -1,0 +1,33 @@
+url: https://mlverse.github.io/tfevents/
+template:
+  bootstrap: 5
+
+reference:
+  - title: Event logging
+    desc: >
+      Functions directly related to event logging.
+    contents:
+      - log_event
+      - as_event
+      - set_global_step
+      - set_default_logdir
+      - with_logdir
+      - local_logdir
+  - title: Summaries
+    desc: >
+      Types of events that can be logged
+    contents:
+      - starts_with("summary_")
+      - -contains("hparams")
+  - title: HParams
+    desc: >
+      Related to logging hyperparameters
+    contents:
+      contains("hparams")
+
+articles:
+  - title: Guides
+    navbar: Guides
+    contents:
+      - articles/hparams
+

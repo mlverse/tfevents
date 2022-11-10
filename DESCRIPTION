@@ -34,7 +34,8 @@ Suggests:
     reticulate,
     rmarkdown
 SystemRequirements: cmake, C++11
-URL: https://github.com/mlverse/tfevents
+URL: https://github.com/mlverse/tfevents,
+    https://mlverse.github.io/tfevents/
 BugReports: https://github.com/mlverse/tfevents/issues
 Config/testthat/edition: 3
 Config/Needs/website: tensorflow, webshot2

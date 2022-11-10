@@ -27,3 +27,6 @@
 ^logs$
 ^.vscode$
 ^README\.Rmd$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

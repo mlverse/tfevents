@@ -3,3 +3,4 @@
 #include "as.h"
 #include "wrap.h"
 #include "hparams.h"
+#include "tensor.h"

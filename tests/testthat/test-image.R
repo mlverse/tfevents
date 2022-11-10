@@ -67,3 +67,15 @@ test_that("can write a ggplot", {
 
   expect_equal(dim(reloaded), c(2100, 2100, 3))
 })
+
+test_that("error when passing an array with wrong dimensions", {
+  img <- array(orig_img, dim = c(28, 28, 1))
+  temp <- tempfile()
+
+  expect_error({
+    with_logdir(temp, {
+      log_event(hello = summary_image(img))
+    })
+  }, regexp = "array with dimensions")
+
+})

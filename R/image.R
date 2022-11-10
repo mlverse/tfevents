@@ -62,7 +62,7 @@ summary_image.ggplot <- function(img, ..., width = NA, height = NA, metadata = N
 summary_image.array <- function(img, ..., metadata = NULL, tag = NA) {
   if (length(dim(img)) <= 3) {
     cli::cli_abort(c(
-      "Expected an array if dimensions {.code (batch, height, width, channels)}",
+      "Expected an array with dimensions {.code (batch, height, width, channels)}",
       i = "Got an array with dimensions {.code ({paste(dim(img), collapse=', ')})}."
     ))
   }
@@ -145,15 +145,7 @@ new_summary_summary_image <- function(buffer = blob(), width = integer(), height
 }
 
 #' @export
-vec_cast.tfevents_summary_values.tfevents_summary_image <- function(x, to, ...) {
-  klass <- class(x)
-  klass <- klass[-which(klass == "tfevents_summary_image")]
-  class(x) <- klass
-  x
-}
-
-#' @export
-vec_ptyp2.summary_summary_image.summary_summary_image <- function(x, y, ...) {
+vec_ptype2.summary_summary_image.summary_summary_image <- function(x, y, ...) {
   new_summary_summary_image()
 }
 #' @export

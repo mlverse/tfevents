@@ -403,14 +403,6 @@ vec_ptype2.tfevents_summary_values.summary_hparams_config <- function(x, y, ...)
 vec_ptype2.summary_hparams_config.tfevents_summary_values <- function(x, y, ...) {
   new_summary_values()
 }
-#' @export
-vec_cast.tfevents_summary_values.summary_hparams_config <- function(x, to, ...) {
-  # return the same object removing the summary_scalar class.
-  klass <- class(x)
-  klass <- klass[-which(klass == "summary_hparams_config")]
-  class(x) <- klass
-  x
-}
 
 #' @export
 vec_ptype2.hparams_interval.hparams_interval <- function(x, y, ...) {

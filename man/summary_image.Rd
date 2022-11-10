@@ -3,12 +3,15 @@
 \name{summary_image}
 \alias{summary_image}
 \alias{summary_image.array}
+\alias{summary_image.blob}
 \alias{summary_image.raw}
 \title{Creates a image summary}
 \usage{
 summary_image(img, ..., metadata = NULL, tag = NA)
 
 \method{summary_image}{array}(img, ..., metadata = NULL, tag = NA)
+
+\method{summary_image}{blob}(img, ..., width, height, colorspace, metadata = NULL, tag = NA)
 
 \method{summary_image}{raw}(img, ..., width, height, colorspace, metadata = NULL, tag = NA)
 }
@@ -41,7 +44,11 @@ Creates a image summary
 \section{Methods (by class)}{
 \itemize{
 \item \code{summary_image(array)}: Creates an image from an R array. The array should be
-numeric, with values between 0 and 1.
+numeric, with values between 0 and 1. Dimensions should be \verb{(batch, height, width, channels)}.
+
+\item \code{summary_image(blob)}: Creates an image from \code{\link[blob:blob]{blob::blob()}} vctr of PNG encoded images,
+(eg using \code{\link[png:writePNG]{png::writePNG()}}). \code{width}, \code{height} and \code{colorspace} are recycled
+thus they can be a single scalar or a vector the same size of the images blob.
 
 \item \code{summary_image(raw)}: Creates an image from a png encoded image. Eg, created
 with \code{\link[png:writePNG]{png::writePNG()}}. In this case you need to provide \code{width}, \code{height} and

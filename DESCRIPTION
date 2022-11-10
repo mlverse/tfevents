@@ -26,7 +26,8 @@ Imports:
     blob,
     png,
     digest,
-    cli
+    cli,
+    zeallot
 Suggests: 
     testthat (>= 3.0.0),
     tibble,

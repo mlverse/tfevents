@@ -37,12 +37,3 @@ vec_ptype2.tfevents_summary_values.tfevents_summary_scalar <- function(x, y, ...
 vec_ptype2.tfevents_summary_scalar.tfevents_summary_values <- function(x, y, ...) {
   new_summary_values()
 }
-
-#' @export
-vec_cast.tfevents_summary_values.tfevents_summary_scalar <- function(x, to, ...) {
-  # return the same object removing the summary_scalar class.
-  klass <- class(x)
-  klass <- klass[-which(klass == "tfevents_summary_scalar")]
-  class(x) <- klass
-  x
-}

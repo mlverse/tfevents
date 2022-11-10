@@ -41,9 +41,9 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
-      - name: Install libraries used for testing
+      - name: Install Python libraries used for testing
         run: |
-          reticulate::py_install("tbparse", pip = TRUE)
+          reticulate::py_install(c("tbparse", "tensorflow"), pip = TRUE)
         shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v2

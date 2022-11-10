@@ -28,9 +28,9 @@ jobs:
           extra-packages: any::covr
           needs: coverage
 
-      - name: Install libraries used for testing
+      - name: Install Python libraries used for testing
         run: |
-          reticulate::py_install("tbparse", pip = TRUE)
+          reticulate::py_install(c("tbparse", "tensorflow"), pip = TRUE)
         shell: Rscript {0}
 
       - name: Test coverage

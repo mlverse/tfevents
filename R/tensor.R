@@ -24,7 +24,6 @@ as_tensor_proto.blob <- function(x, dtype = NA, ...) {
 
 as_tensor_proto.array <- function(x, dtype = NA, ...) {
   dims <- dim(x)
-  names(dims) <- dimnames(x)
   tensor_proto(x, shape = new_tensor_shape(dim = list(dims)), dtype = dtype)
 }
 

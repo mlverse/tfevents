@@ -86,3 +86,11 @@ test_that("error when passing an array with wrong dimensions", {
   }, regexp = "array with dimensions")
 
 })
+
+test_that("fails if weong metadata is specified", {
+  orig_img <- png::readPNG(test_path("resources/img.png"))
+  img <- array(orig_img, dim = c(1, 28, 28, 1))
+  expect_error({
+    summary_image(img, metadata = summary_metadata(plugin_name = "tensor"))
+  }, regexp = "Plugin name should be")
+})

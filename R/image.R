@@ -74,7 +74,7 @@ summary_image.array <- function(img, ..., metadata = NULL, tag = NA) {
   if (!all(field(metadata, "plugin_name") == "images")) {
     cli::cli_abort(c(
       "Plugin name should be 'images'",
-      x = "Got {.val {unique(metadata$plugin_name)}}"
+      x = "Got {.val {unique(field(metadata, 'plugin_name'))}}"
     ))
   }
 

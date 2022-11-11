@@ -95,7 +95,7 @@ summary_image.array <- function(img, ..., metadata = NULL, tag = NA) {
   summary_tensor(
     blobs,
     dtype = "string",
-    metadata = summary_metadata(plugin_name = "images"),
+    metadata = metadata,
     tag = tag
   )
 }

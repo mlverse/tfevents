@@ -87,6 +87,34 @@ test_that("error when passing an array with wrong dimensions", {
 
 })
 
+test_that("can pass a custom display name", {
+
+  temp <- tempfile()
+  orig_img <- png::readPNG(test_path("resources/img.png"))
+  img <- array(orig_img, dim = c(1, 28, 28, 1))
+
+  with_logdir(temp, {
+    log_event(hello = summary_image(
+      img,
+      metadata = summary_metadata(
+        plugin_name = "images",
+        display_name = "Hello world",
+        description = "This is a description"
+      )
+    ))
+  })
+
+  s <- collect_summaries(temp)
+  expect_equal(
+    field(field(s$summary, "metadata"), "description"),
+    "This is a description"
+  )
+  expect_equal(
+    field(field(s$summary, "metadata"), "display_name"),
+    "Hello world"
+  )
+})
+
 test_that("fails if weong metadata is specified", {
   orig_img <- png::readPNG(test_path("resources/img.png"))
   img <- array(orig_img, dim = c(1, 28, 28, 1))

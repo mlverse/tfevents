@@ -10,7 +10,7 @@
 \usage{
 summary_image(img, ..., metadata = NULL, tag = NA)
 
-\method{summary_image}{ggplot}(img, ..., width = NA, height = NA, metadata = NULL, tag = NA)
+\method{summary_image}{ggplot}(img, ..., width = 480, height = 480, metadata = NULL, tag = NA)
 
 \method{summary_image}{array}(img, ..., metadata = NULL, tag = NA)
 
@@ -47,7 +47,7 @@ Creates a image summary
 \section{Methods (by class)}{
 \itemize{
 \item \code{summary_image(ggplot)}: Cretes an image summary from a ggplot2 graph object.
-The \code{...} will be forwarded to \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}.
+The \code{...} will be forwarded to \code{\link[grDevices:png]{grDevices::png()}}.
 
 \item \code{summary_image(array)}: Creates an image from an R array. The array should be
 numeric, with values between 0 and 1. Dimensions should be \verb{(batch, height, width, channels)}.

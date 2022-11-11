@@ -19,37 +19,23 @@ summary_image <- function(img, ..., metadata = NULL, tag = NA) {
 }
 
 #' @describeIn summary_image Cretes an image summary from a ggplot2 graph object.
-#'   The `...` will be forwarded to [ggplot2::ggsave()].
+#'   The `...` will be forwarded to [grDevices::png()].
 #' @export
-summary_image.ggplot <- function(img, ..., width = NA, height = NA, metadata = NULL, tag = NA) {
+summary_image.ggplot <- function(img, ..., width = 480, height = 480, metadata = NULL, tag = NA) {
   temp <- tempfile(fileext = ".png")
   on.exit({unlink(temp)}, add = TRUE)
 
-  txt <- utils::capture.output(type = "message", {
-    ggplot2::ggsave(
-      filename = fs::path_file(temp),
-      path = fs::path_dir(temp),
-      plot = img,
-      units = "px",
-      width = width,
-      height = height,
-      ...
-    )
-  })
-
-  # there's no way to get the dimensions directly from the file
-  # so we parse the message returned by `ggsave`.
-  dims <- regmatches(txt,regexpr("[0-9x ]+",txt))
-  dims <- strsplit(dims, "x")[[1]]
-  dims <- as.integer(dims)
+  grDevices::png(filename = temp, width = width, height = height, ...)
+  plot(img)
+  dev.off()
 
   sze <- fs::file_info(temp)$size
   raw <- readBin(temp, n = sze, what = "raw")
 
   summary_image(
     raw,
-    width = dims[1],
-    height = dims[2],
+    width = width,
+    height = height,
     colorspace = 4,
     metadata = metadata,
     tag = tag

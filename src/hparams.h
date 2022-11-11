@@ -301,8 +301,3 @@ Rcpp::as<tensorboard::hparams::HParamsPluginData> (SEXP x) {
 
   return plugin_data;
 }
-
-
-
-
-

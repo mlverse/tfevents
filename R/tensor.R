@@ -1,8 +1,8 @@
-summary_tensor <- function(x, dtype, ..., metadata = NULL, tag = NA) {
+summary_tensor <- function(x, dtype = NA, ..., metadata = NULL, tag = NA) {
   new_summary_tensor(x = x, dtype = dtype, metadata = metadata, tag = tag)
 }
 
-new_summary_tensor <- function(x, dtype, ..., metadata = NULL, tag = NA) {
+new_summary_tensor <- function(x, dtype = NA, ..., metadata = NULL, tag = NA) {
   if (is.null(metadata)) {
     metadata <- summary_metadata(plugin_name = "tensor")
   }
@@ -21,16 +21,30 @@ as_tensor_proto.array <- function(x, dtype = NA, ...) {
   tensor_proto(x, shape = new_tensor_shape(dim = list(dims)), dtype = dtype)
 }
 
+as_tensor_proto.list <- function(x, dtype, ...) {
+  c(x, dtype) %<-% vec_recycle_common(x, dtype)
+  results <- lapply(seq_along(x), function(i) {
+    as_tensor_proto(x[[i]], dtype[[i]], ...)
+  })
+  vec_c(!!!results)
+}
+
 tensor_proto <- function(content, shape, dtype = NA) {
+  if (!is.list(content)) content <- list(content)
+
   if ((length(dtype) == 1) && is.na(dtype)) {
     dtype <- sapply(content, make_default_dtype)
   }
-  if (!is.list(content)) content <- list(content)
+
   new_tensor_proto(
     content = content,
     shape = shape,
     dtype = dtype
   )
+}
+
+make_dims <- function(x) {
+
 }
 
 make_default_dtype <- function(x) {

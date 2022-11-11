@@ -3,7 +3,8 @@ pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   hparams: hparams.html
-last_built: 2022-11-11T17:22Z
+  images: images.html
+last_built: 2022-11-11T19:05Z
 urls:
   reference: https://mlverse.github.io/tfevents/reference
   article: https://mlverse.github.io/tfevents/articles

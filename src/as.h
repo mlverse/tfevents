@@ -7,16 +7,20 @@ std::vector<tensorboard::SummaryMetadata> Rcpp::as<std::vector<tensorboard::Summ
   auto r_summary_metadata = Rcpp::as<Rcpp::List>(x);
 
   auto r_plugin_name = Rcpp::as<std::vector<std::string>>(r_summary_metadata["plugin_name"]);
-  auto r_display_name = Rcpp::as<std::vector<std::string>>(r_summary_metadata["display_name"]);
-  auto r_description = Rcpp::as<std::vector<std::string>>(r_summary_metadata["description"]);
+  auto r_display_name = Rcpp::as<Rcpp::CharacterVector>(r_summary_metadata["display_name"]);
+  auto r_description = Rcpp::as<Rcpp::CharacterVector>(r_summary_metadata["description"]);
   auto r_plugin_content = Rcpp::as<Rcpp::List>(r_summary_metadata["plugin_content"]);
 
   std::vector<tensorboard::SummaryMetadata> metadata;
   for (size_t i = 0; i < r_plugin_name.size(); i++) {
     tensorboard::SummaryMetadata meta;
     meta.mutable_plugin_data()->CopyFrom(make_plugin_data(r_plugin_name[i], r_plugin_content[i]));
-    meta.set_display_name(r_display_name[i]);
-    meta.set_summary_description(r_description[i]);
+    if (!Rcpp::CharacterVector::is_na(r_display_name[i])) {
+      meta.set_display_name(r_display_name[i]);
+    }
+    if (!Rcpp::CharacterVector::is_na(r_description[i])) {
+      meta.set_summary_description(r_description[i]);
+    }
     metadata.push_back(meta);
   }
 
@@ -67,7 +71,8 @@ tensorboard::Summary Rcpp::as<tensorboard::Summary> (SEXP x) {
   for (size_t i = 0; i < r_tag.size(); i++) {
     auto value = summary.add_value();
     value->set_tag(r_tag[i]);
-    value->mutable_metadata()->CopyFrom(r_metadata[i]);
+    auto metadata = r_metadata[i];
+    value->mutable_metadata()->CopyFrom(metadata);
 
     // If the value is NA, we don't save it
     if (!Rcpp::NumericVector::is_na(r_value[i])) {
@@ -78,9 +83,6 @@ tensorboard::Summary Rcpp::as<tensorboard::Summary> (SEXP x) {
     // tthe pb message
     auto image = r_image[i];
     if (image.height() > 0) {
-      // // if we add an image, we modify the tag to image_summary/tag/image/i or tag/image if
-      // // a single image is to be written. this allows TB UI to show 1 of N samples.
-      // // See https://github.com/tensorflow/tensorflow/blob/bede6d9fad632b517b334033fcd444e97527384a/tensorflow/core/kernels/summary_image_op.cc#L151-L161
       // // See also https://github.com/tensorflow/tensorboard/blob/a74c10dd197e7b2a07219855a61bc62651e80065/tensorboard/plugins/image/summary_v2.py#L104
       // value->set_tag("image_summary/" + r_tag[i] + "/image" + (r_tag.size() > 1 ? ("/" + std::to_string(i)) : ""));
       value->mutable_image()->CopyFrom(image);

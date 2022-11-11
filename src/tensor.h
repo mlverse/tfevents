@@ -84,6 +84,24 @@ Rcpp::as<std::vector<tl::optional<tensorboard::TensorShapeProto>>> (SEXP x) {
   return shapes;
 }
 
+
+void add_string_values (tensorboard::TensorProto* tensor, SEXP x) {
+  if (Rf_inherits(x, "blob")) {
+    // a blob is a list of raw vectors in R
+    auto values = Rcpp::as<Rcpp::List>(x);
+    for (auto val : values) {
+      auto raw = Rcpp::as<Rcpp::RawVector>(val);
+      tensor->add_string_val(std::string(raw.begin(), raw.end()));
+    }
+    return;
+  }
+
+  for (auto val : Rcpp::as<std::vector<std::string>>(x)) {
+    tensor->add_string_val(val);
+  }
+}
+
+
 template<>
 std::vector<tl::optional<tensorboard::TensorProto>>
 Rcpp::as<std::vector<tl::optional<tensorboard::TensorProto>>> (SEXP x) {
@@ -114,9 +132,7 @@ Rcpp::as<std::vector<tl::optional<tensorboard::TensorProto>>> (SEXP x) {
       }
       break;
     case tensorboard::DataType::DT_STRING:
-      for (auto val : Rcpp::as<std::vector<std::string>>(content)) {
-        tensor.add_string_val(val);
-      }
+      add_string_values(&tensor, content);
       break;
     case tensorboard::DataType::DT_DOUBLE:
       for (auto val : Rcpp::as<std::vector<double>>(content)) {

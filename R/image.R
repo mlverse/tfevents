@@ -67,18 +67,35 @@ summary_image.array <- function(img, ..., metadata = NULL, tag = NA) {
     ))
   }
 
-  buffers <- blob::new_blob(apply(img, 1, png::writePNG, simplify = FALSE))
+  if (is.null(metadata)) {
+    metadata <- summary_metadata(plugin_name = "images")
+  }
 
-  height <- dim(img)[2]
-  width <- dim(img)[3]
-  colorspace <- dim(img)[4]
+  if (!all(field(metadata, "plugin_name") == "images")) {
+    cli::cli_abort(c(
+      "Plugin name should be 'images'",
+      x = "Got {.val {unique(metadata$plugin_name)}}"
+    ))
+  }
 
-  summary_image(
-    buffers,
-    height = height,
-    width = width,
-    colorspace = colorspace,
-    metadata = metadata,
+  # See https://github.com/tensorflow/tensorboard/blob/a74c10dd197e7b2a07219855a61bc62651e80065/tensorboard/plugins/image/summary_v2.py#L111
+  # for the implementation.
+  # The images are converted to a character evctor, the first 2 elements being the
+  # dimensions, and the others containing the image encoded a png.
+  png_images <- apply(img, 1, function(x) {
+     png::writePNG(x)
+  }, simplify = FALSE)
+  blob_images <- blob::new_blob(png_images)
+
+  dims <- dim(img)
+  dims <- blob::blob(as.raw(dims[3]), as.raw(dims[2]))
+
+  blobs <- c(dims, blob_images)
+
+  summary_tensor(
+    blobs,
+    dtype = "string",
+    metadata = summary_metadata(plugin_name = "images"),
     tag = tag
   )
 }

@@ -15,6 +15,13 @@ as_tensor_proto <- function(x, dtype = NA, ...) {
   UseMethod("as_tensor_proto")
 }
 
+as_tensor_proto.blob <- function(x, dtype = NA, ...) {
+  if (is.na(dtype)) dtype <- "string"
+  if (!dtype %in% c("string"))
+    cli::cli_abort("dtype should be string when converting a blob to tensor proto.")
+  tensor_proto(list(x), shape = new_tensor_shape(dim = length(x)), dtype = dtype)
+}
+
 as_tensor_proto.array <- function(x, dtype = NA, ...) {
   dims <- dim(x)
   names(dims) <- dimnames(x)
@@ -41,10 +48,6 @@ tensor_proto <- function(content, shape, dtype = NA) {
     shape = shape,
     dtype = dtype
   )
-}
-
-make_dims <- function(x) {
-
 }
 
 make_default_dtype <- function(x) {
@@ -78,3 +81,4 @@ new_tensor_shape <- function(dim = new_list_of(ptype = integer())) {
 
 #' @export
 vec_cast.tensor_proto.tensor_proto <- function(x, to, ...) x
+

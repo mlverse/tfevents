@@ -10,10 +10,15 @@ test_that("write image", {
   events <- collect_events(temp)
   expect_equal(nrow(events), 2)
 
-  buf <- field(field(events$summary[[2]], "image"), "buffer")
-  reloaded <- png::readPNG(as.raw(buf[[1]]))
 
-  expect_equal(orig_img, reloaded)
+  skip_if_tbparse_not_available()
+  reader <- tbparse$SummaryReader(temp)
+  buf <- reader$tensors$value[[1]][[3]]
+  # TODO: in theory we don't need tensorflow for this, but couldnt find a way to
+  # cast the bytestring to a raw vector.
+  reloaded <- as.array(tensorflow::tf$image$decode_png(buf))
+
+  expect_equal(orig_img, reloaded[,,1]/255)
 })
 
 test_that("can write nested images", {
@@ -48,8 +53,7 @@ test_that("can write a batch of images", {
   skip_if_tbparse_not_available()
   reader <- tbparse$SummaryReader(temp)
   tags <- reader$tags
-  expect_equal(as.character(tags$images), "hello")
-  expect_equal(nrow(reader$images), 10)
+  expect_equal(as.character(tags$tensors), "hello")
 })
 
 test_that("can write a ggplot", {

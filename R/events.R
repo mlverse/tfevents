@@ -139,21 +139,24 @@ vec_cast.tfevents_event.tfevents_event <- function(x, to, ...) {
   x
 }
 
-summary_values <- function(metadata, tag = NA, ..., value = NA, image = NA, class = NULL) {
+summary_values <- function(metadata, tag = NA, ..., value = NA, image = NA, tensor = NA, class = NULL) {
   value <- vec_cast(value, numeric())
   image <- vec_cast(image, new_summary_summary_image())
   tag <- vec_cast(tag, character())
+  tensor <- vec_cast(tensor, new_tensor_proto())
 
-  c(metadata, tag, value, image) %<-% vec_recycle_common(metadata, tag, value, image)
+  c(metadata, tag, value, image, tensor) %<-% vec_recycle_common(metadata, tag, value, image, tensor)
 
-  new_summary_values(metadata = metadata, tag = tag, value = value, image = image, class = class)
+  new_summary_values(metadata = metadata, tag = tag, value = value, image = image,
+                     tensor = tensor, class = class)
 }
 
 new_summary_values <- function(metadata = new_summary_metadata(), tag = character(), ...,
                         value = numeric(), image = new_summary_summary_image(),
-                        class = NULL) {
+                        tensor = new_tensor_proto(), class = NULL) {
   vctrs::new_rcrd(
-    fields = list(metadata = metadata, tag = tag, value = value, image = image),
+    fields = list(metadata = metadata, tag = tag, value = value, image = image,
+                  tensor = tensor),
     class = c(class, "tfevents_summary_values")
   )
 }

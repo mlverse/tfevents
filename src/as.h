@@ -57,11 +57,11 @@ template <>
 tensorboard::Summary Rcpp::as<tensorboard::Summary> (SEXP x) {
   auto r_summary = Rcpp::as<Rcpp::List>(x);
 
-  auto r_tag = Rcpp::as<std::vector<std::string>>(r_summary["tag"]);
-  auto r_metadata = Rcpp::as<std::vector<tensorboard::SummaryMetadata>>(r_summary["metadata"]);
-  auto r_value = Rcpp::as<Rcpp::NumericVector>(r_summary["value"]); // Use a numeric vector to allow NA's
-  auto r_image = Rcpp::as<std::vector<tensorboard::Summary_Image>>(r_summary["image"]);
-
+  const auto r_tag = Rcpp::as<std::vector<std::string>>(r_summary["tag"]);
+  const auto r_metadata = Rcpp::as<std::vector<tensorboard::SummaryMetadata>>(r_summary["metadata"]);
+  const auto r_value = Rcpp::as<Rcpp::NumericVector>(r_summary["value"]); // Use a numeric vector to allow NA's
+  const auto r_image = Rcpp::as<std::vector<tensorboard::Summary_Image>>(r_summary["image"]);
+  const auto r_tensor = Rcpp::as<std::vector<tl::optional<tensorboard::TensorProto>>>(r_summary["tensor"]);
 
   tensorboard::Summary summary;
   for (size_t i = 0; i < r_tag.size(); i++) {
@@ -84,6 +84,10 @@ tensorboard::Summary Rcpp::as<tensorboard::Summary> (SEXP x) {
       // // See also https://github.com/tensorflow/tensorboard/blob/a74c10dd197e7b2a07219855a61bc62651e80065/tensorboard/plugins/image/summary_v2.py#L104
       // value->set_tag("image_summary/" + r_tag[i] + "/image" + (r_tag.size() > 1 ? ("/" + std::to_string(i)) : ""));
       value->mutable_image()->CopyFrom(image);
+    }
+
+    if (r_tensor[i].has_value()) {
+      value->mutable_tensor()->CopyFrom(r_tensor[i].value());
     }
   }
   return summary;

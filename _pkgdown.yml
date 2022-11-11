@@ -29,5 +29,6 @@ articles:
   - title: Guides
     navbar: Guides
     contents:
+      - articles/images
       - articles/hparams
 

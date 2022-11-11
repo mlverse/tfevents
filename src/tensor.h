@@ -118,6 +118,11 @@ Rcpp::as<std::vector<tl::optional<tensorboard::TensorProto>>> (SEXP x) {
         tensor.add_string_val(val);
       }
       break;
+    case tensorboard::DataType::DT_DOUBLE:
+      for (auto val : Rcpp::as<std::vector<double>>(content)) {
+        tensor.add_double_val(val);
+      }
+      break;
     default:
       Rcpp::stop("Unsupported type");
     }

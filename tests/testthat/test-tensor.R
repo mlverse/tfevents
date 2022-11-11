@@ -9,11 +9,12 @@ test_that("can write a tensor", {
     log_event(y = summary_tensor(tx)) # auto detect type
     log_event(z = summary_tensor(txc)) # auto detect type
     log_event(a = summary_tensor(list(tx, txc))) # auto detect type
+    log_event(b = summary_tensor(tx, "double"))
   })
 
   reader <- tbparse$SummaryReader(temp)
   df <- reader$tensors
-  expect_equal(nrow(df), 5)
+  expect_equal(nrow(df), 6)
 })
 
 

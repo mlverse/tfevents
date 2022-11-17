@@ -95,7 +95,7 @@ training samples available in the Fashion MNIST dataset builtin into
 Keras.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fashion_mnist</span> <span class="op">&lt;-</span> <span class="fu">keras</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/keras/man/dataset_fashion_mnist.html" class="external-link">dataset_fashion_mnist</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loaded Tensorflow version 2.10.0</span></span>
+<span><span class="co">#&gt; Loaded Tensorflow version 2.10.1</span></span>
 <span><span class="va">train_imgs</span> <span class="op">&lt;-</span> <span class="va">fashion_mnist</span><span class="op">$</span><span class="va">train</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,,<span class="op">]</span><span class="op">/</span><span class="fl">255</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">train_imgs</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  num [1:5, 1:28, 1:28] 0 0 0 0 0 0 0 0 0 0 ...</span></span></code></pre></div>

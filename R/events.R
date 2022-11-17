@@ -36,6 +36,12 @@ as_event.list <- function(x, step, wall_time, ..., name = ".") {
 
 #' @export
 as_event.numeric <- function(x, step, wall_time, ..., name) {
+  if (!rlang::is_scalar_atomic(x)) {
+    cli::cli_abort(c(
+      "Can't log a numeric vector with length != 1.",
+      i = "Expected a single value but got a vector with length {.val {length(x)}}."
+    ))
+  }
   x <- summary_scalar(x)
   as_event(x, step = step, wall_time = wall_time, name = name)
 }

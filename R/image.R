@@ -27,7 +27,7 @@ summary_image.ggplot <- function(img, ..., width = 480, height = 480, metadata =
 
   grDevices::png(filename = temp, width = width, height = height, ...)
   plot(img)
-  dev.off()
+  grDevices::dev.off()
 
   sze <- fs::file_info(temp)$size
   raw <- readBin(temp, n = sze, what = "raw")

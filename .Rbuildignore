@@ -24,6 +24,7 @@
 ^LICENSE\.md$
 ^codecov\.yml$
 ^vignettes/articles$
+^vignettes/examples$
 ^logs$
 ^.vscode$
 ^README\.Rmd$

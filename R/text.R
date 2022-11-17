@@ -1,6 +1,6 @@
 
 #' Creates a text summary
-#' @param text An object that can be converted to a text.
+#' @param txt An object that can be converted to a text.
 #' @param ... Currently unused.
 #' @inheritParams summary_scalar
 #'

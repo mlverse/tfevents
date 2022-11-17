@@ -10,6 +10,8 @@ summary_text(txt, ..., metadata = NULL, tag = NA)
 \method{summary_text}{character}(txt, ..., metadata = NULL, tag = NA)
 }
 \arguments{
+\item{txt}{An object that can be converted to a text.}
+
 \item{...}{Currently unused.}
 
 \item{metadata}{A \code{metadata} object, as created with \code{\link[=summary_metadata]{summary_metadata()}}. In
@@ -17,8 +19,6 @@ most cases you don't need to change the default.}
 
 \item{tag}{A tag that within the TensorBoard UI. See \code{\link[=log_event]{log_event()}} for other
 ways of specifying the tag attribute.}
-
-\item{text}{An object that can be converted to a text.}
 }
 \value{
 A summary that can be logged with \code{\link[=log_event]{log_event()}}.

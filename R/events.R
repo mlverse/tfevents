@@ -46,6 +46,12 @@ as_event.numeric <- function(x, step, wall_time, ..., name) {
   as_event(x, step = step, wall_time = wall_time, name = name)
 }
 
+#' @export
+as_event.character <- function(x, step, wall_time, ..., name) {
+  x <- summary_text(x)
+  as_event(x, step = step, wall_time = wall_time, name = name)
+}
+
 #' @importFrom utils tail
 #' @export
 as_event.tfevents_summary_values <- function(x, step, wall_time, ..., name) {

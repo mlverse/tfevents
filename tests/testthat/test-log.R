@@ -108,7 +108,7 @@ test_that("can write tags with the slash instead of nested list", {
 
 test_that("Errors gracefully when a numeric with length >1 is provided", {
 
-  temp1 <- tempfile()
+  temp <- tempfile()
   expect_error({
     with_logdir(temp, {
       log_event(

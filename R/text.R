@@ -1,8 +1,24 @@
+
+#' Creates a text summary
+#' @param text An object that can be converted to a text.
+#' @param ... Currently unused.
+#' @inheritParams summary_scalar
+#'
+#' @examples
+#' temp <- tempfile()
+#' with_logdir(temp, {
+#'   log_event(
+#'     x = "hello world",
+#'     y = summary_text("hello world")
+#'   )
+#' })
+#' @returns A summary that can be logged with [log_event()].
 #' @export
 summary_text <- function(txt, ..., metadata = NULL, tag = NA) {
   UseMethod("summary_text")
 }
 
+#' @describeIn summary_text Creates a summary from a scalar character vector.
 #' @export
 summary_text.character <- function(txt, ..., metadata = NULL, tag = NA) {
   if (is.null(metadata)) {

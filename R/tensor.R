@@ -22,6 +22,13 @@ as_tensor_proto.blob <- function(x, dtype = NA, ...) {
   tensor_proto(list(x), shape = new_tensor_shape(dim = length(x)), dtype = dtype)
 }
 
+as_tensor_proto.character <- function(x, dtype = NA, ...) {
+  if (is.na(dtype)) dtype <- "string"
+  if (!dtype %in% c("string"))
+    cli::cli_abort("dtype should be string when converting a character to tensor proto.")
+  tensor_proto(list(x), shape = new_tensor_shape(dim = length(x)), dtype = dtype)
+}
+
 as_tensor_proto.array <- function(x, dtype = NA, ...) {
   dims <- dim(x)
   tensor_proto(x, shape = new_tensor_shape(dim = list(dims)), dtype = dtype)

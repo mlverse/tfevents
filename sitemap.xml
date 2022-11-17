@@ -66,4 +66,7 @@
   <url>
     <loc>https://mlverse.github.io/tfevents/reference/summary_scalar.html</loc>
   </url>
+  <url>
+    <loc>https://mlverse.github.io/tfevents/reference/summary_text.html</loc>
+  </url>
 </urlset>

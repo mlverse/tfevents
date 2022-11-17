@@ -26,3 +26,13 @@ test_that("errors when passing more than one character value", {
     regexp = "Can't log a character"
   )
 })
+
+test_that("make sure we fail when metadata is not text", {
+  temp <- tempfile()
+  expect_error(
+    with_logdir(temp, {
+      log_event(x = summary_text("hello", metadata = summary_metadata("text2")))
+    }),
+    regexp = "Plugin name should be "
+  )
+})

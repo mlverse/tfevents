@@ -91,3 +91,17 @@ test_that("local_logdir", {
   })
 
 })
+
+test_that("can write tags with the slash instead of nested list", {
+  temp <- tempfile()
+  with_logdir(temp, {
+    log_event(
+      "train/loss" = 0.1,
+      "train/acc" = 0.1,
+      "valid/loss" = 0.1,
+      "valid/acc" = 0.1
+    )
+  })
+
+  expect_equal(nrow(collect_summaries(temp)), 4)
+})

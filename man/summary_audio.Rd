@@ -3,11 +3,17 @@
 \name{summary_audio}
 \alias{summary_audio}
 \alias{summary_audio.array}
+\alias{summary_audio.raw}
+\alias{summary_audio.blob}
 \title{Summary audio}
 \usage{
 summary_audio(audio, ..., metadata = NULL, tag = NA)
 
 \method{summary_audio}{array}(audio, ..., sample_rate = 44100, metadata = NULL, tag = NA)
+
+\method{summary_audio}{raw}(audio, ..., metadata = NULL, tag = NA)
+
+\method{summary_audio}{blob}(audio, ..., metadata = NULL, tag = NA)
 }
 \arguments{
 \item{audio}{Object that will be written as an audio event in the tfevents record.}
@@ -29,5 +35,11 @@ Audio summaries can be played withing the TensorBoard UI.
 \itemize{
 \item \code{summary_audio(array)}: Creates a summary from a 3D array with dimensions
 \verb{(batch_size, n_samples, n_channels)}. Values must be in the range \verb{[-1, 1]}.
+
+\item \code{summary_audio(raw)}: Creates an audio summary from a raw vector containing
+a WAV encoded audio file.
+
+\item \code{summary_audio(blob)}: Creates an audio summary from a blob (ie list of raw vectors)
+containing WAV encoded audio files.
 
 }}

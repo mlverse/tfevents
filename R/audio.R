@@ -18,21 +18,38 @@ summary_audio.array <- function(audio, ..., sample_rate = 44100, metadata = NULL
                           tag = NA) {
 
   rlang::check_installed("wav")
-  if (is.null(metadata)) {
-    metadata <- summary_metadata(plugin_name = "audio")
-  }
-
   temp <- tempfile()
   raw_audios <- apply(audio, 1, simplify = FALSE, function(x) {
     wav::write_wav(t(x), sample_rate = sample_rate, path = temp)
     sze <- fs::file_info(temp)$size
     readBin(temp, n = sze, what = "raw")
   })
-
   blob_audios <- blob::new_blob(raw_audios)
+  summary_audio(
+    blob_audios,
+    metadata = metadata,
+    tag = tag
+  )
+}
+
+#' @describeIn summary_audio Creates an audio summary from a raw vector containing
+#'  a WAV encoded audio file.
+#' @export
+summary_audio.raw <- function(audio, ..., metadata = NULL, tag = NA) {
+  summary_audio(blob::blob(audio), metadata = metadata, tag = tag)
+}
+
+#' @describeIn summary_audio Creates an audio summary from a blob (ie list of raw vectors)
+#'   containing WAV encoded audio files.
+#' @export
+summary_audio.blob <- function(audio, ..., metadata = NULL, tag = NA) {
+
+  if (is.null(metadata)) {
+    metadata <- summary_metadata(plugin_name = "audio")
+  }
 
   summary_tensor(
-    blob_audios,
+    audio,
     dtype = "string",
     metadata = metadata,
     tag = tag

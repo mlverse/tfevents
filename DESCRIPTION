@@ -35,7 +35,8 @@ Suggests:
     reticulate,
     rmarkdown,
     ggplot2,
-    tensorflow
+    tensorflow,
+    wav
 SystemRequirements: cmake, C++11
 URL: https://github.com/mlverse/tfevents,
     https://mlverse.github.io/tfevents/

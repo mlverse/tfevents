@@ -4,5 +4,6 @@ CXX_STD=CXX11
 
 CPP_SOURCES=@cppsrc@
 CC_SOURCES=@pbsrc@
+C_SOURCES=@csrc@
 
-OBJECTS=$(CPP_SOURCES:.cpp=.o) $(CC_SOURCES:.cc=.o)
+OBJECTS=$(CPP_SOURCES:.cpp=.o) $(CC_SOURCES:.cc=.o) $(C_SOURCES:.c=.o)

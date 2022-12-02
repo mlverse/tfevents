@@ -5,7 +5,7 @@ articles:
   hparams: hparams.html
   images: images.html
   torch: examples/torch.html
-last_built: 2022-11-17T22:33Z
+last_built: 2022-12-02T14:46Z
 urls:
   reference: https://mlverse.github.io/tfevents/reference
   article: https://mlverse.github.io/tfevents/articles

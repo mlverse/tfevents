@@ -1,6 +1,10 @@
 #include <cstring>
 #include "record_writer.h"
-#include "crc/crc.h"
+#include <iostream>
+extern "C" {
+#include "crc32c.h"
+}
+
 
 // helper functions
 
@@ -14,11 +18,10 @@ void encode_fixed_32(char* buf, std::uint32_t value) {
   memcpy(buf, &value, sizeof(value));
 }
 
+
 // found implementation here: https://bidetly.io/2017/02/08/crc-part-1/
-std::uint32_t crc32_boost(const char* first, const char* last) {
-  boost::crc_optimal<32, 0x1edc6f41, 0xffffffff, 0xffffffff, true, true> machine;
-  machine.process_block(first, last);
-  return machine.checksum();
+std::uint32_t crc32_c(const char* first, int len) {
+  return crc32c(0, (void*) first, len);
 }
 
 // mask delta constant
@@ -32,7 +35,7 @@ uint32_t mask(uint32_t crc) {
 };
 
 std::uint32_t masked_crc (char * data, std::size_t n) {
-  return mask(crc32_boost(data, data + n));
+  return mask(crc32_c(data, n));
 }
 
 RecordWriter::RecordWriter (std::string path) {

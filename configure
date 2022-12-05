@@ -40,5 +40,6 @@ find ./ -type f -name "*.pb.h" -exec sed -i.bak "s@  #pragma@/*nowarn*/#pragma@g
 
 PB_SRC=$(echo $(find generated -type f -name "*.pb.cc" -print))
 CPP_SRC=$(echo $(find *.cpp -print))
-sed -e "s|@pbsrc@|$PB_SRC|" -e "s|@cppsrc@|$CPP_SRC|" Makevars.in > Makevars
+CRC_SRC=$(echo $(find . -type f -name "*.c" -print))
+sed -e "s|@pbsrc@|$PB_SRC|" -e "s|@cppsrc@|$CPP_SRC|" -e "s|@csrc@|$CRC_SRC|" Makevars.in > Makevars
 

@@ -2,3 +2,4 @@ ignore:
   - inst/tp
   - src/generated
   - src/zlib
+  - src/crc32c

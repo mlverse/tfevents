@@ -18,7 +18,7 @@ if [ ! -d "libs" ]; then
     -DBUILD_SHARED_LIBS:bool=OFF \
     -DCMAKE_POSITION_INDEPENDENT_CODE:bool=ON \
     -Dprotobuf_BUILD_TESTS=OFF
-  ${MAKE} -j8
+  cmake --build . --parallel 8
   cd ..
   mkdir libs
   cp build/libprotobuf.a libs/

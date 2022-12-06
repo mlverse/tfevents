@@ -31,6 +31,9 @@ as_tensor_proto.character <- function(x, dtype = NA, ...) {
 
 as_tensor_proto.array <- function(x, dtype = NA, ...) {
   dims <- dim(x)
+  # proto store tensor data in C ordering, thus we need to reshape values
+  # here.
+  x <- aperm(x, rev(seq_along(dims)))
   tensor_proto(x, shape = new_tensor_shape(dim = list(dims)), dtype = dtype)
 }
 

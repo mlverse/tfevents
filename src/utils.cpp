@@ -3,6 +3,7 @@
 #include "generated/plugins/image/plugin_data.pb.h"
 #include "generated/plugins/text/plugin_data.pb.h"
 #include "generated/plugins/audio/plugin_data.pb.h"
+#include "generated/plugins/histogram/plugin_data.pb.h"
 
 tensorboard::SummaryMetadata::PluginData make_plugin_data (std::string plugin_name,
                                                            SEXP plugin_content) {
@@ -29,6 +30,11 @@ tensorboard::SummaryMetadata::PluginData make_plugin_data (std::string plugin_na
       auto content = tensorboard::AudioPluginData();
       content.set_version(0);
       content.set_encoding(tensorboard::AudioPluginData_Encoding::AudioPluginData_Encoding_WAV);
+      plugin_data.set_content(content.SerializeAsString());
+    }
+    if (plugin_name == "histograms") {
+      auto content = tensorboard::HistogramPluginData();
+      content.set_version(0);
       plugin_data.set_content(content.SerializeAsString());
     }
   } else {

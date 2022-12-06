@@ -5,9 +5,15 @@ if test -z "${R_HOME}"; then
 fi
 
 CC=`"${R_HOME}/bin/R" CMD config CC`
+CXX=`"${R_HOME}/bin/R" CMD config CCX`
 CFLAGS=`"${R_HOME}/bin/R" CMD config CFLAGS`
 CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
 LDFLAGS=`"${R_HOME}/bin/R" CMD config LDFLAGS`
+
+CMAKE_C_COMPILER="$CC"                                                                                                       ; echo setting CMAKE_C_COMPILER="$CMAKE_C_COMPILER"                   ; export CMAKE_C_COMPILER="$CMAKE_C_COMPILER"
+CMAKE_C_FLAGS="$CFLAGS"                                                                                         ; echo setting CMAKE_C_FLAGS="$CMAKE_C_FLAGS"                         ; export CMAKE_C_FLAGS="$CMAKE_C_FLAGS"
+CMAKE_CXX_COMPILER="$CXX"                                                                                                    ; echo setting CMAKE_CXX_COMPILER="$CMAKE_CXX_COMPILER"               ; export CMAKE_CXX_COMPILER="$CMAKE_CXX_COMPILER"
+CMAKE_CXX_FLAGS="$CPPFLAGS"
 
 cd src
 

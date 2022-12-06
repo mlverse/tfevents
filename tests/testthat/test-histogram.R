@@ -11,6 +11,19 @@ test_that("can write and visualize histograms", {
   reader <- tbparse$SummaryReader(temp)
   x <- reader$tensors
   expect_equal(nrow(x), 10)
+
+  # test for arrays.
+  temp <- tempfile()
+  with_logdir(temp, {
+    for(i in 1:10) {
+      log_event(x = summary_histogram(array(rnorm(10000), dim = c(10, 10, 100))))
+    }
+  })
+
+  skip_if_tbparse_not_available()
+  reader <- tbparse$SummaryReader(temp)
+  x <- reader$tensors
+  expect_equal(nrow(x), 10)
 })
 
 test_that("edge case where there's no data doesn't fail", {

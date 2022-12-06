@@ -6,7 +6,7 @@ Authors@R: c(
     person(family = "Posit, PBC", role = c("cph")),
     person(family = "The Protobuf authors", role = c("cph"), comment = "For the vendored Protobuf code."),
     person(family = "The tl::optional authors", role = c("cph"), comment = "For the vendored tl::optional code."),
-    person(family = "Boost authors", role = c("cph"), comment = "For the included crc.h code.")
+    person("Mark", "Adler", role = c("cph"), comment = "For the included crc32c code.")
     )
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
@@ -14,8 +14,7 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 LinkingTo: 
-    Rcpp,
-    BH
+    Rcpp
 Imports: 
     Rcpp,
     withr,

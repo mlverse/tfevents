@@ -18,12 +18,15 @@ CMAKE_CXX_FLAGS="$CPPFLAGS"
 cd src
 
 if [ ! -d "libs" ]; then
+  echo "Building Protobuf ------------"
   mkdir build && cd build
   cmake ../../inst/tp/pb \
     -DCMAKE_BUILD_TYPE=Release \
     -DBUILD_SHARED_LIBS:bool=OFF \
     -DCMAKE_POSITION_INDEPENDENT_CODE:bool=ON \
-    -Dprotobuf_BUILD_TESTS=OFF
+    -Dprotobuf_BUILD_TESTS=OFF \
+    -DCMAKE_C_COMPILER="$CC" \
+    -DCMAKE_CXX_COMPILER="$CXX"
   cmake --build . --parallel 8
   cd ..
   mkdir libs

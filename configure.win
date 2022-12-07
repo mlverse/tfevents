@@ -21,7 +21,7 @@ if [ ! -d "libs" ]; then
   echo "Building Protobuf ------------"
   mkdir build && cd build
   cmake ../../inst/tp/pb \
-    -G "MinGW Makefiles"
+    -G "MinGW Makefiles" \
     -DCMAKE_BUILD_TYPE=Release \
     -DBUILD_SHARED_LIBS:bool=OFF \
     -DCMAKE_POSITION_INDEPENDENT_CODE:bool=ON \

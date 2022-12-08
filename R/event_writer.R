@@ -4,5 +4,6 @@ create_event_writer <- function(logdir) {
     logdir,
     paste0("events.out.tfevents.", as.integer(Sys.time()), ".v2")
   )
+  fs::file_create(fname)
   event_writer(fname)
 }

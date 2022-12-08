@@ -4,7 +4,7 @@
 #include "reader.h"
 
 EventFileIterator::EventFileIterator (const std::string& path) {
-  file.open(path);
+  file.open(path, std::ios::binary);
 };
 
 tensorboard::Event EventFileIterator::get_next () {

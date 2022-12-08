@@ -5,20 +5,25 @@ if test -z "${R_HOME}"; then
 fi
 
 CC=`"${R_HOME}/bin/R" CMD config CC`
+CXX=`"${R_HOME}/bin/R" CMD config CXX`
 CFLAGS=`"${R_HOME}/bin/R" CMD config CFLAGS`
 CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
 LDFLAGS=`"${R_HOME}/bin/R" CMD config LDFLAGS`
 
+echo "$(which g++)"
+
 cd src
 
 if [ ! -d "libs" ]; then
+  echo "Building Protobuf ------------"
   mkdir build && cd build
   cmake ../../inst/tp/pb \
+    -G "MinGW Makefiles" \
     -DCMAKE_BUILD_TYPE=Release \
     -DBUILD_SHARED_LIBS:bool=OFF \
     -DCMAKE_POSITION_INDEPENDENT_CODE:bool=ON \
     -Dprotobuf_BUILD_TESTS=OFF
-  ${MAKE} -j8
+  cmake --build . --parallel 8
   cd ..
   mkdir libs
   cp build/libprotobuf.a libs/
@@ -42,5 +47,5 @@ find ./ -type f -name "*.pb.h" -exec sed -i.bak "s@  #pragma@/*nowarn*/#pragma@g
 PB_SRC=$(echo $(find generated -type f -name "*.pb.cc" -print))
 CPP_SRC=$(echo $(find *.cpp -print))
 CRC_SRC=$(echo $(find . -type f -name "*.c" -print))
-sed -e "s|@pbsrc@|$PB_SRC|" -e "s|@cppsrc@|$CPP_SRC|" -e "s|@csrc@|$CRC_SRC|" Makevars.in > Makevars
+sed -e "s|@pbsrc@|$PB_SRC|" -e "s|@cppsrc@|$CPP_SRC|" -e "s|@csrc@|$CRC_SRC|" Makevars.in > Makevars.win
 

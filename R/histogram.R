@@ -50,8 +50,8 @@ summary_histogram.numeric <- function(data, ..., metadata = NULL, tag = NA, buck
       clamped_indices <- pmin(bucket_indices, buckets)
       bucket_counts <- sapply(seq(0, buckets-1), function(i) sum(clamped_indices==i))
       edges <- seq(min_, max_, length.out = buckets + 1)
-      left_edges <- head(edges, buckets)
-      right_edges <- tail(edges, buckets)
+      left_edges <- utils::head(edges, buckets)
+      right_edges <- utils::tail(edges, buckets)
       histogram_buckets <- cbind(left_edges, right_edges, bucket_counts)
     }
   }

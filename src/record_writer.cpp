@@ -40,7 +40,7 @@ std::uint32_t masked_crc (char * data, std::size_t n) {
 
 RecordWriter::RecordWriter (std::string path) {
   this->path = path;
-  this->writer.open(path);
+  this->writer.open(path, std::ios::binary);
 }
 
 RecordWriter::~RecordWriter () {

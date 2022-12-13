@@ -16,7 +16,7 @@ collect_events <- function(logdir = get_default_logdir()) {
 
 collect_summaries <- function(logdir = get_default_logdir()) {
   events <- collect_events(logdir)
-  events[!is.na(events$summary),]
+  events <- events[!is.na(events$summary),]
   events$summary <- as.list(events$summary)
   events <- tidyr::unnest(events, summary)
   events$tag <- field(events$summary, "tag")
@@ -29,4 +29,15 @@ collect_scalars <- function(logdir = get_default_logdir()) {
   summaries <- summaries[plugin_name=="scalars",]
   summaries$value <- field(summaries$summary, "value")
   summaries
+}
+
+plugin <- function(summary) {
+  if (!inherits(summary, "tfevents_summary_values")) {
+    cli::cli_abort(c(
+      "{.arg summary} must be {.cls tfevents_summary_values}",
+      i = "Got object with {.cls {class(summary)}}."
+    ))
+  }
+
+  field(field(summary, "metadata"), "plugin_name")
 }

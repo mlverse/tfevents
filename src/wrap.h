@@ -47,6 +47,13 @@ SEXP tensor_proto_content (const tensorboard::TensorProto& object) {
     }
     list.push_back(out);
   }
+  else if (dtype == tensorboard::DataType::DT_STRING) {
+    Rcpp::CharacterVector out;
+    for (int i =0; i < object.string_val_size(); i++) {
+      out.push_back(object.string_val(i));
+    }
+    list.push_back(out);
+  }
   else {
     Rcpp::stop("Can't read this object.");
   }

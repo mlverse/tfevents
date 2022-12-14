@@ -12,18 +12,19 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // create_event_file_iterator
-Rcpp::XPtr<EventFileIterator> create_event_file_iterator(const std::string& path);
-RcppExport SEXP _tfevents_create_event_file_iterator(SEXP pathSEXP) {
+Rcpp::XPtr<EventFileIterator> create_event_file_iterator(const std::string& path, const std::string& run_name);
+RcppExport SEXP _tfevents_create_event_file_iterator(SEXP pathSEXP, SEXP run_nameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_event_file_iterator(path));
+    Rcpp::traits::input_parameter< const std::string& >::type run_name(run_nameSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_event_file_iterator(path, run_name));
     return rcpp_result_gen;
 END_RCPP
 }
 // event_file_iterator_next
-tensorboard::Event event_file_iterator_next(Rcpp::XPtr<EventFileIterator> iter);
+SEXP event_file_iterator_next(Rcpp::XPtr<EventFileIterator> iter);
 RcppExport SEXP _tfevents_event_file_iterator_next(SEXP iterSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -79,7 +80,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_tfevents_create_event_file_iterator", (DL_FUNC) &_tfevents_create_event_file_iterator, 1},
+    {"_tfevents_create_event_file_iterator", (DL_FUNC) &_tfevents_create_event_file_iterator, 2},
     {"_tfevents_event_file_iterator_next", (DL_FUNC) &_tfevents_event_file_iterator_next, 1},
     {"_tfevents_event_file_iterator_collect", (DL_FUNC) &_tfevents_event_file_iterator_collect, 1},
     {"_tfevents_get_wall_time", (DL_FUNC) &_tfevents_get_wall_time, 0},

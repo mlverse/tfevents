@@ -34,7 +34,7 @@ collect_scalars <- function(logdir = get_default_logdir()) {
 events_iterator <- function(logdir = get_default_logdir()) {
   force(logdir)
   files <- fs::dir_ls(logdir, type = "file", regexp = ".*tfevents.*", recurse = TRUE)
-  iterators <- lapply(files, create_event_file_iterator)
+  iterators <- create_iterators(files, logdir)
   function() {
     out <- try_iterators(iterators)
     # if there's a value we can ealry return it.
@@ -49,7 +49,7 @@ events_iterator <- function(logdir = get_default_logdir()) {
 
     # append to files and iterators
     files <<- c(files, new_files)
-    iterators <<- append(iterators, lapply(new_files, create_event_file_iterator))
+    iterators <<- append(iterators, create_iterators(new_files, logdir))
 
     # retry sendinga value, otherwise returns exhausted().
     try_iterators(iterators)
@@ -83,4 +83,18 @@ exhausted <- function () {
 
 is_exhausted <- function (x) {
   identical(x, exhausted())
+}
+
+fill_run_field <- function(event, run) {
+  field(event, "run") <- rep(run, vec_size(event))
+  event
+}
+
+create_iterators <- function(files, logdir) {
+  lapply(files, function(name) {
+    create_event_file_iterator(
+      name,
+      fs::path_dir(fs::path_rel(name, logdir))
+    )
+  })
 }

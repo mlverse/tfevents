@@ -4,16 +4,29 @@
 #include "reader.h"
 
 EventFileIterator::EventFileIterator (const std::string& path) {
-  file.open(path, std::ios::binary);
+  this->path = path;
 };
 
 tensorboard::Event EventFileIterator::get_next () {
   std::uint64_t length;
   std::uint32_t crc;
 
+  if (!file.is_open()) {
+    file.open(path, std::ios::binary);
+    file.seekg(current_pos, std::ios::beg);
+  }
+
+  current_pos = file.tellg();
+
+  if (file.peek() == EOF) {
+    file.close();
+    Rcpp::stop("File iterator is over.");
+  }
+
   file.read(reinterpret_cast<char*>(&length), sizeof(std::uint64_t));
 
   if (file.eof()) {
+    file.clear();
     Rcpp::stop("File iterator is over.");
   }
 

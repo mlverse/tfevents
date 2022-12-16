@@ -68,12 +68,12 @@ try_iterators <- function(iterators) {
 
 #' @keywords internal
 #' @export
-value <- function(x) {
+value <- function(x, ...) {
   UseMethod("value")
 }
 
 #' @export
-value.tfevents_summary_values <- function(x) {
+value.tfevents_summary_values <- function(x, ...) {
   if (!vec_size(x) == 1) {
     cli::cli_abort(c(
       "You must pass a single summary_value to get it's value.",
@@ -85,8 +85,24 @@ value.tfevents_summary_values <- function(x) {
 }
 
 #' @export
-value.tfevents_summary_values_scalars <- function(x) {
+value.tfevents_summary_values_scalars <- function(x, ...) {
   field(x, "value")
+}
+
+#' @export
+value.tfevents_summary_values_histograms <- function(x, ...) {
+  tensor <- field(x, "tensor")
+
+  values <- field(tensor, "content")[[1]]
+  dims <- field(field(tensor, "shape"), "dim")[[1]]
+
+  # values in the tensor arre in C ordering, so we need to move to fortran ordering.
+  arr <- aperm(array(values, dim = rev(dims)), perm = rev(seq_along(dims)))
+
+  df <- as.data.frame(arr)
+  colnames(df) <- c("lower", "upper", "count")
+
+  df
 }
 
 plugin <- function(summary) {

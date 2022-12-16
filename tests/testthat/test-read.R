@@ -87,10 +87,17 @@ test_that("can extract value", {
   with_logdir(temp, {
     log_event(hello = 1)
     log_event(hello = 2)
+    log_event(hist = summary_histogram(rnorm(1000)))
   })
 
   summaries <- collect_summaries(temp)
   expect_equal(value(summaries$summary[1]), 1)
   expect_error(value(summaries$summary), regexp = "single summary_value")
+
+
+  histo <- value(summaries$summary[3])
+  expect_true(is.data.frame(histo))
+  expect_true(nrow(histo) == 30)
+  expect_equal(names(histo), c("lower", "upper", "count"))
 
 })

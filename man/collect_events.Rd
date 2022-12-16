@@ -12,6 +12,9 @@ collect_summaries(logdir = get_default_logdir())
 
 collect_scalars(logdir = get_default_logdir())
 }
+\arguments{
+\item{logdir}{The log directory that you want to query events from.}
+}
 \value{
 A \code{tibble} with the collected events.
 }
@@ -37,7 +40,7 @@ collect_events(temp)
 # collect summaries in the logdir
 collect_summaries(temp)
 # collect only scalar events
-collect_scalars()
+collect_scalars(temp)
 
 }
 \seealso{

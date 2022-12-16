@@ -8,6 +8,8 @@ value(x, ...)
 }
 \arguments{
 \item{x}{A \code{tfevents_summary_values} object.}
+
+\item{...}{Currently unused. To allow future extension.}
 }
 \value{
 Depending on the type of the summary it returns an image, audio, text or

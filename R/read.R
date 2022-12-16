@@ -2,7 +2,7 @@
 #'
 #' Collects all events of a kind in a single data.frame ready for analysis.
 #'
-#' @inheritParams log_event
+#' @param logdir The log directory that you want to query events from.
 #'
 #' @returns
 #' A `tibble` with the collected events.
@@ -19,7 +19,7 @@
 #' # collect summaries in the logdir
 #' collect_summaries(temp)
 #' # collect only scalar events
-#' collect_scalars()
+#' collect_scalars(temp)
 #'
 #' @seealso iter_events
 #'
@@ -48,7 +48,7 @@ collect_scalars <- function(logdir = get_default_logdir()) {
 #' Allows iterating trough events in tfevents records files without necessarily
 #' loading all of them in RAM at once. Uses [coro::iterator] protocol.
 #'
-#' @inheritParams log_event
+#' @inheritParams collect_events
 #'
 #' @returns
 #' An iterator that can be used to get events one by one. Returned iterators use
@@ -165,6 +165,7 @@ try_iterators <- function(iterators) {
 #' correct way to extract images, audio, text, etc from summary values.
 #'
 #' @param x A `tfevents_summary_values` object.
+#' @param ... Currently unused. To allow future extension.
 #' @returns
 #' Depending on the type of the summary it returns an image, audio, text or
 #' scalar.

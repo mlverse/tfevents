@@ -12,6 +12,9 @@ iter_summaries(logdir = get_default_logdir())
 
 iter_scalars(logdir = get_default_logdir())
 }
+\arguments{
+\item{logdir}{The log directory that you want to query events from.}
+}
 \value{
 An iterator that can be used to get events one by one. Returned iterators use
 the \link[coro:iterator]{coro::iterator} protocol.

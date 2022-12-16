@@ -66,6 +66,29 @@ try_iterators <- function(iterators) {
   exhausted()
 }
 
+#' @keywords internal
+#' @export
+value <- function(x) {
+  UseMethod("value")
+}
+
+#' @export
+value.tfevents_summary_values <- function(x) {
+  if (!vec_size(x) == 1) {
+    cli::cli_abort(c(
+      "You must pass a single summary_value to get it's value.",
+      i = "Got size {.val {vec_size(x)}}"
+    ))
+  }
+  class(x) <- c(paste0("tfevents_summary_values_", plugin(x)), class(x))
+  value(x)
+}
+
+#' @export
+value.tfevents_summary_values_scalars <- function(x) {
+  field(x, "value")
+}
+
 plugin <- function(summary) {
   if (!inherits(summary, "tfevents_summary_values")) {
     cli::cli_abort(c(

@@ -80,3 +80,17 @@ test_that("can iterate over events", {
   expect_true(is_exhausted(value))
 
 })
+
+test_that("can extract value", {
+
+  temp <- tempfile()
+  with_logdir(temp, {
+    log_event(hello = 1)
+    log_event(hello = 2)
+  })
+
+  summaries <- collect_summaries(temp)
+  expect_equal(value(summaries$summary[1]), 1)
+  expect_error(value(summaries$summary), regexp = "single summary_value")
+
+})

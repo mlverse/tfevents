@@ -62,17 +62,3 @@ SEXP event_file_iterator_next (Rcpp::XPtr<EventFileIterator> iter) {
   auto event = iter->get_next();
   return r_fill_run_field(event, iter->run_name);
 }
-
-// [[Rcpp::export]]
-std::vector<tensorboard::Event> event_file_iterator_collect (const std::string& path) {
-  auto iterator = EventFileIterator(path, "");
-  std::vector<tensorboard::Event> events;
-  while (true) {
-    try {
-      events.push_back(iterator.get_next());
-    } catch (...) {
-      break;
-    }
-  }
-  return events;
-}

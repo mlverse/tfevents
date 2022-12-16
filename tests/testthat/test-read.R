@@ -39,12 +39,13 @@ test_that("can iterate over events", {
 
   # reads the file definition event
   value <- iter()
-  expect_true(inherits(value, "tfevents_event"))
+  expect_true(inherits(value, "tbl"))
+  expect_true(inherits(value$event, "tfevents_event"))
 
   # reads the scalar
   value <- iter()
-  expect_true(inherits(value, "tfevents_event"))
-  expect_equal(get_scalar_value(value), 1)
+  expect_true(inherits(value$event, "tfevents_event"))
+  expect_equal(get_scalar_value(value$event), 1)
 
   # no more events in the file, so exhausted is returned
   value <- iter()
@@ -57,8 +58,8 @@ test_that("can iterate over events", {
   # new events are written to the same file,
   # read them
   value <- iter()
-  expect_true(inherits(value, "tfevents_event"))
-  expect_equal(get_scalar_value(value), 2)
+  expect_true(inherits(value$event, "tfevents_event"))
+  expect_equal(get_scalar_value(value$event), 2)
 
   # new events are written to a different file in the
   # directory and they are read.
@@ -69,11 +70,11 @@ test_that("can iterate over events", {
   # first file event, is always a dummy event containg
   # timestamps and etc.
   value <- iter()
-  expect_true(inherits(value, "tfevents_event"))
+  expect_true(inherits(value$event, "tfevents_event"))
 
   value <- iter()
-  expect_true(inherits(value, "tfevents_event"))
-  expect_equal(get_scalar_value(value), 3)
+  expect_true(inherits(value$event, "tfevents_event"))
+  expect_equal(get_scalar_value(value$event), 3)
 
   # no more events available, returns exhausted
   value <- iter()

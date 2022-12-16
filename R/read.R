@@ -1,34 +1,47 @@
 collect_events <- function(logdir = get_default_logdir()) {
-  rlang::check_installed(c("tibble", "tidyr"))
-  files <- fs::dir_ls(logdir, type = "file", regexp = ".*tfevents.*", recurse = TRUE)
-  events <- lapply(files, event_file_iterator_collect)
-  events <- map2(events, function(event, name) {
-    field(event, "run") <- rep(fs::path_dir(fs::path_rel(name, logdir)), vec_size(event))
-    event
-  })
-  events <- vec_c(!!!unname(events))
-  events <- tibble::tibble(event = events)
-  events$run <- field(events$event, "run")
-  events$step <- field(events$event, "step")
-  events$summary <- field(events$event, "summary")
-  events
+  iter <- events_iterator(logdir)
+  vec_rbind(!!!coro::collect(iter))
 }
 
 collect_summaries <- function(logdir = get_default_logdir()) {
-  events <- collect_events(logdir)
-  events <- events[!is.na(events$summary),]
-  events$summary <- as.list(events$summary)
-  events <- tidyr::unnest(events, summary)
-  events$tag <- field(events$summary, "tag")
-  events$plugin <- plugin(events$summary)
-  events
+  iter <- summaries_iterator(logdir)
+  vec_rbind(!!!coro::collect(iter))
 }
 
 collect_scalars <- function(logdir = get_default_logdir()) {
-  summaries <- collect_summaries(logdir)
-  summaries <- summaries[summaries$plugin=="scalars",]
-  summaries$value <- field(summaries$summary, "value")
-  summaries
+  iter <- scalars_iterator(logdir)
+  vec_rbind(!!!coro::collect(iter))
+}
+
+scalars_iterator <- function(logdir = get_default_logdir()) {
+  iter <- summaries_iterator(logdir)
+  coro::gen({
+    for (summary in iter) {
+      if (summary$plugin == "scalars") {
+        summary$value <- value(summary$summary)
+        coro::yield(summary)
+      } else {
+        next
+      }
+    }
+  })
+}
+
+summaries_iterator <- function(logdir = get_default_logdir()) {
+  rlang::check_installed("tidyr")
+  iter <- events_iterator(logdir)
+  coro::gen({
+    for (event in iter) {
+      if (!is.na(event$summary)) {
+        events <- tidyr::unnest(event, summary)
+        events$tag <- field(events$summary, "tag")
+        events$plugin <- plugin(events$summary)
+        coro::yield(events)
+      } else {
+         next
+      }
+    }
+  })
 }
 
 events_iterator <- function(logdir = get_default_logdir()) {
@@ -57,10 +70,15 @@ events_iterator <- function(logdir = get_default_logdir()) {
 }
 
 try_iterators <- function(iterators) {
+  rlang::check_installed("tibble")
   for (iterator in iterators) {
     event <- try(event_file_iterator_next(iterator), silent = TRUE)
     if (!inherits(event, "try-error")) {
-      return(event)
+      events <- tibble::tibble(event = event)
+      events$run <- field(events$event, "run")
+      events$step <- field(events$event, "step")
+      events$summary <- field(events$event, "summary")
+      return(events)
     }
   }
   exhausted()
@@ -143,7 +161,7 @@ value.tfevents_summary_values_images <- function(x, ...) {
 
 #' @export
 value.tfevents_summary_values_text <- function(x, ...) {
-  tensor <- field(tx, "tensor")
+  tensor <- field(x, "tensor")
   rawToChar(field(tensor, "content")[[1]][[1]])
 }
 

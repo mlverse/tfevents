@@ -34,17 +34,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// event_file_iterator_collect
-std::vector<tensorboard::Event> event_file_iterator_collect(const std::string& path);
-RcppExport SEXP _tfevents_event_file_iterator_collect(SEXP pathSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
-    rcpp_result_gen = Rcpp::wrap(event_file_iterator_collect(path));
-    return rcpp_result_gen;
-END_RCPP
-}
 // get_wall_time
 long get_wall_time();
 RcppExport SEXP _tfevents_get_wall_time() {
@@ -82,7 +71,6 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_tfevents_create_event_file_iterator", (DL_FUNC) &_tfevents_create_event_file_iterator, 2},
     {"_tfevents_event_file_iterator_next", (DL_FUNC) &_tfevents_event_file_iterator_next, 1},
-    {"_tfevents_event_file_iterator_collect", (DL_FUNC) &_tfevents_event_file_iterator_collect, 1},
     {"_tfevents_get_wall_time", (DL_FUNC) &_tfevents_get_wall_time, 0},
     {"_tfevents_event_writer", (DL_FUNC) &_tfevents_event_writer, 1},
     {"_tfevents_write_events", (DL_FUNC) &_tfevents_write_events, 2},

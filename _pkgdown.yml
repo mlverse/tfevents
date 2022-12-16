@@ -30,6 +30,7 @@ reference:
     contents:
       - starts_with("collect")
       - starts_with("iter")
+      - value
 
 articles:
   - title: Guides

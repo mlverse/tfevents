@@ -35,7 +35,7 @@ test_that("can iterate over events", {
     log_event(hello = 1)
   })
 
-  iter <- events_iterator(temp)
+  iter <- iter_events(temp)
 
   # reads the file definition event
   value <- iter()

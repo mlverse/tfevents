@@ -1,50 +1,88 @@
+#' Collect data from tfevents records
+#'
+#' Collects all events of a kind in a single data.frame ready for analysis.
+#'
+#' @inheritParams log_event
+#'
+#' @returns
+#' A `tibble` with the collected events.
+#'
+#' @examples
+#' temp <- tempfile()
+#' with_logdir(temp, {
+#'   for(i in 1:5) {
+#'     log_event(my_log = runif(1))
+#'   }
+#' })
+#' # collect all events in files, including file description events
+#' collect_events(temp)
+#' # collect summaries in the logdir
+#' collect_summaries(temp)
+#' # collect only scalar events
+#' collect_scalars()
+#'
+#' @seealso iter_events
+#'
+#' @export
 collect_events <- function(logdir = get_default_logdir()) {
-  iter <- events_iterator(logdir)
+  iter <- iter_events(logdir)
   vec_rbind(!!!coro::collect(iter))
 }
 
+#' @describeIn collect_events Collect events that contain summary values.
+#' @export
 collect_summaries <- function(logdir = get_default_logdir()) {
-  iter <- summaries_iterator(logdir)
+  iter <- iter_summaries(logdir)
   vec_rbind(!!!coro::collect(iter))
 }
 
+#' @describeIn collect_events Collect event summaries that contain scalar values.
+#' @export
 collect_scalars <- function(logdir = get_default_logdir()) {
-  iter <- scalars_iterator(logdir)
+  iter <- iter_scalars(logdir)
   vec_rbind(!!!coro::collect(iter))
 }
 
-scalars_iterator <- function(logdir = get_default_logdir()) {
-  iter <- summaries_iterator(logdir)
-  coro::gen({
-    for (summary in iter) {
-      if (summary$plugin == "scalars") {
-        summary$value <- value(summary$summary)
-        coro::yield(summary)
-      } else {
-        next
-      }
-    }
-  })
-}
-
-summaries_iterator <- function(logdir = get_default_logdir()) {
-  rlang::check_installed("tidyr")
-  iter <- events_iterator(logdir)
-  coro::gen({
-    for (event in iter) {
-      if (!is.na(event$summary)) {
-        events <- tidyr::unnest(event, summary)
-        events$tag <- field(events$summary, "tag")
-        events$plugin <- plugin(events$summary)
-        coro::yield(events)
-      } else {
-         next
-      }
-    }
-  })
-}
-
-events_iterator <- function(logdir = get_default_logdir()) {
+#' Creates an iterator for events in tfevents records
+#'
+#' Allows iterating trough events in tfevents records files without necessarily
+#' loading all of them in RAM at once. Uses [coro::iterator] protocol.
+#'
+#' @inheritParams log_event
+#'
+#' @returns
+#' An iterator that can be used to get events one by one. Returned iterators use
+#' the [coro::iterator] protocol.
+#'
+#' @examples
+#' temp <- tempfile()
+#' with_logdir(temp, {
+#'   for(i in 1:5) {
+#'     log_event(my_log = runif(1))
+#'   }
+#' })
+#'
+#' # iterate over all events
+#' iter <- iter_events(temp)
+#' iter()
+#' iter()
+#' coro::collect(iter)
+#'
+#' # iterate over summaries only
+#' iter <- iter_summaries(logdir)
+#' iter()
+#' iter()
+#' coro::collect(iter)
+#'
+#' # iterate over events that contain scalar summaries only
+#' iter <- iter_scalars(temp)
+#' iter()
+#' iter()
+#' coro::collect(iter)
+#'
+#' @seealso collect_events
+#' @export
+iter_events <- function(logdir = get_default_logdir()) {
   force(logdir)
   files <- fs::dir_ls(logdir, type = "file", regexp = ".*tfevents.*", recurse = TRUE)
   iterators <- create_iterators(files, logdir)
@@ -69,6 +107,41 @@ events_iterator <- function(logdir = get_default_logdir()) {
   }
 }
 
+#' @describeIn iter_events Creates an iteartor that discard events that don't contain summaries.
+#' @export
+iter_summaries <- function(logdir = get_default_logdir()) {
+  rlang::check_installed("tidyr")
+  iter <- iter_events(logdir)
+  coro::gen({
+    for (event in iter) {
+      if (!is.na(event$summary)) {
+        events <- tidyr::unnest(event, summary)
+        events$tag <- field(events$summary, "tag")
+        events$plugin <- plugin(events$summary)
+        coro::yield(events)
+      } else {
+        next
+      }
+    }
+  })
+}
+
+#' @describeIn iter_events Creates an iterator that onyl takes scalar summaries.
+#' @export
+iter_scalars <- function(logdir = get_default_logdir()) {
+  iter <- iter_summaries(logdir)
+  coro::gen({
+    for (summary in iter) {
+      if (summary$plugin == "scalars") {
+        summary$value <- value(summary$summary)
+        coro::yield(summary)
+      } else {
+        next
+      }
+    }
+  })
+}
+
 try_iterators <- function(iterators) {
   rlang::check_installed("tibble")
   for (iterator in iterators) {
@@ -84,7 +157,31 @@ try_iterators <- function(iterators) {
   exhausted()
 }
 
-#' @keywords internal
+#' Extracts the value of a summary value
+#'
+#' Summaries are complicated objects because they reflect the Protobuf object
+#' structure that are serialized in the tfevents records files. This function
+#' allows one to easily query vaues from summaries and will dispatch to the
+#' correct way to extract images, audio, text, etc from summary values.
+#'
+#' @param x A `tfevents_summary_values` object.
+#' @returns
+#' Depending on the type of the summary it returns an image, audio, text or
+#' scalar.
+#'
+#' @examples
+#' temp <- tempfile()
+#' with_logdir(temp, {
+#'   for(i in 1:5) {
+#'     log_event(my_log = runif(1))
+#'   }
+#' })
+#'
+#' # iterate over all events
+#' iter <- iter_summaries(temp)
+#' summary <- iter()
+#' value(summary$summary)
+#'
 #' @export
 value <- function(x, ...) {
   UseMethod("value")

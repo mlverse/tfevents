@@ -24,6 +24,12 @@ reference:
       Related to logging hyperparameters
     contents:
       contains("hparams")
+  - title: Reading
+    desc: >
+      Related to reading tfevents record files
+    contents:
+      - starts_with("collect")
+      - starts_with("iter")
 
 articles:
   - title: Guides

@@ -48,9 +48,13 @@ SEXP tensor_proto_content (const tensorboard::TensorProto& object) {
     list.push_back(out);
   }
   else if (dtype == tensorboard::DataType::DT_STRING) {
-    Rcpp::CharacterVector out;
-    for (int i =0; i < object.string_val_size(); i++) {
-      out.push_back(object.string_val(i));
+    Rcpp::List out;
+    for (int i=0; i < object.string_val_size(); i++) {
+      auto val = object.string_val(i);
+      Rcpp::RawVector v(val.size());
+      memcpy(&(v[0]), val.c_str(), v.size());
+      out.push_back(v);
+      out.attr("class") = std::vector<std::string>({"blob", "vctrs_list_of", "vctrs_vctr", "list"});
     }
     list.push_back(out);
   }

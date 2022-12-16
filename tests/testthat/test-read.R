@@ -84,20 +84,37 @@ test_that("can iterate over events", {
 test_that("can extract value", {
 
   temp <- tempfile()
+
+  orig_img <- png::readPNG(test_path("resources/img.png"))
+  img <- array(orig_img, dim = c(1, 28, 28, 1))
+
+  f <- wav::read_wav(test_path("resources/test-audio.wav"))
+  audio <- array(t(f), dim = c(1, rev(dim(f))))
+
   with_logdir(temp, {
     log_event(hello = 1)
     log_event(hello = 2)
     log_event(hist = summary_histogram(rnorm(1000)))
+    log_event(img = summary_image(img))
+    log_event(audio = summary_audio(audio))
   })
 
   summaries <- collect_summaries(temp)
   expect_equal(value(summaries$summary[1]), 1)
   expect_error(value(summaries$summary), regexp = "single summary_value")
 
-
   histo <- value(summaries$summary[3])
   expect_true(is.data.frame(histo))
   expect_true(nrow(histo) == 30)
   expect_equal(names(histo), c("lower", "upper", "count"))
 
+  im <- value(summaries$summary[4])
+  expect_equal(class(im), c("matrix", "array"))
+  expect_equal(dim(im), c(28, 28))
+
+  aud <- value(summaries$summary[5])
+  expect_equal(class(aud), c("matrix", "array"))
+  expect_equal(dim(aud), c(2, 352800))
+  expect_equal(attr(aud, "sample_rate"), 44100)
+  expect_equal(attr(aud, "bit_depth"), 32)
 })

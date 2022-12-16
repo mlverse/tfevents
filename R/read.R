@@ -105,6 +105,42 @@ value.tfevents_summary_values_histograms <- function(x, ...) {
   df
 }
 
+#' @export
+value.tfevents_summary_values_audio <- function(x, ...) {
+  # audio is stored in the tensor field.
+  tensor <- field(x, "tensor")
+
+  # content is serialized as a wave encoded tensor.
+  content <- field(tensor, "content")[[1]]
+
+  # in order to read, we first write the bytes to a file, then read with wav::read_wav
+  tmp <- tempfile(fileext = ".wav")
+  on.exit({file.remove(tmp)}, add = TRUE)
+  writeBin(object = content[[1]], con = tmp)
+
+  wav::read_wav(tmp)
+}
+
+#' @export
+value.tfevents_summary_values_images <- function(x, ...) {
+  # images are stored as tensors in the summary proto
+  image <- field(x, "tensor")
+
+  # the stored tensor is a 1d vector with 3 elements.
+  # first 2 describe the dimension of the image, the third
+  # contains a PNG encoded image.
+  buffer <- field(image, "content")[[1]]
+  dim1 <- readBin(buffer[[1]], what = integer(), size = 1)
+  dim2 <- readBin(buffer[[2]], what = integer(), size = 1)
+  img <- png::readPNG(buffer[[3]])
+
+  if (!identical(dim(img)[1:2], c(dim1, dim2))) {
+    cli::cli_abort("An error ocurred. Report a issue in the tfevents repository.")
+  }
+
+  img
+}
+
 plugin <- function(summary) {
   if (!inherits(summary, "tfevents_summary_values")) {
     cli::cli_abort(c(

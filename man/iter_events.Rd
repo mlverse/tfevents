@@ -45,7 +45,7 @@ iter()
 coro::collect(iter)
 
 # iterate over summaries only
-iter <- iter_summaries(logdir)
+iter <- iter_summaries(temp)
 iter()
 iter()
 coro::collect(iter)

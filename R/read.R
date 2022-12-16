@@ -69,7 +69,7 @@ collect_scalars <- function(logdir = get_default_logdir()) {
 #' coro::collect(iter)
 #'
 #' # iterate over summaries only
-#' iter <- iter_summaries(logdir)
+#' iter <- iter_summaries(temp)
 #' iter()
 #' iter()
 #' coro::collect(iter)

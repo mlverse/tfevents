@@ -97,6 +97,7 @@ test_that("can extract value", {
     log_event(hist = summary_histogram(rnorm(1000)))
     log_event(img = summary_image(img))
     log_event(audio = summary_audio(audio))
+    log_event(text = summary_text("hello world"))
   })
 
   summaries <- collect_summaries(temp)
@@ -117,4 +118,8 @@ test_that("can extract value", {
   expect_equal(dim(aud), c(2, 352800))
   expect_equal(attr(aud, "sample_rate"), 44100)
   expect_equal(attr(aud, "bit_depth"), 32)
+
+  tx <- value(summaries$summary[6])
+  expect_equal(tx, "hello world")
+
 })

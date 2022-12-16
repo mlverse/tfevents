@@ -141,6 +141,12 @@ value.tfevents_summary_values_images <- function(x, ...) {
   img
 }
 
+#' @export
+value.tfevents_summary_values_text <- function(x, ...) {
+  tensor <- field(tx, "tensor")
+  rawToChar(field(tensor, "content")[[1]][[1]])
+}
+
 plugin <- function(summary) {
   if (!inherits(summary, "tfevents_summary_values")) {
     cli::cli_abort(c(

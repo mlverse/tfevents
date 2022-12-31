@@ -39,8 +39,8 @@ test_that("simple hparams experiment", {
   expect_equal(nrow(reader$scalars), 40)
 
   expect_equal(nrow(collect_events(temp)), 40 + 4)
-  expect_equal(nrow(collect_summaries(temp)), 40 + 2)
-  expect_equal(nrow(collect_scalars(temp)), 40)
+  expect_equal(nrow(collect_events(temp, type="summary")), 40 + 2)
+  expect_equal(nrow(collect_events(temp, type="scalar")), 40)
 })
 
 test_that("multiple runs, each in a different logdir", {

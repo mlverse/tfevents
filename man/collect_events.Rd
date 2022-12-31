@@ -2,18 +2,27 @@
 % Please edit documentation in R/read.R
 \name{collect_events}
 \alias{collect_events}
-\alias{collect_summaries}
-\alias{collect_scalars}
+\alias{events_logdir}
 \title{Collect data from tfevents records}
 \usage{
-collect_events(logdir = get_default_logdir())
+collect_events(
+  logdir = get_default_logdir(),
+  n = NULL,
+  type = c("any", "summary", "scalar")
+)
 
-collect_summaries(logdir = get_default_logdir())
-
-collect_scalars(logdir = get_default_logdir())
+events_logdir(logdir = get_default_logdir())
 }
 \arguments{
-\item{logdir}{The log directory that you want to query events from.}
+\item{logdir}{The log directory that you want to query events from. Either a
+file path or a connection created with \code{\link[=events_logdir]{events_logdir()}}.}
+
+\item{n}{The maximum number of events to read from the connection. If \code{NULL}
+then all events are read, the default is \code{NULL}.}
+
+\item{type}{The kind of events that are to be read. By default all events are
+read. If a different type is specified, then the result can include other
+columns as well as more lines.}
 }
 \value{
 A \code{tibble} with the collected events.
@@ -23,9 +32,8 @@ Collects all events of a kind in a single data.frame ready for analysis.
 }
 \section{Functions}{
 \itemize{
-\item \code{collect_summaries()}: Collect events that contain summary values.
-
-\item \code{collect_scalars()}: Collect event summaries that contain scalar values.
+\item \code{events_logdir()}: Creates a connection to a logdir that can be reused
+to read further events later.
 
 }}
 \examples{
@@ -38,11 +46,8 @@ with_logdir(temp, {
 # collect all events in files, including file description events
 collect_events(temp)
 # collect summaries in the logdir
-collect_summaries(temp)
+collect_events(temp, type = "summary")
 # collect only scalar events
-collect_scalars(temp)
+collect_events(temp, type = "scalar")
 
-}
-\seealso{
-iter_events
 }

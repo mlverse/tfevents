@@ -104,7 +104,7 @@ test_that("can pass a custom display name", {
     ))
   })
 
-  s <- collect_summaries(temp)
+  s <- collect_events(temp, type="summary")
   expect_equal(
     field(field(s$summary, "metadata"), "description"),
     "This is a description"

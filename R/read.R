@@ -2,7 +2,13 @@
 #'
 #' Collects all events of a kind in a single data.frame ready for analysis.
 #'
-#' @param logdir The log directory that you want to query events from.
+#' @param logdir The log directory that you want to query events from. Either a
+#'  file path or a connection created with [events_logdir()].
+#' @param n The maximum number of events to read from the connection. If `NULL`
+#'  then all events are read, the default is `NULL`.
+#' @param type The kind of events that are to be read. By default all events are
+#'  read. If a different type is specified, then the result can include other
+#'  columns as well as more lines.
 #'
 #' @returns
 #' A `tibble` with the collected events.
@@ -17,129 +23,121 @@
 #' # collect all events in files, including file description events
 #' collect_events(temp)
 #' # collect summaries in the logdir
-#' collect_summaries(temp)
+#' collect_events(temp, type = "summary")
 #' # collect only scalar events
-#' collect_scalars(temp)
-#'
-#' @seealso iter_events
+#' collect_events(temp, type = "scalar")
 #'
 #' @export
-collect_events <- function(logdir = get_default_logdir()) {
-  iter <- iter_events(logdir)
-  vec_rbind(!!!coro::collect(iter))
+collect_events <- function(logdir = get_default_logdir(), n = NULL,
+                           type = c("any", "summary", "scalar")) {
+  logdir <- events_logdir(logdir)
+  type <- rlang::arg_match(type)
+
+  if (!is.null(n) && n <= 0) {
+    cli::cli_abort(c(
+      "{.arg n} must be positive or `NULL`",
+      "{.val {n}} is <=0 and not allowed."
+    ))
+  }
+
+  events <- list()
+  repeat {
+    event <- read_next(logdir, type = type)
+    if (is_exhausted(event)) {
+      break
+    } else {
+      events[[length(events) + 1]] <- event
+      if (!is.null(n) && length(events) == n)
+        break
+    }
+  }
+  vec_rbind(!!!events)
 }
 
-#' @describeIn collect_events Collect events that contain summary values.
-#' @export
-collect_summaries <- function(logdir = get_default_logdir()) {
-  iter <- iter_summaries(logdir)
-  vec_rbind(!!!coro::collect(iter))
+#' @describeIn collect_events Creates a connection to a logdir that can be reused
+#'   to read further events later.
+events_logdir <- function(logdir = get_default_logdir()) {
+  if (inherits(logdir, "tfevents_logdir_connection"))
+    return(logdir)
+  new_events_logdir_connection(logdir)
 }
 
-#' @describeIn collect_events Collect event summaries that contain scalar values.
-#' @export
-collect_scalars <- function(logdir = get_default_logdir()) {
-  iter <- iter_scalars(logdir)
-  vec_rbind(!!!coro::collect(iter))
-}
+new_events_logdir_connection <- function(logdir) {
+  con <- structure(
+    new.env(parent = emptyenv()),
+    class = "tfevents_logdir_connection"
+  )
 
-#' Creates an iterator for events in tfevents records
-#'
-#' Allows iterating trough events in tfevents records files without necessarily
-#' loading all of them in RAM at once. Uses [coro::iterator] protocol.
-#'
-#' @inheritParams collect_events
-#'
-#' @returns
-#' An iterator that can be used to get events one by one. Returned iterators use
-#' the [coro::iterator] protocol.
-#'
-#' @examples
-#' temp <- tempfile()
-#' with_logdir(temp, {
-#'   for(i in 1:5) {
-#'     log_event(my_log = runif(1))
-#'   }
-#' })
-#'
-#' # iterate over all events
-#' iter <- iter_events(temp)
-#' iter()
-#' iter()
-#' coro::collect(iter)
-#'
-#' # iterate over summaries only
-#' iter <- iter_summaries(temp)
-#' iter()
-#' iter()
-#' coro::collect(iter)
-#'
-#' # iterate over events that contain scalar summaries only
-#' iter <- iter_scalars(temp)
-#' iter()
-#' iter()
-#' coro::collect(iter)
-#'
-#' @seealso collect_events
-#' @export
-iter_events <- function(logdir = get_default_logdir()) {
-  force(logdir)
   files <- fs::dir_ls(logdir, type = "file", regexp = ".*tfevents.*", recurse = TRUE)
   iterators <- create_iterators(files, logdir)
-  function() {
-    out <- try_iterators(iterators)
-    # if there's a value we can ealry return it.
-    if (!is_exhausted(out)) {
-      return(out)
-    }
-    # if exhausted, maybe there's a new file in the directory that we were not
-    # tracking yet, so we try it before returing the exhausted flag.
-    # check if new files were added to the directory
-    new_files <- fs::dir_ls(logdir, type = "file", regexp = ".*tfevents.*", recurse = TRUE)
-    new_files <- new_files[!new_files %in% files]
 
-    # append to files and iterators
-    files <<- c(files, new_files)
-    iterators <<- append(iterators, create_iterators(new_files, logdir))
+  con$logdir <- logdir
+  con$iterators <- iterators
+  con$files <- files
 
-    # retry sendinga value, otherwise returns exhausted().
-    try_iterators(iterators)
+  con
+}
+
+# possibly includes new files that might have been created in the logdir, and
+# could yield new values.
+refresh_events_logdir_connection <- function(con) {
+  # if exhausted, maybe there's a new file in the directory that we were not
+  # tracking yet, so we try it before returing the exhausted flag.
+  # check if new files were added to the directory
+  new_files <- fs::dir_ls(con$logdir, type = "file", regexp = ".*tfevents.*", recurse = TRUE)
+  new_files <- new_files[!new_files %in% con$files]
+
+  # append to files and iterators
+  con$files <- c(con$files, new_files)
+  con$iterators <- append(con$iterators, create_iterators(new_files, con$logdir))
+  invisible(NULL)
+}
+
+read_next <- function(con, type) {
+  if (type == "any") {
+    read_next_event(con)
+  } else if (type == "summary") {
+    read_next_summary(con)
+  } else if (type == "scalar") {
+    read_next_scalar(con)
+  } else {
+    cli::cli_abort("Unsupported type: {.val {type}}.")
   }
 }
 
-#' @describeIn iter_events Creates an iteartor that discard events that don't contain summaries.
-#' @export
-iter_summaries <- function(logdir = get_default_logdir()) {
-  rlang::check_installed("tidyr")
-  iter <- iter_events(logdir)
-  coro::gen({
-    for (event in iter) {
-      if (!is.na(event$summary)) {
-        events <- tidyr::unnest(event, summary)
-        events$tag <- field(events$summary, "tag")
-        events$plugin <- plugin(events$summary)
-        coro::yield(events)
-      } else {
-        next
-      }
-    }
-  })
+read_next_event <- function(con) {
+  out <- try_iterators(con$iterators)
+  if (is_exhausted(out)) {
+    refresh_events_logdir_connection(con)
+    out <- try_iterators(con$iterators)
+  }
+  out
 }
 
-#' @describeIn iter_events Creates an iterator that onyl takes scalar summaries.
-#' @export
-iter_scalars <- function(logdir = get_default_logdir()) {
-  iter <- iter_summaries(logdir)
-  coro::gen({
-    for (summary in iter) {
-      if (summary$plugin == "scalars") {
-        summary$value <- value(summary$summary)
-        coro::yield(summary)
-      } else {
-        next
-      }
-    }
-  })
+read_next_summary <- function(con) {
+  out <- read_next_event(con)
+  if (is_exhausted(out)) {
+    out
+  } else if (is.na(out$summary)) {
+    read_next_summary(con)
+  } else {
+    out <- tidyr::unnest(out, summary)
+    out$tag <- field(out$summary, "tag")
+    out$plugin <- plugin(out$summary)
+    out
+  }
+}
+
+read_next_scalar <- function(con) {
+  out <- read_next_summary(con)
+  if (is_exhausted(out)) {
+    out
+  } else if (out$plugin == "scalars") {
+    out$value <- value(out$summary)
+    out
+  } else {
+    read_next_scalar(con)
+  }
 }
 
 try_iterators <- function(iterators) {

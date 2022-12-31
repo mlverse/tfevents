@@ -16,7 +16,7 @@ test_that("can use the plugin function", {
     log_event(bye = 1)
   })
 
-  summaries <- collect_summaries(temp)
+  summaries <- collect_events(temp, type = "summary")
   expect_equal(plugin(summaries$summary), c("histograms", "scalars"))
   expect_equal(summaries$plugin, c("histograms", "scalars"))
 
@@ -24,7 +24,6 @@ test_that("can use the plugin function", {
 
 test_that("can iterate over events", {
   # tests low level reading functionality.
-  # each event is read in a call to iterator.
 
   get_scalar_value <- function(value) {
     field(field(value, "summary")[[1]], "value")
@@ -35,21 +34,21 @@ test_that("can iterate over events", {
     log_event(hello = 1)
   })
 
-  iter <- iter_events(temp)
+  con <- events_logdir(temp)
 
   # reads the file definition event
-  value <- iter()
+  value <- collect_events(con, n = 1)
   expect_true(inherits(value, "tbl"))
   expect_true(inherits(value$event, "tfevents_event"))
 
   # reads the scalar
-  value <- iter()
+  value <- collect_events(con, n = 1)
   expect_true(inherits(value$event, "tfevents_event"))
   expect_equal(get_scalar_value(value$event), 1)
 
   # no more events in the file, so exhausted is returned
-  value <- iter()
-  expect_true(is_exhausted(value))
+  value <- collect_events(con, n = 1)
+  expect_true(nrow(value) == 0)
 
   with_logdir(temp, {
     log_event(hello = 2)
@@ -57,7 +56,7 @@ test_that("can iterate over events", {
 
   # new events are written to the same file,
   # read them
-  value <- iter()
+  value <- collect_events(con, n = 1)
   expect_true(inherits(value$event, "tfevents_event"))
   expect_equal(get_scalar_value(value$event), 2)
 
@@ -69,17 +68,16 @@ test_that("can iterate over events", {
 
   # first file event, is always a dummy event containg
   # timestamps and etc.
-  value <- iter()
+  value <- collect_events(con, n = 1)
   expect_true(inherits(value$event, "tfevents_event"))
 
-  value <- iter()
+  value <- collect_events(con, n = 1)
   expect_true(inherits(value$event, "tfevents_event"))
   expect_equal(get_scalar_value(value$event), 3)
 
   # no more events available, returns exhausted
-  value <- iter()
-  expect_true(is_exhausted(value))
-
+  value <- collect_events(con, n = 1)
+  expect_true(nrow(value) == 0)
 })
 
 test_that("can extract value", {
@@ -101,7 +99,7 @@ test_that("can extract value", {
     log_event(text = summary_text("hello world"))
   })
 
-  summaries <- collect_summaries(temp)
+  summaries <- collect_events(temp, type = "summary")
   expect_equal(value(summaries$summary[1]), 1)
   expect_error(value(summaries$summary), regexp = "single summary_value")
 

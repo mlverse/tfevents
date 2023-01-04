@@ -38,6 +38,7 @@ articles:
     contents:
       - articles/images
       - articles/hparams
+      - articles/read
   - title: Examples
     navbar: Examples
     contents:

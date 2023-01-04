@@ -56,6 +56,7 @@ collect_events <- function(logdir = get_default_logdir(), n = NULL,
 
 #' @describeIn collect_events Creates a connection to a logdir that can be reused
 #'   to read further events later.
+#' @export
 events_logdir <- function(logdir = get_default_logdir()) {
   if (inherits(logdir, "tfevents_logdir_connection"))
     return(logdir)

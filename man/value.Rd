@@ -30,8 +30,7 @@ with_logdir(temp, {
 })
 
 # iterate over all events
-iter <- iter_summaries(temp)
-summary <- iter()
+summary <- collect_events(temp, n = 1, type = "summary")
 value(summary$summary)
 
 }

@@ -136,4 +136,9 @@ test_that("collect_event with type fails", {
     regexp = "must be one of"
   )
 
+  expect_error(
+    collect_events(temp, n =-102),
+    regexp = "must be positive"
+  )
+
 })

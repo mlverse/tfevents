@@ -122,3 +122,18 @@ test_that("can extract value", {
   expect_equal(tx, "hello world")
 
 })
+
+test_that("collect_event with type fails", {
+
+  temp <- tempfile()
+  with_logdir(temp, {
+    log_event(hello = summary_histogram(runif(1000)))
+    log_event(bye = 1)
+  })
+
+  expect_error(
+    collect_events(temp, type = "xx"),
+    regexp = "must be one of"
+  )
+
+})

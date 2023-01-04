@@ -100,8 +100,6 @@ read_next <- function(con, type) {
     read_next_summary(con)
   } else if (type == "scalar") {
     read_next_scalar(con)
-  } else {
-    cli::cli_abort("Unsupported type: {.val {type}}.")
   }
 }
 

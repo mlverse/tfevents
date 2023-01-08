@@ -14,7 +14,7 @@ test_that("Can't have untagged summaries", {
     log_event(summary_scalar(1, tag = "hello"))
   }), regexp = NA)
 
-  scalars <- collect_scalars(temp)
+  scalars <- collect_events(temp, type = "scalar")
   expect_equal(scalars$tag, "hello")
 
 })

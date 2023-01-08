@@ -52,6 +52,12 @@ tensor_proto <- function(content, shape, dtype = NA) {
     dtype <- sapply(content, make_default_dtype)
   }
 
+  if (!inherits(shape, "tensor_shape")) {
+    if (is.list(shape))
+      shape <- new_tensor_shape(dim = shape)
+  }
+
+
   new_tensor_proto(
     content = content,
     shape = shape,

@@ -1,0 +1,106 @@
+---
+title: "Reading event records"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(tfevents)
+```
+
+tfevents stores events in files inside a **logdir**, there might be many files tfevents records  files in the log directory and each file can contain many events.
+
+tfevents provides functionality to read records writen to the log directory and to extract their value in a convenient representation, useful if you want to analyse the results from R.
+
+Let's write a few records a temporary directory, then we'll use tfevents functionality to read the data into R.
+
+```{r}
+temp <- tempfile()
+set_default_logdir(temp)
+```
+
+```{r}
+log_event(text = "hello world")
+for (i in 1:10) {
+  log_event(hello = i* runif(1))
+}
+```
+
+We can **collect** all events from the *logdir* with:
+
+```{r}
+events <- collect_events(temp)
+events
+```
+
+`collect_events()` returns a tibble with each row repesenting an event writen to that *logdir*. Note that the tibble has 12 rows, 1 more than the number of our calls to `log_event`. That's because every event record file includes an event storing some metadata, like the time it was created and etc. The `run` column indicates the directory within the *logdir* that the events were collected from. Although tfevents only supports writing summary events, tfevents record files can contain other kind of events like log message, TensorFlow graphs and metadata information (as we see in this file), in those cases the `summary` column will have a `NA` value. In summary events it will contain additional information on the summary.
+
+You might want to collect only the summary events, like those that were created with `log_event`, in this case you can pass the `type` argument to `collect_events` specifying the kind of events that you want to collect.
+
+```{r}
+summaries <- collect_events(temp, type = "summary")
+summaries
+```
+Since the above asked for summary events, the returned data frame can include additional information like the name of the plugin that was used to created the summary (eg. scalars, images, audio, etc) and the tag name for the summary. This data is already included in the objects in the `summary` column, but is extracted as columns to make analyses easier. 
+
+You can extract the value out of a summary using the `value` function.
+
+```{r}
+value(summaries$summary[1])
+```
+
+Notice that `value` extracts values of a single summary so you need a loop to query all summary values from the data frame. For example with `sapply`:
+
+```{r}
+# we remove the first summary, as it's a text summary
+sapply(summaries$summary[-1], value)
+```
+
+The reson why you can only extract values one by one is because summaries are not homogenous (ie. they might be scalars, audio, images or text) and there would be good way of combining all of them in a different way than what `summaries$summary` already does.
+
+If you are only interested in scalar summaries, you can use `type="scalar"` in `collect_events`:
+
+```{r}
+scalars <- collect_events(temp, type = "scalar")
+scalars
+```
+
+Now, values can be expanded in the data frame and you get a ready to use data frame, for example:
+
+```{r}
+library(ggplot2)
+ggplot(scalars, aes(x = step, y = value)) +
+  geom_line()
+```
+
+## Iterating over a logdir
+
+Passing a directory path to `collect_events` by default collects all events in that directory, but you might not want to collect them all at once because of memory constraints or even because they are not yet written, in this case you can use `events_logdir` to create an object, similar to a file connection that
+will allow you to load events in smaller batches.
+
+```{r}
+con <- events_logdir(temp)
+collect_events(con, n = 1, type = "scalar")
+```
+
+Notice that the first call to `collect_events` collected the first scalar summary event in the directory because of `n = 1`. The next call will collect the remaining ones as by default `n = NULL`. 
+
+```{r}
+collect_events(con, type = "scalar")
+```
+
+We can now log some more scalars and recollect, you will see that the events that were just written are now collected.
+
+```{r}
+for (i in 1:3) {
+  log_event(hello = i* runif(1))
+}
+collect_events(con, type = "scalar")
+```
+
+This interface allows you to efficiently read tfevents records without having them all on RAM at once, or work in a streaming way in a sense that a process might be writing tfevents (for example in a training loop) and another one is used to display intermediate results - for example in a Shiny app.

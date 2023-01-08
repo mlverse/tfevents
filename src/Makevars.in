@@ -1,6 +1,6 @@
 PKG_CPPFLAGS = -I../inst/tp/pb/src -Igenerated
 PKG_LIBS = libs/libprotobuf.a
-CXX_STD=CXX11
+CXX_STD=CXX14
 
 CPP_SOURCES=@cppsrc@
 CC_SOURCES=@pbsrc@

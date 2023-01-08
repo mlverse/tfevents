@@ -10,7 +10,7 @@ test_that("write a few simple scalars", {
   expect_equal(nrow(events), 10 + 1)
   expect_equal(events$run, rep(".", 11))
 
-  scalars <- collect_scalars(temp)
+  scalars <- collect_events(temp, type="scalar")
   expect_equal(nrow(events), 10 + 1)
   expect_equal(scalars$value, (1:10)^2)
   expect_equal(scalars$step, 0:9)
@@ -32,7 +32,7 @@ test_that("write nested scalar for multiple runs", {
   expect_equal(nrow(events), 4*10 + 2)
   expect_equal(unique(events$run), c("train", "valid"))
 
-  scalars <- collect_scalars(temp)
+  scalars <- collect_events(temp, type = "scalar")
   expect_equal(nrow(scalars), 4*10)
   expect_equal(unique(scalars$tag), c("loss", "acc"))
   expect_true(all(unique(scalars$step) %in% 0:9))
@@ -54,7 +54,7 @@ test_that("can log manually created scalars directly", {
   events <- collect_events(temp)
   expect_equal(nrow(events), 4*10 + 10 + 3)
 
-  scalars <- collect_scalars(temp)
+  scalars <- collect_events(temp, type = "scalar")
   expect_equal(scalars[scalars$tag == "loss2",]$value, 1:10 + 2)
 })
 
@@ -70,7 +70,7 @@ test_that("can log with a specified step", {
     log_event(bye = 1, step = get_global_step(increment = FALSE))
   })
 
-  scalars <- collect_scalars(temp)
+  scalars <- collect_events(temp, type = "scalar")
   expect_true(100 %in% scalars$step)
   expect_true(3 %in% scalars$step)
   expect_equal(scalars$step[scalars$tag == "bye"], 3)
@@ -103,7 +103,7 @@ test_that("can write tags with the slash instead of nested list", {
     )
   })
 
-  expect_equal(nrow(collect_summaries(temp)), 4)
+  expect_equal(nrow(collect_events(temp, type = "summary")), 4)
 })
 
 test_that("Errors gracefully when a numeric with length >1 is provided", {

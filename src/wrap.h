@@ -8,6 +8,7 @@ static auto r_summary_values = Rcpp::Function(pkg["summary_values"]);
 static auto r_vec_c_list = Rcpp::Function(pkg["vec_c_list"]);
 static auto r_event = Rcpp::Function(pkg["event"]);
 static auto r_summary_summary_image = Rcpp::Function(pkg["summary_summary_image"]);
+static auto r_tensor_proto = Rcpp::Function(pkg["tensor_proto"]);
 
 template <>
 SEXP Rcpp::wrap(const tensorboard::SummaryMetadata& object) {
@@ -29,6 +30,74 @@ SEXP Rcpp::wrap(const tensorboard::Summary_Image& object) {
   );
 }
 
+SEXP tensor_proto_content (const tensorboard::TensorProto& object) {
+  auto dtype = object.dtype();
+  auto list = Rcpp::List();
+  if (dtype == tensorboard::DataType::DT_FLOAT) {
+    Rcpp::NumericVector out;
+    for (int i =0; i < object.float_val_size(); i++) {
+      out.push_back(object.float_val(i));
+    }
+    list.push_back(out);
+  }
+  else if (dtype == tensorboard::DataType::DT_DOUBLE) {
+    Rcpp::NumericVector out;
+    for (int i =0; i < object.double_val_size(); i++) {
+      out.push_back(object.double_val(i));
+    }
+    list.push_back(out);
+  }
+  else if (dtype == tensorboard::DataType::DT_STRING) {
+    Rcpp::List out;
+    for (int i=0; i < object.string_val_size(); i++) {
+      auto val = object.string_val(i);
+      Rcpp::RawVector v(val.size());
+      memcpy(&(v[0]), val.c_str(), v.size());
+      out.push_back(v);
+      out.attr("class") = std::vector<std::string>({"blob", "vctrs_list_of", "vctrs_vctr", "list"});
+    }
+    list.push_back(out);
+  }
+  else {
+    Rcpp::stop("Can't read this object.");
+  }
+  return list;
+}
+
+template<>
+SEXP Rcpp::wrap(const tensorboard::DataType& object) {
+  switch (object) {
+  case tensorboard::DataType::DT_FLOAT:
+    return Rcpp::wrap("float");
+  case tensorboard::DataType::DT_DOUBLE:
+    return Rcpp::wrap("double");
+  case tensorboard::DataType::DT_STRING:
+    return Rcpp::wrap("string");
+  default:
+    Rcpp::stop("Can't read this type.");
+  }
+}
+
+template<>
+SEXP Rcpp::wrap(const tensorboard::TensorProto& object) {
+  auto content = tensor_proto_content(object);
+  auto shape = object.tensor_shape();
+  auto shape_out = IntegerVector();
+
+  for (int i = 0; i < shape.dim_size(); i++) {
+    shape_out.push_back(shape.dim(i).size());
+  }
+
+  auto shape_out2 = Rcpp::List();
+  shape_out2.push_back(shape_out);
+
+  return r_tensor_proto(
+    content,
+    shape_out2,
+    Rcpp::wrap(object.dtype())
+  );
+}
+
 template <>
 SEXP Rcpp::wrap(const tensorboard::Summary& object) {
   auto n_values = object.value_size();
@@ -40,7 +109,8 @@ SEXP Rcpp::wrap(const tensorboard::Summary& object) {
       value.metadata(),
       value.tag(),
       Rcpp::Named("value", value.has_simple_value() ? value.simple_value() : pkg["na"]),
-      Rcpp::Named("image", value.has_image() ? Rcpp::wrap(value.image()) : pkg["na"])
+      Rcpp::Named("image", value.has_image() ? Rcpp::wrap(value.image()) : pkg["na"]),
+      Rcpp::Named("tensor", value.has_tensor() ? Rcpp::wrap(value.tensor()): pkg["na"])
     ));
   }
 

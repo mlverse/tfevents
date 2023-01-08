@@ -22,6 +22,9 @@
     <loc>https://mlverse.github.io/tfevents/articles/index.html</loc>
   </url>
   <url>
+    <loc>https://mlverse.github.io/tfevents/articles/read.html</loc>
+  </url>
+  <url>
     <loc>https://mlverse.github.io/tfevents/authors.html</loc>
   </url>
   <url>
@@ -29,6 +32,9 @@
   </url>
   <url>
     <loc>https://mlverse.github.io/tfevents/reference/as_event.html</loc>
+  </url>
+  <url>
+    <loc>https://mlverse.github.io/tfevents/reference/collect_events.html</loc>
   </url>
   <url>
     <loc>https://mlverse.github.io/tfevents/reference/event.html</loc>
@@ -74,5 +80,8 @@
   </url>
   <url>
     <loc>https://mlverse.github.io/tfevents/reference/summary_text.html</loc>
+  </url>
+  <url>
+    <loc>https://mlverse.github.io/tfevents/reference/value.html</loc>
   </url>
 </urlset>

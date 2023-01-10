@@ -142,3 +142,18 @@ test_that("collect_event with type fails", {
   )
 
 })
+
+test_that("can format a data frame containing summaries", {
+
+
+  temp <- tempfile()
+  with_logdir(temp, {
+    log_event(hello = summary_histogram(runif(1000)))
+    log_event(bye = 1)
+  })
+
+  x <- collect_events(temp)
+  expect_error(as.data.frame(x), regexp = NA)
+  expect_error(format(as.data.frame(x)), regexp = NA)
+
+})

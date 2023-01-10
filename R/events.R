@@ -254,7 +254,7 @@ new_summary_metadata <- function(plugin_name = character(), display_name = chara
 
 #' @export
 format.tfevents_summary <- function(x, ...) {
-  format(vctrs::field(x, "value"))
+  sapply(x, format)
 }
 
 #' @export

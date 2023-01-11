@@ -184,16 +184,25 @@ value <- function(x, ...) {
   UseMethod("value")
 }
 
+#' @describeIn value Acess values from `summary_values`.
+#' @param as_list A boolean indicating if the results should be returned in a list.
+#'   The default is to return a single value. If you need to extract values from
+#'   multiple summaries use `as_list = TRUE`.
 #' @export
-value.tfevents_summary_values <- function(x, ...) {
-  if (!vec_size(x) == 1) {
+value.tfevents_summary_values <- function(x, ..., as_list = FALSE) {
+  if (!vec_size(x) == 1 && !as_list) {
     cli::cli_abort(c(
       "You must pass a single summary_value to get it's value.",
-      i = "Got size {.val {vec_size(x)}}"
+      i = "Got size {.val {vec_size(x)}}",
+      i = "Use {.val as_list = TRUE} to cast many values at once."
     ))
   }
-  class(x) <- c(paste0("tfevents_summary_values_", plugin(x)), class(x))
-  value(x)
+  if (as_list) {
+    lapply(x, value)
+  } else {
+    class(x) <- c(paste0("tfevents_summary_values_", plugin(x)), class(x))
+    value(x)
+  }
 }
 
 #' @export

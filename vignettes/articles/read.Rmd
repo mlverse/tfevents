@@ -54,14 +54,13 @@ You can extract the value out of a summary using the `value` function.
 value(summaries$summary[1])
 ```
 
-Notice that `value` extracts values of a single summary so you need a loop to query all summary values from the data frame. For example with `sapply`:
+Notice that `value` extracts values of a single summary and errors if you pass
+more summary values. To query all values you can pass the `as_list = TRUE` argument. This ensures that `value` will always return a list, making it type stable no matter the size of the summary_values vector that you pass.
 
 ```{r}
 # we remove the first summary, as it's a text summary
-sapply(summaries$summary[-1], value)
+value(summaries$summary[-1], as_list = TRUE)
 ```
-
-The reson why you can only extract values one by one is because summaries are not homogenous (ie. they might be scalars, audio, images or text) and there would be good way of combining all of them in a different way than what `summaries$summary` already does.
 
 If you are only interested in scalar summaries, you can use `type="scalar"` in `collect_events`:
 

@@ -2,14 +2,21 @@
 % Please edit documentation in R/read.R
 \name{value}
 \alias{value}
+\alias{value.tfevents_summary_values}
 \title{Extracts the value of a summary value}
 \usage{
 value(x, ...)
+
+\method{value}{tfevents_summary_values}(x, ..., as_list = FALSE)
 }
 \arguments{
 \item{x}{A \code{tfevents_summary_values} object.}
 
 \item{...}{Currently unused. To allow future extension.}
+
+\item{as_list}{A boolean indicating if the results should be returned in a list.
+The default is to return a single value. If you need to extract values from
+multiple summaries use \code{as_list = TRUE}.}
 }
 \value{
 Depending on the type of the summary it returns an image, audio, text or
@@ -21,6 +28,11 @@ structure that are serialized in the tfevents records files. This function
 allows one to easily query vaues from summaries and will dispatch to the
 correct way to extract images, audio, text, etc from summary values.
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{value(tfevents_summary_values)}: Acess values from \code{summary_values}.
+
+}}
 \examples{
 temp <- tempfile()
 with_logdir(temp, {

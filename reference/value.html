@@ -69,7 +69,10 @@ correct way to extract images, audio, text, etc from summary values.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">value</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">value</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for tfevents_summary_values</span></span>
+<span><span class="fu">value</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, as_list <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -81,6 +84,12 @@ correct way to extract images, audio, text, etc from summary values.</p>
 <dt>...</dt>
 <dd><p>Currently unused. To allow future extension.</p></dd>
 
+
+<dt>as_list</dt>
+<dd><p>A boolean indicating if the results should be returned in a list.
+The default is to return a single value. If you need to extract values from
+multiple summaries use <code>as_list = TRUE</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -89,6 +98,11 @@ correct way to extract images, audio, text, etc from summary values.</p>
 <p>Depending on the type of the summary it returns an image, audio, text or
 scalar.</p>
     </div>
+    <div class="section level2">
+    <h2 id="methods-by-class-">Methods (by class)<a class="anchor" aria-label="anchor" href="#methods-by-class-"></a></h2>
+    
+<ul><li><p><code>value(tfevents_summary_values)</code>: Acess values from <code>summary_values</code>.</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -102,7 +116,7 @@ scalar.</p>
 <span class="r-in"><span><span class="co"># iterate over all events</span></span></span>
 <span class="r-in"><span><span class="va">summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="collect_events.html">collect_events</a></span><span class="op">(</span><span class="va">temp</span>, n <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">"summary"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">value</span><span class="op">(</span><span class="va">summary</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.08821645</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.6226243</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

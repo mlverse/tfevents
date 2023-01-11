@@ -114,6 +114,12 @@ ways of specifying the tag attribute.</p></dd>
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>An image summary that can be logged with <code><a href="log_event.html">log_event()</a></code>.</p>
+    </div>
+    <div class="section level2">
     <h2 id="methods-by-class-">Methods (by class)<a class="anchor" aria-label="anchor" href="#methods-by-class-"></a></h2>
     
 <ul><li><p><code>summary_image(ggplot)</code>: Cretes an image summary from a ggplot2 graph object.
@@ -127,7 +133,25 @@ thus they can be a single scalar or a vector the same size of the images blob.</
 with <code><a href="https://rdrr.io/pkg/png/man/writePNG.html" class="external-link">png::writePNG()</a></code>. In this case you need to provide <code>width</code>, <code>height</code> and
 <code>colorspace</code> arguments.</p></li>
 </ul></div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other summary: 
+<code><a href="summary_audio.html">summary_audio</a>()</code>,
+<code><a href="summary_histogram.html">summary_histogram</a>()</code>,
+<code><a href="summary_scalar.html">summary_scalar</a>()</code>,
+<code><a href="summary_text.html">summary_text</a>()</code></p></div>
+    </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="get_default_logdir.html">with_logdir</a></span><span class="op">(</span><span class="va">tmp</span>, <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu">summary_image</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">array</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">10</span>, <span class="fl">10</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;tfevents_summary_tensor[1]&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] &lt;NA&gt;</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

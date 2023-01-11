@@ -53,3 +53,11 @@ with_logdir(temp, {
 })
 
 }
+\seealso{
+Other summary: 
+\code{\link{summary_audio}()},
+\code{\link{summary_image}()},
+\code{\link{summary_scalar}()},
+\code{\link{summary_text}()}
+}
+\concept{summary}

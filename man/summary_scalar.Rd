@@ -29,3 +29,11 @@ with_logdir(temp, {
   log_event(loss = summary_scalar(1))
 })
 }
+\seealso{
+Other summary: 
+\code{\link{summary_audio}()},
+\code{\link{summary_histogram}()},
+\code{\link{summary_image}()},
+\code{\link{summary_text}()}
+}
+\concept{summary}

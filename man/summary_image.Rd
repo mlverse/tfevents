@@ -41,6 +41,9 @@ ways of specifying the tag attribute.}
 \code{5 - DIGITAL_YUV},
 \code{6 - BGRA}}
 }
+\value{
+An image summary that can be logged with \code{\link[=log_event]{log_event()}}.
+}
 \description{
 Creates a image summary
 }
@@ -61,3 +64,17 @@ with \code{\link[png:writePNG]{png::writePNG()}}. In this case you need to provi
 \code{colorspace} arguments.
 
 }}
+\examples{
+tmp <- tempfile()
+with_logdir(tmp, {
+  summary_image(array(runif(100), dim = c(1,10, 10, 1)))
+})
+}
+\seealso{
+Other summary: 
+\code{\link{summary_audio}()},
+\code{\link{summary_histogram}()},
+\code{\link{summary_scalar}()},
+\code{\link{summary_text}()}
+}
+\concept{summary}

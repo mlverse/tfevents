@@ -5,7 +5,13 @@
 #' @param audio Object that will be written as an audio event in the tfevents record.
 #' @inheritParams summary_image
 #' @param sample_rate The sample rate in Hz associated to the audio values.
-#'
+#' @returns An audio summary that can be logged with [log_event()].
+#' @family summary
+#' @examples
+#' tmp <- tempfile()
+#' with_logdir(tmp, {
+#'   summary_audio(array(runif(100), dim = c(1,100, 1)))
+#' })
 #' @export
 summary_audio <- function(audio, ..., metadata = NULL, tag = NA) {
   UseMethod("summary_audio")

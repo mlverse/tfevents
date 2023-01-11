@@ -12,7 +12,13 @@
 #'   `4 - RGBA`,
 #'   `5 - DIGITAL_YUV`,
 #'   `6 - BGRA`
-#'
+#' @family summary
+#' @returns An image summary that can be logged with [log_event()].
+#' @examples
+#' tmp <- tempfile()
+#' with_logdir(tmp, {
+#'   summary_image(array(runif(100), dim = c(1,10, 10, 1)))
+#' })
 #' @export
 summary_image <- function(img, ..., metadata = NULL, tag = NA) {
   UseMethod("summary_image")

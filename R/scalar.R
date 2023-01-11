@@ -8,6 +8,7 @@
 #'   ways of specifying the tag attribute.
 #'
 #' @returns A `<scalar_event>` object.
+#' @family summary
 #'
 #' @examples
 #' temp <- tempfile()

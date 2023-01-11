@@ -163,9 +163,6 @@ try_iterators <- function(iterators) {
 #'
 #' @param x A `tfevents_summary_values` object.
 #' @param ... Currently unused. To allow future extension.
-#' @param as_list A boolean indicating if the results should be returned in a list.
-#'   The default is to return a single value. If you need to extract values from
-#'   multiple summaries use `as_list = TRUE`.
 #' @returns
 #' Depending on the type of the summary it returns an image, audio, text or
 #' scalar.
@@ -187,6 +184,10 @@ value <- function(x, ...) {
   UseMethod("value")
 }
 
+#' @describeIn value Acess values from `summary_values`.
+#' @param as_list A boolean indicating if the results should be returned in a list.
+#'   The default is to return a single value. If you need to extract values from
+#'   multiple summaries use `as_list = TRUE`.
 #' @export
 value.tfevents_summary_values <- function(x, ..., as_list = FALSE) {
   if (!vec_size(x) == 1 && !as_list) {

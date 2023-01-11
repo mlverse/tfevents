@@ -157,3 +157,22 @@ test_that("can format a data frame containing summaries", {
   expect_error(format(as.data.frame(x)), regexp = NA)
 
 })
+
+test_that("can as list summary values", {
+
+  temp <- tempfile()
+  with_logdir(temp, {
+    log_event(hello = runif(1))
+    log_event(bye = 1)
+  })
+
+  expect_error(
+    value(collect_events(temp, type = "summary")$summary),
+    "as_list = TRUE"
+  )
+
+  x <- value(collect_events(temp, type = "summary")$summary, as_list = TRUE)
+  expect_true(is.list(x))
+  expect_length(x, 2)
+
+})

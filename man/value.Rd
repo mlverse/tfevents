@@ -10,6 +10,10 @@ value(x, ...)
 \item{x}{A \code{tfevents_summary_values} object.}
 
 \item{...}{Currently unused. To allow future extension.}
+
+\item{as_list}{A boolean indicating if the results should be returned in a list.
+The default is to return a single value. If you need to extract values from
+multiple summaries use \code{as_list = TRUE}.}
 }
 \value{
 Depending on the type of the summary it returns an image, audio, text or

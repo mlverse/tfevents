@@ -12,8 +12,9 @@
 #'   and right endpoints are the same and only the last bucket has nonzero count.
 #'   Defaults to 30 if not specified.
 #'
-#' @return
+#' @returns
 #' An histogram summary that can be logged with [log_event()].
+#' @family summary
 #'
 #' @examples
 #' temp <- tempfile()

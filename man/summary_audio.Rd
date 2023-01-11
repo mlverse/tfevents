@@ -28,6 +28,9 @@ ways of specifying the tag attribute.}
 
 \item{sample_rate}{The sample rate in Hz associated to the audio values.}
 }
+\value{
+An audio summary that can be logged with \code{\link[=log_event]{log_event()}}.
+}
 \description{
 Audio summaries can be played withing the TensorBoard UI.
 }
@@ -43,3 +46,17 @@ a WAV encoded audio file.
 containing WAV encoded audio files.
 
 }}
+\examples{
+tmp <- tempfile()
+with_logdir(tmp, {
+  summary_audio(array(runif(100), dim = c(1,100, 1)))
+})
+}
+\seealso{
+Other summary: 
+\code{\link{summary_histogram}()},
+\code{\link{summary_image}()},
+\code{\link{summary_scalar}()},
+\code{\link{summary_text}()}
+}
+\concept{summary}

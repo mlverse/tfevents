@@ -3,6 +3,7 @@
 #' @param txt An object that can be converted to a text.
 #' @param ... Currently unused.
 #' @inheritParams summary_scalar
+#' @family summary
 #'
 #' @examples
 #' temp <- tempfile()

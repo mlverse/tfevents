@@ -38,7 +38,7 @@ Suggests:
     ggplot2,
     tensorflow,
     wav
-SystemRequirements: cmake, C++11
+SystemRequirements: libprotobuf, protobuf-compiler
 URL: https://github.com/mlverse/tfevents,
     https://mlverse.github.io/tfevents/
 BugReports: https://github.com/mlverse/tfevents/issues

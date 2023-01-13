@@ -28,9 +28,13 @@ format that can be later consumed by [TensorBoard](https://www.tensorflow.org/te
 
 ## Installation
 
-You can install the development version of tfevents from [GitHub](https://github.com/) with:
+You can install tfevents from CRAN with:
 
-> Note: Currently only MacOS and Linux are supported. Windows support coming soon!
+``` r
+install.packages("tfevents")
+```
+
+You can install the development version of tfevents from [GitHub](https://github.com/) with:
 
 You need to have `cmake` on your path. See installation instructions in the [cmake install
 webpage](https://cmake.org/install/) - or:

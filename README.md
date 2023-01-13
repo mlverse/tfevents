@@ -17,11 +17,14 @@ generate visualizations.
 
 ## Installation
 
+You can install tfevents from CRAN with:
+
+``` r
+install.packages("tfevents")
+```
+
 You can install the development version of tfevents from
 [GitHub](https://github.com/) with:
-
-> Note: Currently only MacOS and Linux are supported. Windows support
-> coming soon!
 
 You need to have `cmake` on your path. See installation instructions in
 the [cmake install webpage](https://cmake.org/install/) - or:
@@ -83,9 +86,9 @@ subdirectories under `logs` to write metrics for each group.
 fs::dir_tree("logs")
 #> logs
 #> ├── train
-#> │   └── events.out.tfevents.1668024224.v2
+#> │   └── events.out.tfevents.1673447763.v2
 #> └── valid
-#>     └── events.out.tfevents.1668024224.v2
+#>     └── events.out.tfevents.1673447763.v2
 ```
 
 You can later point TensorBoard to that logdir using TensorBoard’s
@@ -93,7 +96,6 @@ command line interface or tensorflow’s utility function `tensorboard()`
 
 ``` r
 tensorflow::tensorboard(normalizePath("logs"), port = 6060)
-#> Loaded Tensorflow version 2.10.0
 #> Started TensorBoard at http://127.0.0.1:6060
 ```
 

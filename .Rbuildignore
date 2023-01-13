@@ -19,6 +19,8 @@
 ^inst/tp/pb/\.github$
 ^inst/tp/pb/src/solaris/libstdc\+\+\.la$
 ^inst/tp/pb/src/google/protobuf/testing$
+^inst/tp/pb/third_party/googletest$
+^inst/tp/pb/third_party/benchmark$
 ^\.DS_Store$
 ^src/\.DS_Store$
 ^LICENSE\.md$
@@ -31,3 +33,4 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^cran-comments\.md$

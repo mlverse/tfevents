@@ -1,14 +1,16 @@
 Package: tfevents
-Title: What the Package Does (One Line, Title Case)
+Title: Write Events for TensorBoard
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Daniel", "Falbel", email = "daniel@rstudio.com", role = c("aut", "cre", "cph")),
+    person("Daniel", "Falbel", email = "daniel@posit.co", role = c("aut", "cre", "cph")),
     person(family = "Posit, PBC", role = c("cph")),
     person(family = "The Protobuf authors", role = c("cph"), comment = "For the vendored Protobuf code."),
     person(family = "The tl::optional authors", role = c("cph"), comment = "For the vendored tl::optional code."),
     person("Mark", "Adler", role = c("cph"), comment = "For the included crc32c code.")
     )
-Description: What the package does (one paragraph).
+Description: Provides a convenient way to log scalars, images, audio, and histograms in the 'tfevent' record file format. 
+  Logged data can be visualized on the fly using 'TensorBoard', a web based tool that focuses on visualizing the training 
+  progress of machine learning models.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -1,37 +1,120 @@
-: ${R_HOME=`R RHOME`}
-if test -z "${R_HOME}"; then
-  echo "could not determine R_HOME"
+# Anticonf (tm) script by Jeroen Ooms (2022)
+# This script will query 'pkg-config' for the required cflags and ldflags.
+# If pkg-config is unavailable or does not find the library, try setting
+# INCLUDE_DIR and LIB_DIR manually via e.g:
+# R CMD INSTALL --configure-vars='INCLUDE_DIR=/.../include LIB_DIR=/.../lib'
+
+# Library settings
+PKG_CONFIG_NAME="protobuf"
+PKG_DEB_NAME="libprotobuf-dev"
+PKG_RPM_NAME="protobuf-devel"
+PKG_BREW_NAME="protobuf"
+PKG_TEST_HEADER="<google/protobuf/message.h>"
+PKG_LIBS="-lprotobuf"
+PKG_CFLAGS=""
+
+# Use pkg-config if available (except for on CRAN)
+if [ `command -v pkg-config` ] && [ ! -d "/Volumes/SSD-Data/Builds" ]; then
+  PKGCONFIG_CFLAGS=`pkg-config --cflags --silence-errors ${PKG_CONFIG_NAME}`
+  PKGCONFIG_LIBS=`pkg-config --libs ${PKG_CONFIG_NAME}`
+  PKGCONFIG_MODVERSION=`pkg-config --modversion --silence-errors ${PKG_CONFIG_NAME}`
+fi
+
+# Note that cflags may be empty in case of success
+if [ "$INCLUDE_DIR" ] || [ "$LIB_DIR" ]; then
+  echo "Found INCLUDE_DIR and/or LIB_DIR!"
+  PKG_CFLAGS="-I$INCLUDE_DIR $PKG_CFLAGS"
+  PKG_LIBS="-L$LIB_DIR $PKG_LIBS"
+elif [ "$PKGCONFIG_CFLAGS" ] || [ "$PKGCONFIG_LIBS" ]; then
+  echo "Found pkg-config cflags and libs!"
+  PKG_CFLAGS=${PKGCONFIG_CFLAGS}
+  PKG_LIBS=${PKGCONFIG_LIBS}
+elif [ `uname` = "Darwin" ]; then
+  test ! "$CI" && brew --version 2>/dev/null
+  if [ $? -eq 0 ]; then
+    BREWDIR=`brew --prefix`
+    PATH="$BREWDIR/bin:$PATH"
+    PKG_CFLAGS="-I$BREWDIR/include"
+    PKG_LIBS="-L$BREWDIR/lib $PKG_LIBS"
+  else
+    curl -sfL "https://autobrew.github.io/scripts/protobuf" > autobrew
+    . autobrew
+  fi
+fi
+
+# For debugging
+echo "Using PKG_CFLAGS=$PKG_CFLAGS"
+echo "Using PKG_LIBS=$PKG_LIBS"
+
+# Use CXX17 if available (preferred for recent libprotobuf)
+CXX17=`${R_HOME}/bin/R CMD config CXX17` || unset CXX17
+
+if [ "$CXX17" ]; then
+CXX_STD=CXX17
+CXX="$CXX17 `${R_HOME}/bin/R CMD config CXX17STD`"
+CXXFLAGS=`${R_HOME}/bin/R CMD config CXX17FLAGS`
+echo "Using C++17 compiler: $CXX"
+else
+echo "Using default C++ compiler"
+CXX_STD=CXX11
+CXX=`${R_HOME}/bin/R CMD config CXX`
+CXXFLAGS=`${R_HOME}/bin/R CMD config CXXFLAGS`
+fi
+
+# Test configuration
+CPPFLAGS=`${R_HOME}/bin/R CMD config CPPFLAGS`
+echo "#include $PKG_TEST_HEADER" | ${CXX} -E ${CPPFLAGS} ${PKG_CFLAGS} ${CXXFLAGS} -xc++ - >/dev/null 2>configure.log
+
+# Customize the error
+if [ $? -ne 0 ]; then
+  echo "------------------------------[ ANTICONF ]-----------------------------"
+  echo "Configuration failed to find $PKG_CONFIG_NAME. Try installing:"
+  echo " * deb: $PKG_DEB_NAME (Debian, Ubuntu, etc)"
+  echo " * rpm: $PKG_RPM_NAME (Fedora, EPEL)"
+  echo " * brew: $PKG_BREW_NAME (OSX)"
+  echo "If $PKG_CONFIG_NAME is already installed, check that 'pkg-config' is in your"
+  echo "PATH and PKG_CONFIG_PATH contains a $PKG_CONFIG_NAME.pc file. If pkg-config"
+  echo "is unavailable you can set INCLUDE_DIR and LIB_DIR manually via:"
+  echo "R CMD INSTALL --configure-vars='INCLUDE_DIR=... LIB_DIR=...'"
+  echo "----------------------------[ ERROR MESSAGE ]----------------------------"
+  cat configure.log
+  echo "------------------------------------------------------------------------"
   exit 1
 fi
 
-CC=`"${R_HOME}/bin/R" CMD config CC`
-CFLAGS=`"${R_HOME}/bin/R" CMD config CFLAGS`
-CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
-LDFLAGS=`"${R_HOME}/bin/R" CMD config LDFLAGS`
+# Fix for deprecated declarations
+if pkg-config ${PKG_CONFIG_NAME} --atleast-version 3.6; then
+PKG_CFLAGS="$PKG_CFLAGS -DUSENEWAPI"
+fi
+
+# Write to Makevars
+sed -e "s|@cflags@|$PKG_CFLAGS|" -e "s|@libs@|$PKG_LIBS|" -e "s|CXX11|${CXX_STD}|" src/Makevars.in > src/Makevars
+
+# Look for 'protoc' compiler
+if [ `command -v protoc` ]; then
+  PROTOC_VERSION=`protoc --version`
+  echo "Using ${PROTOC_VERSION} from `command -v protoc`"
+else
+  echo "Failed to run protoc."
+  echo "Please install the 'protobuf-compiler' package for your system."
+  exit 1
+fi
+
+# Try to check if protoc version matches libproto
+case $PROTOC_VERSION in
+  *"$PKGCONFIG_MODVERSION"*)
+    ;;
+  *)
+    echo "Warning: protoc version $PROTOC_VERSION might not match libproto version $PKGCONFIG_MODVERSION.";
+    ;;
+esac
 
 cd src
-
-if [ ! -d "libs" ]; then
-  mkdir build && cd build
-  cmake ../../inst/tp/pb \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DBUILD_SHARED_LIBS:bool=OFF \
-    -DCMAKE_POSITION_INDEPENDENT_CODE:bool=ON \
-    -Dprotobuf_BUILD_TESTS=OFF
-  ${MAKE} -j8
-  cd ..
-  mkdir libs
-  cp build/libprotobuf.a libs/
-  cp build/protoc libs/
-  rm -r build
-else
-  echo "Protobuf is already built."
-fi
 
 if [ ! -d "generated" ]; then
   mkdir generated
   find proto -name *.proto -exec bash -c \
-    './libs/protoc -I "proto" -I "../inst/tp/pb/src" --cpp_out="generated" {}' \;
+    'protoc -I "proto" --cpp_out="generated" {}' \;
 fi
 
 # copied from protolite:
@@ -42,5 +125,7 @@ find ./ -type f -name "*.pb.h" -exec sed -i.bak "s@  #pragma@/*nowarn*/#pragma@g
 PB_SRC=$(echo $(find generated -type f -name "*.pb.cc" -print))
 CPP_SRC=$(echo $(find *.cpp -print))
 CRC_SRC=$(echo $(find . -type f -name "*.c" -print))
-sed -e "s|@pbsrc@|$PB_SRC|" -e "s|@cppsrc@|$CPP_SRC|" -e "s|@csrc@|$CRC_SRC|" Makevars.in > Makevars
+sed -e "s|@pbsrc@|$PB_SRC|" -e "s|@cppsrc@|$CPP_SRC|" -e "s|@csrc@|$CRC_SRC|" \
+    -e "s|@cflags@|$PKG_CFLAGS|" -e "s|@libs@|$PKG_LIBS|" -e "s|CXX11|${CXX_STD}|" \
+    Makevars.in > Makevars
 

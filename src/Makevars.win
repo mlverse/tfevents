@@ -1,0 +1,23 @@
+# ProtoBuf Version
+VERSION = 3.8.0
+RWINLIB = ../windows/protobuf-${VERSION}
+
+PKG_CPPFLAGS= -I$(RWINLIB)/include -Igenerated
+PKG_LIBS= -L$(RWINLIB)/lib${subst gcc,,${COMPILED_BY}}${R_ARCH} \
+	-L$(RWINLIB)/lib${R_ARCH}${CRT} \
+	-lprotobuf
+
+CXX_STD=CXX11
+
+all: clean winlibs
+
+winlibs:
+	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R" $(VERSION)
+	mkdir generated
+  find proto -name *.proto -exec bash -c \
+    './libs/protoc -I "proto" --cpp_out="generated" {}' \;
+
+clean:
+	rm -f $(OBJECTS) $(SHLIB)
+	rm -f -r generated
+	(cd ..; sh cleanup)

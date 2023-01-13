@@ -1,5 +1,6 @@
-PKG_CPPFLAGS = -I../inst/tp/pb/src -Igenerated
-PKG_LIBS = libs/libprotobuf.a
+PKG_CPPFLAGS=@cflags@ -Igenerated
+PKG_CXXFLAGS=$(C_VISIBILITY)
+PKG_LIBS=@libs@
 CXX_STD=CXX14
 
 CPP_SOURCES=@cppsrc@

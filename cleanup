@@ -1,2 +1,1 @@
-rm -r src/generated
-rm src/Makevars
+

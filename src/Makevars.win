@@ -14,8 +14,7 @@ all: clean winlibs
 winlibs:
 	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R" $(VERSION)
 	mkdir generated
-  find proto -name *.proto -exec bash -c \
-    './libs/protoc -I "proto" --cpp_out="generated" {}' \;
+  find proto -name *.proto -exec bash -c './libs/protoc -I "proto" --cpp_out="generated" {}' \;
 
 clean:
 	rm -f $(OBJECTS) $(SHLIB)

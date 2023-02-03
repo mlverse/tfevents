@@ -123,8 +123,8 @@ SEXP Rcpp::wrap(const tensorboard::Event& object) {
     Rcpp::Named("run", pkg["na"]),
     Rcpp::Named("wall_time", object.wall_time()),
     Rcpp::Named("step", object.step()),
-    Rcpp::Named("summary", object.has_summary() ? Rcpp::wrap(object.summary()) : pkg["na"]),
-    Rcpp::Named("file_version", object.has_file_version() ? Rcpp::wrap(object.file_version()) : pkg["na"])
+    Rcpp::Named("summary", object.what_case() == tensorboard::Event::WhatCase::kSummary ? Rcpp::wrap(object.summary()) : pkg["na"]),
+    Rcpp::Named("file_version", object.what_case() == tensorboard::Event::WhatCase::kFileVersion ? Rcpp::wrap(object.file_version()) : pkg["na"])
   );
 }
 

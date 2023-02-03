@@ -108,9 +108,9 @@ SEXP Rcpp::wrap(const tensorboard::Summary& object) {
     summaries.push_back(r_summary_values(
       value.metadata(),
       value.tag(),
-      Rcpp::Named("value", value.has_simple_value() ? value.simple_value() : pkg["na"]),
-      Rcpp::Named("image", value.has_image() ? Rcpp::wrap(value.image()) : pkg["na"]),
-      Rcpp::Named("tensor", value.has_tensor() ? Rcpp::wrap(value.tensor()): pkg["na"])
+      Rcpp::Named("value", value.value_case() == tensorboard::Summary_Value::ValueCase::kSimpleValue  ? value.simple_value() : pkg["na"]),
+      Rcpp::Named("image", value.value_case() == tensorboard::Summary_Value::ValueCase::kImage ? Rcpp::wrap(value.image()) : pkg["na"]),
+      Rcpp::Named("tensor", value.value_case() == tensorboard::Summary_Value::ValueCase::kTensor ? Rcpp::wrap(value.tensor()): pkg["na"])
     ));
   }
 

@@ -14,7 +14,7 @@ static auto r_fill_run_field = Rcpp::Function(pkg["fill_run_field"]);
 EventFileIterator::EventFileIterator (const std::string& path, const std::string& run_name) {
   this->path = path;
   this->run_name = run_name;
-};
+}
 
 tensorboard::Event EventFileIterator::get_next () {
   std::uint64_t length;

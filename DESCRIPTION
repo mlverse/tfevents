@@ -4,7 +4,6 @@ Version: 0.0.0.9000
 Authors@R: c(
     person("Daniel", "Falbel", email = "daniel@posit.co", role = c("aut", "cre", "cph")),
     person(family = "Posit, PBC", role = c("cph")),
-    person(family = "The Protobuf authors", role = c("cph"), comment = "For the vendored Protobuf code."),
     person(family = "The tl::optional authors", role = c("cph"), comment = "For the vendored tl::optional code."),
     person("Mark", "Adler", role = c("cph"), comment = "For the included crc32c code.")
     )

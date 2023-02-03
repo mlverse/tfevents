@@ -1,5 +1,5 @@
 # ProtoBuf Version
-VERSION = 3.8.0
+VERSION = 3.19.4
 RWINLIB = ../windows/protobuf-${VERSION}
 
 PKG_CPPFLAGS= -I$(RWINLIB)/include -Igenerated

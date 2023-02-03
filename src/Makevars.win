@@ -1,0 +1,48 @@
+# ProtoBuf Version
+VERSION = 3.19.4
+RWINLIB = ../windows/protobuf-${VERSION}
+
+PKG_CPPFLAGS= -I$(RWINLIB)/include -Igenerated
+PKG_LIBS= -L$(RWINLIB)/lib${subst gcc,,${COMPILED_BY}}${R_ARCH} \
+	-L$(RWINLIB)/lib${R_ARCH}${CRT} \
+	-lprotobuf
+
+CXX_STD=CXX11
+
+OBJECTS = \
+		generated/event.pb.o \
+		generated/plugins/audio/plugin_data.pb.o \
+		generated/plugins/histogram/plugin_data.pb.o \
+		generated/plugins/hparams/api.pb.o \
+		generated/plugins/hparams/hparams_util.pb.o \
+		generated/plugins/hparams/plugin_data.pb.o \
+		generated/plugins/image/plugin_data.pb.o \
+		generated/plugins/scalar/plugin_data.pb.o \
+		generated/plugins/text/plugin_data.pb.o \
+		generated/resource_handle.pb.o \
+		generated/summary.pb.o \
+		generated/tensor.pb.o \
+		generated/tensor_shape.pb.o \
+		generated/types.pb.o \
+		reader.o \
+		event_writer.o \
+		record_writer.o \
+		utils.o \
+		write.o \
+		code.o \
+		RcppExports.o \
+		crc32c.o
+
+#OBJECTS=$(CPP_SOURCES:.cpp=.o) $(CC_SOURCES:.cc=.o) $(C_SOURCES:.c=.o)
+
+all: clean winlibs
+
+winlibs:
+	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R" $(VERSION)
+	mkdir generated
+	find proto -name *.proto -exec bash -c '"${RWINLIB}/bin$(WIN)/protoc" -I "proto" --cpp_out="generated" {}' \;
+
+clean:
+	rm -f $(OBJECTS) $(SHLIB)
+	rm -f -r generated
+	(cd ..; sh cleanup)

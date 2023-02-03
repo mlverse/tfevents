@@ -108,9 +108,9 @@ SEXP Rcpp::wrap(const tensorboard::Summary& object) {
     summaries.push_back(r_summary_values(
       value.metadata(),
       value.tag(),
-      Rcpp::Named("value", value.has_simple_value() ? value.simple_value() : pkg["na"]),
-      Rcpp::Named("image", value.has_image() ? Rcpp::wrap(value.image()) : pkg["na"]),
-      Rcpp::Named("tensor", value.has_tensor() ? Rcpp::wrap(value.tensor()): pkg["na"])
+      Rcpp::Named("value", value.value_case() == tensorboard::Summary_Value::ValueCase::kSimpleValue  ? value.simple_value() : pkg["na"]),
+      Rcpp::Named("image", value.value_case() == tensorboard::Summary_Value::ValueCase::kImage ? Rcpp::wrap(value.image()) : pkg["na"]),
+      Rcpp::Named("tensor", value.value_case() == tensorboard::Summary_Value::ValueCase::kTensor ? Rcpp::wrap(value.tensor()): pkg["na"])
     ));
   }
 
@@ -123,8 +123,8 @@ SEXP Rcpp::wrap(const tensorboard::Event& object) {
     Rcpp::Named("run", pkg["na"]),
     Rcpp::Named("wall_time", object.wall_time()),
     Rcpp::Named("step", object.step()),
-    Rcpp::Named("summary", object.has_summary() ? Rcpp::wrap(object.summary()) : pkg["na"]),
-    Rcpp::Named("file_version", object.has_file_version() ? Rcpp::wrap(object.file_version()) : pkg["na"])
+    Rcpp::Named("summary", object.what_case() == tensorboard::Event::WhatCase::kSummary ? Rcpp::wrap(object.summary()) : pkg["na"]),
+    Rcpp::Named("file_version", object.what_case() == tensorboard::Event::WhatCase::kFileVersion ? Rcpp::wrap(object.file_version()) : pkg["na"])
   );
 }
 

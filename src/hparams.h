@@ -72,7 +72,7 @@ Rcpp::as<std::vector<tl::optional<tensorboard::hparams::Interval>>> (SEXP x) {
 
   auto r_min_value = Rcpp::as<Rcpp::NumericVector>(r_intervals["min_value"]);
   auto r_max_value = Rcpp::as<Rcpp::NumericVector>(r_intervals["max_value"]);
-  for (size_t i = 0; i < r_min_value.size(); i++) {
+  for (R_xlen_t i = 0; i < r_min_value.size(); i++) {
     if (Rcpp::NumericVector::is_na(r_min_value[i])) {
       out.push_back(tl::nullopt);
     } else {
@@ -124,7 +124,7 @@ Rcpp::as<std::vector<tensorboard::hparams::MetricName>> (SEXP x) {
   auto r_group = Rcpp::as<Rcpp::CharacterVector>(r_metric_name["group"]);
 
   std::vector<tensorboard::hparams::MetricName> out;
-  for (size_t i = 0; i < r_tag.size(); i++) {
+  for (R_xlen_t i = 0; i < r_tag.size(); i++) {
     tensorboard::hparams::MetricName metric_name;
     metric_name.set_tag(r_tag[i]);
     if (!Rcpp::CharacterVector::is_na(r_group[i])) {
@@ -224,7 +224,7 @@ Rcpp::as<google::protobuf::Map<std::string, google::protobuf::Value>> (SEXP x) {
   auto r_name = Rcpp::as<std::vector<std::string>>(r_list.names());
 
   google::protobuf::Map<std::string, google::protobuf::Value> out;
-  for (size_t i=0; i< r_list.size(); i++) {
+  for (R_xlen_t i=0; i< r_list.size(); i++) {
     out.insert(google::protobuf::MapPair<std::string,google::protobuf::Value>(
         r_name[i],
               Rcpp::as<google::protobuf::Value>(r_list[i])
@@ -238,7 +238,7 @@ inline std::vector<tl::optional<google::protobuf::Map<std::string, google::proto
 Rcpp::as<std::vector<tl::optional<google::protobuf::Map<std::string, google::protobuf::Value>>>> (SEXP x) {
   auto r_list = Rcpp::as<Rcpp::List>(x);
   std::vector<tl::optional<google::protobuf::Map<std::string, google::protobuf::Value>>> out;
-  for (size_t i = 0; i < r_list.size(); i++) {
+  for (R_xlen_t i = 0; i < r_list.size(); i++) {
     if (r_is_na(r_list[i])) {
       out.push_back(tl::nullopt);
     } else {

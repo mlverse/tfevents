@@ -32,7 +32,7 @@ const uint32_t mask_delta = 0xa282ead8ul;
 // https://github.com/tensorflow/tensorflow/blob/754048a0453a04a761e112ae5d99c149eb9910dd/tensorflow/core/lib/hash/crc32c.h#L40
 uint32_t mask(uint32_t crc) {
   return ((crc >> 15) | (crc << 17)) + mask_delta;
-};
+}
 
 std::uint32_t masked_crc (char * data, std::size_t n) {
   return mask(crc32_c(data, n));

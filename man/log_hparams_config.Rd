@@ -19,6 +19,9 @@ hyperparameter tuning table.}
 \item{time_created_secs}{The time the experiment is created in seconds
 since the UNIX epoch.}
 }
+\value{
+Invisibly returns the HParam conffuration data as a \code{summary} object.
+}
 \description{
 Logs the hyperaparameter configuration for a HyperParameter tuning experiment.
 It allows you to define the domain for each hyperparameters and what are the

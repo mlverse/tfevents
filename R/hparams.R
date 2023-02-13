@@ -31,6 +31,7 @@
 #' @inheritParams log_hparams
 #'
 #' @seealso [log_hparams()]
+#' @returns Invisibly returns the HParam conffuration data as a `summary` object.
 #'
 #' @export
 log_hparams_config <- function(hparams, metrics, time_created_secs = get_wall_time()) {

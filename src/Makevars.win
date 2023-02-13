@@ -7,8 +7,6 @@ PKG_LIBS= -L$(RWINLIB)/lib${subst gcc,,${COMPILED_BY}}${R_ARCH} \
 	-L$(RWINLIB)/lib${R_ARCH}${CRT} \
 	-lprotobuf
 
-CXX_STD=CXX11
-
 OBJECTS = \
 		generated/event.pb.o \
 		generated/plugins/audio/plugin_data.pb.o \

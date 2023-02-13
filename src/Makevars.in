@@ -1,7 +1,6 @@
 PKG_CPPFLAGS=@cflags@ -Igenerated
 PKG_CXXFLAGS=$(C_VISIBILITY)
 PKG_LIBS=@libs@
-CXX_STD=CXX14
 
 CPP_SOURCES=@cppsrc@
 CC_SOURCES=@pbsrc@

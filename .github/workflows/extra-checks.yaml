@@ -25,3 +25,5 @@ jobs:
       run: |
         R -q -e 'pak::pkg_install(c("deps::.", "any::rcmdcheck"), dependencies = TRUE)'
     - uses: r-lib/actions/check-r-package@v2
+      with:
+        upload-results: true

@@ -1,6 +1,8 @@
 #include <cstring>
-#include "record_writer.h"
 #include <iostream>
+#include <cstdint>
+
+#include "record_writer.h"
 extern "C" {
 #include "crc32c.h"
 }

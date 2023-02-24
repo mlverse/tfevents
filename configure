@@ -100,15 +100,6 @@ else
   exit 1
 fi
 
-# Try to check if protoc version matches libproto
-case $PROTOC_VERSION in
-  *"$PKGCONFIG_MODVERSION"*)
-    ;;
-  *)
-    echo "Warning: protoc version $PROTOC_VERSION might not match libproto version $PKGCONFIG_MODVERSION.";
-    ;;
-esac
-
 cd src
 
 if [ ! -d "generated" ]; then

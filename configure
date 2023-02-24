@@ -101,8 +101,8 @@ else
 fi
 
 # Try to check if protoc version matches libproto
-case $PROTOC_VERSION in
-  *"$PKGCONFIG_MODVERSION"*)
+case $PKGCONFIG_MODVERSION in
+  *"$PROTOC_VERSION"*)
     ;;
   *)
     echo "Warning: protoc version $PROTOC_VERSION might not match libproto version $PKGCONFIG_MODVERSION.";

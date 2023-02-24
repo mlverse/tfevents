@@ -41,7 +41,7 @@ std::vector<tensorboard::Summary_Image> Rcpp::as<std::vector<tensorboard::Summar
     tensorboard::Summary_Image img;
     // we abuse by setting height to -1 to indicate that image is NA
     img.set_height(-1);
-    if (!Rcpp::IntegerVector::is_na(r_width[i])) {
+    if (!(Rcpp::IntegerVector::is_na(r_width[i]) || Rcpp::IntegerVector::is_na(r_height[i]))) {
       img.set_height(r_height[i]);
       img.set_width(r_width[i]);
       img.set_colorspace(r_colorspace[i]);
@@ -79,8 +79,8 @@ tensorboard::Summary Rcpp::as<tensorboard::Summary> (SEXP x) {
       value->set_simple_value((float)r_value[i]);
     }
 
-    // images can be NA, in this case we make ttheir height -1 when creating
-    // tthe pb message
+    // images can be NA, in this case we make their height -1 when creating
+    // the pb message
     auto image = r_image[i];
     if (image.height() > 0) {
       // // See also https://github.com/tensorflow/tensorboard/blob/a74c10dd197e7b2a07219855a61bc62651e80065/tensorboard/plugins/image/summary_v2.py#L104

@@ -34,7 +34,7 @@ std::vector<tensorboard::Summary_Image> Rcpp::as<std::vector<tensorboard::Summar
   auto r_buffer = Rcpp::as<Rcpp::List>(r_images["buffer"]);
   auto r_width =  Rcpp::as<Rcpp::IntegerVector>(r_images["width"]);
   auto r_height =  Rcpp::as<Rcpp::IntegerVector>(r_images["height"]);
-  auto r_colorspace =  Rcpp::as<std::vector<int64_t>>(r_images["colorspace"]);
+  auto r_colorspace =  Rcpp::as<Rcpp::IntegerVector>(r_images["colorspace"]);
 
   std::vector<tensorboard::Summary_Image> images;
   for (size_t i =0; i < r_buffer.size(); i++) {

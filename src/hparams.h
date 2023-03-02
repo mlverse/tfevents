@@ -184,7 +184,7 @@ Rcpp::as<std::vector<tl::optional<tensorboard::hparams::Experiment>>> (SEXP x) {
   auto r_name = Rcpp::as<std::vector<std::string>>(r_experiments["name"]);
   auto r_description = Rcpp::as<std::vector<std::string>>(r_experiments["description"]);
   auto r_user = Rcpp::as<std::vector<std::string>>(r_experiments["user"]);
-  auto r_time_created_secs = Rcpp::as<std::vector<int64_t>>(r_experiments["time_created_secs"]);
+  auto r_time_created_secs = Rcpp::as<Rcpp::IntegerVector>(r_experiments["time_created_secs"]);
   auto r_hparam_infos = Rcpp::as<Rcpp::List>(r_experiments["hparam_infos"]);
   auto r_metric_infos = Rcpp::as<Rcpp::List>(r_experiments["metric_infos"]);
 
@@ -257,7 +257,7 @@ Rcpp::as<std::vector<tl::optional<tensorboard::hparams::SessionStartInfo>>> (SEX
   auto r_model_uri = Rcpp::as<std::vector<std::string>>(r_session_start["model_uri"]);
   auto r_monitor_url = Rcpp::as<std::vector<std::string>>(r_session_start["monitor_url"]);
   auto r_group_name = Rcpp::as<std::vector<std::string>>(r_session_start["group_name"]);
-  auto r_start_time_secs = Rcpp::as<std::vector<std::int64_t>>(r_session_start["start_time_secs"]);
+  auto r_start_time_secs = Rcpp::as<Rcpp::IntegerVector>(r_session_start["start_time_secs"]);
 
   std::vector<tl::optional<tensorboard::hparams::SessionStartInfo>> out;
   for (size_t i = 0; i< r_hparams.size(); i++) {
@@ -283,7 +283,7 @@ inline tensorboard::hparams::HParamsPluginData
 Rcpp::as<tensorboard::hparams::HParamsPluginData> (SEXP x) {
   auto r_plugin_data = Rcpp::as<Rcpp::List>(x);
 
-  auto r_version = Rcpp::as<std::vector<std::int64_t>>(r_plugin_data["version"]);
+  auto r_version = Rcpp::as<Rcpp::IntegerVector>(r_plugin_data["version"]);
 
   auto r_experiment = Rcpp::as<std::vector<tl::optional<tensorboard::hparams::Experiment>>>(r_plugin_data["experiment"]);
   auto r_session_start_info = Rcpp::as<std::vector<tl::optional<tensorboard::hparams::SessionStartInfo>>>(r_plugin_data["session_start_info"]);

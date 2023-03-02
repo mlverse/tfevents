@@ -178,34 +178,34 @@ matter the size of the summary_values vector that you pass.</p>
 <code class="sourceCode R"><span><span class="co"># we remove the first summary, as it's a text summary</span></span>
 <span><span class="fu"><a href="../reference/value.html">value</a></span><span class="op">(</span><span class="va">summaries</span><span class="op">$</span><span class="va">summary</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, as_list <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
-<span><span class="co">#&gt; [1] 0.6161485</span></span>
+<span><span class="co">#&gt; [1] 0.5809893</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[2]]</span></span>
-<span><span class="co">#&gt; [1] 0.111779</span></span>
+<span><span class="co">#&gt; [1] 0.6474293</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[3]]</span></span>
-<span><span class="co">#&gt; [1] 2.182474</span></span>
+<span><span class="co">#&gt; [1] 1.434889</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[4]]</span></span>
-<span><span class="co">#&gt; [1] 0.2947489</span></span>
+<span><span class="co">#&gt; [1] 1.232181</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[5]]</span></span>
-<span><span class="co">#&gt; [1] 1.669016</span></span>
+<span><span class="co">#&gt; [1] 3.532491</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[6]]</span></span>
-<span><span class="co">#&gt; [1] 1.924397</span></span>
+<span><span class="co">#&gt; [1] 3.334876</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[7]]</span></span>
-<span><span class="co">#&gt; [1] 1.066157</span></span>
+<span><span class="co">#&gt; [1] 5.016222</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[8]]</span></span>
-<span><span class="co">#&gt; [1] 4.155633</span></span>
+<span><span class="co">#&gt; [1] 1.908642</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[9]]</span></span>
-<span><span class="co">#&gt; [1] 7.640159</span></span>
+<span><span class="co">#&gt; [1] 1.36121</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[10]]</span></span>
-<span><span class="co">#&gt; [1] 3.48781</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 7.178261</span></span></code></pre></div>
 <p>If you are only interested in scalar summaries, you can use
 <code>type="scalar"</code> in <code>collect_events</code>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -214,16 +214,16 @@ matter the size of the summary_values vector that you pass.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 7</span></span></span>
 <span><span class="co">#&gt;         event run    step    summary tag   plugin  value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;tfvnts_v&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;tfvnts__&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     &lt;./ 1&gt; .         1    &lt;hello&gt; hello scalars 0.616</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     &lt;./ 2&gt; .         2    &lt;hello&gt; hello scalars 0.112</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     &lt;./ 3&gt; .         3    &lt;hello&gt; hello scalars 2.18 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     &lt;./ 4&gt; .         4    &lt;hello&gt; hello scalars 0.295</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     &lt;./ 5&gt; .         5    &lt;hello&gt; hello scalars 1.67 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     &lt;./ 6&gt; .         6    &lt;hello&gt; hello scalars 1.92 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     &lt;./ 7&gt; .         7    &lt;hello&gt; hello scalars 1.07 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     &lt;./ 8&gt; .         8    &lt;hello&gt; hello scalars 4.16 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     &lt;./ 9&gt; .         9    &lt;hello&gt; hello scalars 7.64 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     &lt;./10&gt; .        10    &lt;hello&gt; hello scalars 3.49</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     &lt;./ 1&gt; .         1    &lt;hello&gt; hello scalars 0.581</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     &lt;./ 2&gt; .         2    &lt;hello&gt; hello scalars 0.647</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     &lt;./ 3&gt; .         3    &lt;hello&gt; hello scalars 1.43 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     &lt;./ 4&gt; .         4    &lt;hello&gt; hello scalars 1.23 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     &lt;./ 5&gt; .         5    &lt;hello&gt; hello scalars 3.53 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     &lt;./ 6&gt; .         6    &lt;hello&gt; hello scalars 3.33 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     &lt;./ 7&gt; .         7    &lt;hello&gt; hello scalars 5.02 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     &lt;./ 8&gt; .         8    &lt;hello&gt; hello scalars 1.91 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     &lt;./ 9&gt; .         9    &lt;hello&gt; hello scalars 1.36 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     &lt;./10&gt; .        10    &lt;hello&gt; hello scalars 7.18</span></span></code></pre></div>
 <p>Now, values can be expanded in the data frame and you get a ready to
 use data frame, for example:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -246,7 +246,7 @@ load events in smaller batches.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 7</span></span></span>
 <span><span class="co">#&gt;        event run    step    summary tag   plugin  value</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;tfvnts_v&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;tfvnts__&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>      &lt;./1&gt; .         1    &lt;hello&gt; hello scalars 0.616</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>      &lt;./1&gt; .         1    &lt;hello&gt; hello scalars 0.581</span></span></code></pre></div>
 <p>Notice that the first call to <code>collect_events</code> collected
 the first scalar summary event in the directory because of
 <code>n = 1</code>. The next call will collect the remaining ones as by
@@ -256,15 +256,15 @@ default <code>n = NULL</code>.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 7</span></span></span>
 <span><span class="co">#&gt;        event run    step    summary tag   plugin  value</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;tfvnts_v&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;tfvnts__&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     &lt;./ 2&gt; .         2    &lt;hello&gt; hello scalars 0.112</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     &lt;./ 3&gt; .         3    &lt;hello&gt; hello scalars 2.18 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     &lt;./ 4&gt; .         4    &lt;hello&gt; hello scalars 0.295</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     &lt;./ 5&gt; .         5    &lt;hello&gt; hello scalars 1.67 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     &lt;./ 6&gt; .         6    &lt;hello&gt; hello scalars 1.92 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     &lt;./ 7&gt; .         7    &lt;hello&gt; hello scalars 1.07 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>     &lt;./ 8&gt; .         8    &lt;hello&gt; hello scalars 4.16 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>     &lt;./ 9&gt; .         9    &lt;hello&gt; hello scalars 7.64 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>     &lt;./10&gt; .        10    &lt;hello&gt; hello scalars 3.49</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     &lt;./ 2&gt; .         2    &lt;hello&gt; hello scalars 0.647</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     &lt;./ 3&gt; .         3    &lt;hello&gt; hello scalars 1.43 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     &lt;./ 4&gt; .         4    &lt;hello&gt; hello scalars 1.23 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     &lt;./ 5&gt; .         5    &lt;hello&gt; hello scalars 3.53 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     &lt;./ 6&gt; .         6    &lt;hello&gt; hello scalars 3.33 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     &lt;./ 7&gt; .         7    &lt;hello&gt; hello scalars 5.02 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>     &lt;./ 8&gt; .         8    &lt;hello&gt; hello scalars 1.91 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>     &lt;./ 9&gt; .         9    &lt;hello&gt; hello scalars 1.36 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>     &lt;./10&gt; .        10    &lt;hello&gt; hello scalars 7.18</span></span></code></pre></div>
 <p>We can now log some more scalars and recollect, you will see that the
 events that were just written are now collected.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -275,9 +275,9 @@ events that were just written are now collected.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 7</span></span></span>
 <span><span class="co">#&gt;        event run    step    summary tag   plugin  value</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;tfvnts_v&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;tfvnts__&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     &lt;./11&gt; .        11    &lt;hello&gt; hello scalars 0.245</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     &lt;./12&gt; .        12    &lt;hello&gt; hello scalars 0.216</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     &lt;./13&gt; .        13    &lt;hello&gt; hello scalars 1.84</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     &lt;./11&gt; .        11    &lt;hello&gt; hello scalars 0.770</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     &lt;./12&gt; .        12    &lt;hello&gt; hello scalars 0.785</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     &lt;./13&gt; .        13    &lt;hello&gt; hello scalars 0.629</span></span></code></pre></div>
 <p>This interface allows you to efficiently read tfevents records
 without having them all on RAM at once, or work in a streaming way in a
 sense that a process might be writing tfevents (for example in a

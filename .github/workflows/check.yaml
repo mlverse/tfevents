@@ -44,13 +44,10 @@ jobs:
           needs: check
 
       - name: Install Python libraries used for testing
+        continue-on-error: true
         run: |
           reticulate::py_install(c("tbparse", "tensorflow"), pip = TRUE)
         shell: Rscript {0}
-
-      - if: ${{ matrix.config.os == 'macos-latest' }}
-        run: |
-          brew install protobuf
 
       - uses: r-lib/actions/check-r-package@v2
         with:

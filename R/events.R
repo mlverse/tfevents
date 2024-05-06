@@ -31,7 +31,17 @@ as_event.list <- function(x, step, wall_time, ..., name = ".") {
       as_event(obj, step = step, wall_time = wall_time, name = c(name, nm))
     }
   )
-  vec_c(!!!rlang::squash_if(unname(ev), vec_is_list))
+  vec_c(!!!squash_if(unname(ev), vec_is_list))
+}
+
+squash_if <- function(x, predicate) {
+  lapply(x, function(obj) {
+    if (predicate(obj)) {
+      unlist(obj)
+    } else {
+      obj
+    }
+  })
 }
 
 #' @export

@@ -1,4 +1,4 @@
-# tfevents (development version)
+# tfevents 0.0.3
 
 * Fixed GCC 13 compilation issues. (#44)
 * Added support for arm64 Windows. (#42)

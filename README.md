@@ -27,7 +27,7 @@ You can install the development version of tfevents from
 [GitHub](https://github.com/) with:
 
 You need to have `cmake` on your path. See installation instructions in
-the [cmake install webpage](https://cmake.org/install/) - or:
+the [cmake install webpage](https://cmake.org/resources/) - or:
 
 If you use `brew` on MacOS you can run:
 
@@ -86,9 +86,9 @@ subdirectories under `logs` to write metrics for each group.
 fs::dir_tree("logs")
 #> logs
 #> ├── train
-#> │   └── events.out.tfevents.1673447763.v2
+#> │   └── events.out.tfevents.1715003319.v2
 #> └── valid
-#>     └── events.out.tfevents.1673447763.v2
+#>     └── events.out.tfevents.1715003319.v2
 ```
 
 You can later point TensorBoard to that logdir using TensorBoard’s

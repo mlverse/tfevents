@@ -37,7 +37,7 @@ install.packages("tfevents")
 You can install the development version of tfevents from [GitHub](https://github.com/) with:
 
 You need to have `cmake` on your path. See installation instructions in the [cmake install
-webpage](https://cmake.org/install/) - or:
+webpage](https://cmake.org/resources/) - or:
 
 If you use `brew` on MacOS you can run:
 

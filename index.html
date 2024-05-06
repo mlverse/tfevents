@@ -85,7 +85,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"tfevents"</span><span class="op">)</span></span></code></pre></div>
 <p>You can install the development version of tfevents from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
-<p>You need to have <code>cmake</code> on your path. See installation instructions in the <a href="https://cmake.org/install/" class="external-link">cmake install webpage</a> - or:</p>
+<p>You need to have <code>cmake</code> on your path. See installation instructions in the <a href="https://cmake.org/resources/" class="external-link">cmake install webpage</a> - or:</p>
 <p>If you use <code>brew</code> on MacOS you can run:</p>
 <pre class="shell"><code>brew install cmake</code></pre>
 <p>Or on linux install the <code>cmake</code> library, for example on Debian systems:</p>
@@ -117,9 +117,9 @@
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span><span class="st">"logs"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; logs</span></span>
 <span><span class="co">#&gt; ├── train</span></span>
-<span><span class="co">#&gt; │   └── events.out.tfevents.1673447763.v2</span></span>
+<span><span class="co">#&gt; │   └── events.out.tfevents.1715003319.v2</span></span>
 <span><span class="co">#&gt; └── valid</span></span>
-<span><span class="co">#&gt;     └── events.out.tfevents.1673447763.v2</span></span></code></pre></div>
+<span><span class="co">#&gt;     └── events.out.tfevents.1715003319.v2</span></span></code></pre></div>
 <p>You can later point TensorBoard to that logdir using TensorBoard’s command line interface or tensorflow’s utility function <code>tensorboard()</code></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">tensorflow</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tensorflow/man/tensorboard.html" class="external-link">tensorboard</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="st">"logs"</span><span class="op">)</span>, port <span class="op">=</span> <span class="fl">6060</span><span class="op">)</span></span>

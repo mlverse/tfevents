@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <Rcpp.h>
 #include "generated/summary.pb.h"
 

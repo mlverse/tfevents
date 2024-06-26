@@ -242,7 +242,7 @@ summary_metadata <- function(
     display_name = NA_character_,
     description = NA_character_, ...,
     plugin_content = NA) {
-  ellipsis::check_dots_empty()
+  rlang::check_dots_empty()
   plugin_content <- vec_cast(plugin_content, list())
   new_summary_metadata(plugin_name = plugin_name, display_name = display_name,
                        description = description,

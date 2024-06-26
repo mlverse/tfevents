@@ -17,7 +17,7 @@
 #' })
 #' @export
 summary_scalar <- function(value, ..., metadata = NULL, tag = NA) {
-  ellipsis::check_dots_empty()
+  rlang::check_dots_empty()
   new_summary_scalar(value, metadata = metadata, tag = tag)
 }
 

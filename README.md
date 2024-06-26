@@ -8,6 +8,9 @@
 [![R-CMD-check](https://github.com/mlverse/tfevents/actions/workflows/check.yaml/badge.svg)](https://github.com/mlverse/tfevents/actions/workflows/check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/mlverse/tfevents/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mlverse/tfevents?branch=main)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/tfevents)](https://CRAN.R-project.org/package=tfevents)
+[![](https://cranlogs.r-pkg.org/badges/tfevents)](https://cran.r-project.org/package=tfevents)
 <!-- badges: end -->
 
 tfevents allows logging data from machine learning experiments to a file
@@ -86,9 +89,9 @@ subdirectories under `logs` to write metrics for each group.
 fs::dir_tree("logs")
 #> logs
 #> ├── train
-#> │   └── events.out.tfevents.1715003319.v2
+#> │   └── events.out.tfevents.1719410709.v2
 #> └── valid
-#>     └── events.out.tfevents.1715003319.v2
+#>     └── events.out.tfevents.1719410709.v2
 ```
 
 You can later point TensorBoard to that logdir using TensorBoard’s

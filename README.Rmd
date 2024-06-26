@@ -21,6 +21,8 @@ knitr::opts_knit$set(root.dir = temp)
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/mlverse/tfevents/actions/workflows/check.yaml/badge.svg)](https://github.com/mlverse/tfevents/actions/workflows/check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/mlverse/tfevents/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mlverse/tfevents?branch=main)
+[![CRAN status](https://www.r-pkg.org/badges/version/tfevents)](https://CRAN.R-project.org/package=tfevents)
+[![](https://cranlogs.r-pkg.org/badges/tfevents)](https://cran.r-project.org/package=tfevents)
 <!-- badges: end -->
 
 tfevents allows logging data from machine learning experiments to a file

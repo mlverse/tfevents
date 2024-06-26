@@ -8,6 +8,8 @@ on:
 
 name: Check
 
+permissions: read-all
+
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
@@ -26,7 +28,7 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: 'true'
 
@@ -52,3 +54,4 @@ jobs:
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'

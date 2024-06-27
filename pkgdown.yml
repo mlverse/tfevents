@@ -6,7 +6,7 @@ articles:
   images: images.html
   read: read.html
   torch: examples/torch.html
-last_built: 2024-06-26T14:09Z
+last_built: 2024-06-27T13:02Z
 urls:
   reference: https://mlverse.github.io/tfevents/reference
   article: https://mlverse.github.io/tfevents/articles

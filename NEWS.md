@@ -1,4 +1,4 @@
-# tfevents (development version)
+# tfevents 0.0.4
 
 # tfevents 0.0.3
 

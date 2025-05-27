@@ -111,4 +111,4 @@ in the screenshot below:
 webshot2::webshot(url = "http://127.0.0.1:6060/?darkMode=false")
 ```
 
-You can learn more in the [tfevents website](#TODO).
+You can learn more on the [tfevents website](https://mlverse.github.io/tfevents/).

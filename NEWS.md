@@ -1,6 +1,7 @@
 # tfevents 0.0.5
 
 * Changed maintainer to Tomasz Kalinowski.
+* Added `tensorboard()` function to launch TensorBoard from R.
 
 # tfevents 0.0.4
 

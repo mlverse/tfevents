@@ -11,6 +11,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(tfevents)
+reticulate::py_require(c("tensorflow", "tensorboard"))
 ```
 
 Hyperparameter tuning is a important step in machine learning problems.

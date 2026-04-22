@@ -107,4 +107,4 @@ can see in the screenshot below:
 
 <img src="man/figures/README-tensorboard-1.png" width="100%" />
 
-You can learn more in the [tfevents website](#TODO).
+You can learn more on the [tfevents website](https://mlverse.github.io/tfevents/).

@@ -12,9 +12,6 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(tfevents)
 reticulate::py_require(c("tensorflow", "tensorboard"))
-# Ensure tensorboard CLI is on PATH
-python_bin <- dirname(reticulate::py_config()$python)
-Sys.setenv(PATH = paste(python_bin, Sys.getenv("PATH"), sep = ":"))
 ```
 
 Hyperparameter tuning is a important step in machine learning problems.
@@ -138,7 +135,13 @@ fs::dir_tree(temp)
 Finally, we can visualize the experiment results in TensorBoard:
 
 ```{r}
-tensorflow::tensorboard(temp, port = 6060)
+tensorboard <- file.path(dirname(reticulate::py_config()$python), "tensorboard")
+p <- processx::process$new(
+  tensorboard,
+  c("--logdir", temp, "--host", "127.0.0.1", "--port", "6060"),
+  stdout = "|", stderr = "|"
+)
+Sys.sleep(5)
 ```
 
 The screenshot below shows the table view  in the HParams dashboard in TensorBoard. 

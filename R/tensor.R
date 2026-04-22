@@ -15,6 +15,7 @@ as_tensor_proto <- function(x, dtype = NA, ...) {
   UseMethod("as_tensor_proto")
 }
 
+#' @exportS3Method
 as_tensor_proto.blob <- function(x, dtype = NA, ...) {
   if (is.na(dtype)) dtype <- "string"
   if (!dtype %in% c("string"))
@@ -22,6 +23,7 @@ as_tensor_proto.blob <- function(x, dtype = NA, ...) {
   tensor_proto(list(x), shape = new_tensor_shape(dim = length(x)), dtype = dtype)
 }
 
+#' @exportS3Method
 as_tensor_proto.character <- function(x, dtype = NA, ...) {
   if (is.na(dtype)) dtype <- "string"
   if (!dtype %in% c("string"))
@@ -29,6 +31,7 @@ as_tensor_proto.character <- function(x, dtype = NA, ...) {
   tensor_proto(list(x), shape = new_tensor_shape(dim = length(x)), dtype = dtype)
 }
 
+#' @exportS3Method
 as_tensor_proto.array <- function(x, dtype = NA, ...) {
   dims <- dim(x)
   # proto store tensor data in C ordering, thus we need to reshape values
@@ -37,6 +40,7 @@ as_tensor_proto.array <- function(x, dtype = NA, ...) {
   tensor_proto(x, shape = new_tensor_shape(dim = list(dims)), dtype = dtype)
 }
 
+#' @exportS3Method
 as_tensor_proto.list <- function(x, dtype, ...) {
   c(x, dtype) %<-% vec_recycle_common(x, dtype)
   results <- lapply(seq_along(x), function(i) {

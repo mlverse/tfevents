@@ -16,7 +16,8 @@ knitr::opts_knit$set(root.dir = temp)
 
 ```{r setup}
 library(tfevents)
-reticulate::py_require(c("tensorflow<=2.18", "tensorboard"))
+reticulate::py_require(c("tensorflow<=2.18", "tensorboard", "setuptools"))
+Sys.setenv(PATH = paste(dirname(reticulate::py_config()$python), Sys.getenv("PATH"), sep = ":"))
 ```
 
 tfevents has the ability to write log images so they can be
@@ -55,7 +56,7 @@ log_event("Training samples" = summary_image(train_imgs))
 If we open the TensorBoard UI in the logdir we will see something like the below:
 
 ```{r}
-tensorboard(normalizePath("logs"), port = 6060)
+tensorflow::tensorboard(normalizePath("logs"), port = 6060)
 ```
 
 Notice that images are also associated to a global step counter. If you save log
@@ -90,7 +91,7 @@ log_event("Ggplot2 plot" = summary_image(p))
 We now launch TensorBoard and see:
 
 ```{r}
-tensorboard(temp, port = 6061)
+tensorflow::tensorboard(temp, port = 6061)
 ```
 
 ```{r ggpl, echo = FALSE, out.width="100%"}
@@ -159,7 +160,7 @@ log_event("Raster plot" = summary_image(img))
 It will be displayed in the dashboard:
 
 ```{r raster, echo = FALSE, out.width="100%"}
-tensorboard(temp, port = 6062)
+tensorflow::tensorboard(temp, port = 6062)
 webshot2::webshot("http://127.0.0.1:6062/?darkMode=false", vwidth = 1200)
 ```
 

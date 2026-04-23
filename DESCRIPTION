@@ -36,8 +36,7 @@ Suggests:
     rmarkdown,
     ggplot2,
     tensorflow,
-    wav,
-    processx
+    wav
 SystemRequirements: libprotobuf, protobuf-compiler
 URL: https://github.com/mlverse/tfevents,
     https://mlverse.github.io/tfevents/

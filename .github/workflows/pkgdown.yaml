@@ -42,7 +42,7 @@ jobs:
 
       - name: Install Python deps
         run: |
-          reticulate::py_install(c('tensorflow==2.13', 'numpy<2'), pip = TRUE, python_version = '3.11')
+          reticulate::py_install(c('tensorflow==2.10', 'numpy<2'), pip = TRUE, python_version = '3.11')
         shell: Rscript {0}
 
       - name: Build site

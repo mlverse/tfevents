@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(tfevents)
-reticulate::py_require(c("tensorflow<=2.18", "tensorboard", "setuptools"))
+reticulate::py_require(c("tensorflow==2.15.0", "tensorboard", "setuptools"))
 Sys.setenv(PATH = paste(dirname(reticulate::py_config()$python), Sys.getenv("PATH"), sep = ":"))
 ```
 

@@ -16,9 +16,6 @@ knitr::opts_knit$set(root.dir = temp)
 
 ```{r setup}
 library(tfevents)
-reticulate::py_require(python = ">=3.9,<=3.11")
-reticulate::py_require(c("tensorflow==2.14.0", "tensorboard", "setuptools", "numpy<2"))
-Sys.setenv(PATH = paste(dirname(reticulate::py_config()$python), Sys.getenv("PATH"), sep = ":"))
 ```
 
 tfevents has the ability to write log images so they can be

@@ -113,6 +113,13 @@ fi
 find ./ -type f -name "*.pb.h" -exec sed -i.bak "s@  #pragma@/*nowarn*/#pragma@g" {} \;
 find ./ -type f -name "*.pb.h" -exec sed -i.bak '/#pragma GCC diagnostic/d' {} \;
 
+# Strip [[deprecated]] and [[nodiscard]] attributes from generated protobuf
+# code to avoid compilation warnings on CRAN.
+find ./ -type f \( -name "*.pb.h" -o -name "*.pb.cc" \) -exec sed -i.bak \
+  -e 's/\[\[deprecated\]\]//g' \
+  -e 's/\[\[nodiscard\]\]//g' \
+  -e 's/enum \(.*\) : int/enum \1 : int/' {} \;
+
 PB_SRC=$(echo $(find generated -type f -name "*.pb.cc" -print))
 CPP_SRC=$(echo $(find *.cpp -print))
 CRC_SRC=$(echo $(find . -type f -name "*.c" -print))

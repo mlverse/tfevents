@@ -45,6 +45,12 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
+      - name: Install Python libraries used for testing
+        continue-on-error: true
+        run: |
+          reticulate::py_install('tbparse', pip = TRUE)
+        shell: Rscript {0}
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true

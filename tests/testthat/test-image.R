@@ -12,6 +12,8 @@ test_that("write image", {
 
 
   skip_if_tbparse_not_available()
+  skip_if_not_installed("tensorflow")
+  skip_if(inherits(try(reticulate::import("tensorflow"), silent = TRUE), "try-error"))
   reader <- tbparse$SummaryReader(temp)
   buf <- reader$tensors$value[[1]][[3]]
   # TODO: in theory we don't need tensorflow for this, but couldnt find a way to

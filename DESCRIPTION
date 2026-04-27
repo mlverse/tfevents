@@ -1,6 +1,6 @@
 Package: tfevents
 Title: Write Events for 'TensorBoard'
-Version: 0.0.5
+Version: 0.0.5.9000
 Authors@R: c(
     person("Daniel", "Falbel", email = "daniel@posit.co", role = c("aut", "cph")),
     person("Tomasz", "Kalinowski", email = "tomasz@posit.co", role = c("cre")),

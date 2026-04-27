@@ -1,4 +1,6 @@
-# tfevents (development version)
+# tfevents 0.0.5
+
+* Changed maintainer to Tomasz Kalinowski.
 
 # tfevents 0.0.4
 

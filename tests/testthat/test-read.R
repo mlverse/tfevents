@@ -81,6 +81,7 @@ test_that("can iterate over events", {
 })
 
 test_that("can extract value", {
+  skip_if_not_installed("wav")
 
   temp <- tempfile()
 

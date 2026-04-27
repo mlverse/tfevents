@@ -45,7 +45,7 @@ tensorboard::Event EventFileIterator::get_next () {
   file.read(&buffer[0], length);
 
   tensorboard::Event event;
-  event.ParseFromString(std::string(buffer.begin(), buffer.end()));
+  (void)event.ParseFromString(std::string(buffer.begin(), buffer.end()));
 
   file.read(reinterpret_cast<char*>(&crc), sizeof(std::uint32_t));
 

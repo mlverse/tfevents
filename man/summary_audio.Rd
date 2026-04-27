@@ -47,10 +47,12 @@ containing WAV encoded audio files.
 
 }}
 \examples{
+\dontshow{if (rlang::is_installed("wav")) withAutoprint(\{ # examplesIf}
 tmp <- tempfile()
 with_logdir(tmp, {
   summary_audio(array(runif(100), dim = c(1,100, 1)))
 })
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other summary: 

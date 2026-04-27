@@ -7,7 +7,7 @@
 #' @param sample_rate The sample rate in Hz associated to the audio values.
 #' @returns An audio summary that can be logged with [log_event()].
 #' @family summary
-#' @examples
+#' @examplesIf rlang::is_installed("wav")
 #' tmp <- tempfile()
 #' with_logdir(tmp, {
 #'   summary_audio(array(runif(100), dim = c(1,100, 1)))

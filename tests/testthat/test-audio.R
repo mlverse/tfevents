@@ -1,4 +1,5 @@
 test_that("can write an audio file", {
+  skip_if_not_installed("wav")
   f <- wav::read_wav(test_path("resources/test-audio.wav"))
   audio <- array(t(f), dim = c(1, rev(dim(f))))
 
@@ -21,6 +22,7 @@ test_that("can write an audio file", {
 })
 
 test_that("can write multiple audio files from a array", {
+  skip_if_not_installed("wav")
   f <- wav::read_wav(test_path("resources/test-audio.wav"))
   f_t <- t(f)
   audio <- array(0, dim = c(10, rev(dim(f))))

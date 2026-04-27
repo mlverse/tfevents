@@ -1,8 +1,9 @@
 Package: tfevents
 Title: Write Events for 'TensorBoard'
-Version: 0.0.4.9000
+Version: 0.0.5
 Authors@R: c(
-    person("Daniel", "Falbel", email = "daniel@posit.co", role = c("aut", "cre", "cph")),
+    person("Daniel", "Falbel", email = "daniel@posit.co", role = c("aut", "cph")),
+    person("Tomasz", "Kalinowski", email = "tomasz@posit.co", role = c("cre")),
     person(family = "Posit, PBC", role = c("cph")),
     person(family = "The tl::optional authors", role = c("cph"), comment = "For the vendored tl::optional code."),
     person("Mark", "Adler", role = c("cph"), comment = "For the included crc32c code.")
@@ -13,7 +14,7 @@ Description: Provides a convenient way to log scalars, images, audio, and histog
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.3
 LinkingTo: 
     Rcpp
 Imports: 

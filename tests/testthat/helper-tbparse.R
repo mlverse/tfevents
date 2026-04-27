@@ -2,7 +2,7 @@ skip_if_tbparse_not_available <- function() {
   skip_if(inherits(try(reticulate::import("tbparse"), silent = TRUE), "try-error"))
 }
 
-reticulate::py_require(c("tbparse", "tensorflow", "tensorboard"))
+reticulate::py_require("tbparse")
 
 if (inherits(try(reticulate::import("tbparse"), silent = TRUE), "try-error")) {
   tbparse <- NULL

@@ -129,80 +129,80 @@ filled with event files.
 
 ``` r
 fs::dir_tree(temp)
-#> /tmp/RtmpjjsvZh/logdir26bd4bbfcb76
+#> /tmp/RtmpkRwlub/logdir275714ce75a4
 #> ├── bzjrestnbuefsqx
-#> │   ├── events.out.tfevents.1777314647.v2
+#> │   ├── events.out.tfevents.1777315033.v2
 #> │   ├── train
-#> │   │   └── events.out.tfevents.1777314647.v2
+#> │   │   └── events.out.tfevents.1777315033.v2
 #> │   └── valid
-#> │       └── events.out.tfevents.1777314647.v2
-#> ├── events.out.tfevents.1777314646.v2
+#> │       └── events.out.tfevents.1777315033.v2
+#> ├── events.out.tfevents.1777315032.v2
 #> ├── faamrewkadgwxbh
-#> │   ├── events.out.tfevents.1777314646.v2
+#> │   ├── events.out.tfevents.1777315033.v2
 #> │   ├── train
-#> │   │   └── events.out.tfevents.1777314646.v2
+#> │   │   └── events.out.tfevents.1777315033.v2
 #> │   └── valid
-#> │       └── events.out.tfevents.1777314646.v2
+#> │       └── events.out.tfevents.1777315033.v2
 #> ├── fmzbbiaqaayrcpi
-#> │   ├── events.out.tfevents.1777314647.v2
+#> │   ├── events.out.tfevents.1777315034.v2
 #> │   ├── train
-#> │   │   └── events.out.tfevents.1777314647.v2
+#> │   │   └── events.out.tfevents.1777315034.v2
 #> │   └── valid
-#> │       └── events.out.tfevents.1777314647.v2
+#> │       └── events.out.tfevents.1777315034.v2
 #> ├── gkjhvqltorlvuzj
-#> │   ├── events.out.tfevents.1777314646.v2
+#> │   ├── events.out.tfevents.1777315033.v2
 #> │   ├── train
-#> │   │   └── events.out.tfevents.1777314646.v2
+#> │   │   └── events.out.tfevents.1777315033.v2
 #> │   └── valid
-#> │       └── events.out.tfevents.1777314646.v2
+#> │       └── events.out.tfevents.1777315033.v2
 #> ├── ipjjkurjxbtellw
-#> │   ├── events.out.tfevents.1777314647.v2
+#> │   ├── events.out.tfevents.1777315033.v2
 #> │   ├── train
-#> │   │   └── events.out.tfevents.1777314647.v2
+#> │   │   └── events.out.tfevents.1777315033.v2
 #> │   └── valid
-#> │       └── events.out.tfevents.1777314647.v2
+#> │       └── events.out.tfevents.1777315033.v2
 #> ├── mnwerlwzlgjzrdp
-#> │   ├── events.out.tfevents.1777314647.v2
+#> │   ├── events.out.tfevents.1777315034.v2
 #> │   ├── train
-#> │   │   └── events.out.tfevents.1777314647.v2
+#> │   │   └── events.out.tfevents.1777315034.v2
 #> │   └── valid
-#> │       └── events.out.tfevents.1777314647.v2
+#> │       └── events.out.tfevents.1777315034.v2
 #> ├── mwlefoodfieexom
-#> │   ├── events.out.tfevents.1777314646.v2
+#> │   ├── events.out.tfevents.1777315033.v2
 #> │   ├── train
-#> │   │   └── events.out.tfevents.1777314646.v2
+#> │   │   └── events.out.tfevents.1777315033.v2
 #> │   └── valid
-#> │       └── events.out.tfevents.1777314646.v2
+#> │       └── events.out.tfevents.1777315033.v2
 #> ├── qeoelfyoqaitrxp
-#> │   ├── events.out.tfevents.1777314647.v2
+#> │   ├── events.out.tfevents.1777315034.v2
 #> │   ├── train
-#> │   │   └── events.out.tfevents.1777314647.v2
+#> │   │   └── events.out.tfevents.1777315034.v2
 #> │   └── valid
-#> │       └── events.out.tfevents.1777314647.v2
+#> │       └── events.out.tfevents.1777315034.v2
 #> ├── sijyaxpvjfhcepy
-#> │   ├── events.out.tfevents.1777314647.v2
+#> │   ├── events.out.tfevents.1777315034.v2
 #> │   ├── train
-#> │   │   └── events.out.tfevents.1777314647.v2
+#> │   │   └── events.out.tfevents.1777315034.v2
 #> │   └── valid
-#> │       └── events.out.tfevents.1777314647.v2
+#> │       └── events.out.tfevents.1777315034.v2
 #> ├── snayorehalspkzc
-#> │   ├── events.out.tfevents.1777314646.v2
+#> │   ├── events.out.tfevents.1777315033.v2
 #> │   ├── train
-#> │   │   └── events.out.tfevents.1777314646.v2
+#> │   │   └── events.out.tfevents.1777315033.v2
 #> │   └── valid
-#> │       └── events.out.tfevents.1777314646.v2
+#> │       └── events.out.tfevents.1777315033.v2
 #> ├── weytkovhgshlcph
-#> │   ├── events.out.tfevents.1777314647.v2
+#> │   ├── events.out.tfevents.1777315033.v2
 #> │   ├── train
-#> │   │   └── events.out.tfevents.1777314647.v2
+#> │   │   └── events.out.tfevents.1777315033.v2
 #> │   └── valid
-#> │       └── events.out.tfevents.1777314647.v2
+#> │       └── events.out.tfevents.1777315033.v2
 #> └── yiqlnrsjmqnmkje
-#>     ├── events.out.tfevents.1777314647.v2
+#>     ├── events.out.tfevents.1777315034.v2
 #>     ├── train
-#>     │   └── events.out.tfevents.1777314647.v2
+#>     │   └── events.out.tfevents.1777315034.v2
 #>     └── valid
-#>         └── events.out.tfevents.1777314647.v2
+#>         └── events.out.tfevents.1777315034.v2
 ```
 
 Finally, we can visualize the experiment results in TensorBoard:

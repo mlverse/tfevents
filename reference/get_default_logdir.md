@@ -53,5 +53,5 @@ get_default_logdir()
 with_logdir(temp, {
  print(get_default_logdir())
 })
-#> [1] "/tmp/RtmpBRN7qr/file24da1c28a3aa"
+#> [1] "/tmp/RtmpEWAzcP/file257510c55873"
 ```

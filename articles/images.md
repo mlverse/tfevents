@@ -22,11 +22,11 @@ fashion_mnist <- keras::dataset_fashion_mnist()
 #> Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/train-labels-idx1-ubyte.gz
 #>  8192/29515 [=======>......................] - ETA: 0s29515/29515 [==============================] - 0s 0us/step
 #> Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/train-images-idx3-ubyte.gz
-#>     8192/26421880 [..............................] - ETA: 0s  811008/26421880 [..............................] - ETA: 1s 8044544/26421880 [========>.....................] - ETA: 0s14983168/26421880 [================>.............] - ETA: 0s21995520/26421880 [=======================>......] - ETA: 0s26421880/26421880 [==============================] - 0s 0us/step
+#>     8192/26421880 [..............................] - ETA: 0s 5431296/26421880 [=====>........................] - ETA: 0s16523264/26421880 [=================>............] - ETA: 0s26421880/26421880 [==============================] - 0s 0us/step
 #> Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/t10k-labels-idx1-ubyte.gz
 #> 5148/5148 [==============================] - 0s 0us/step
 #> Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/t10k-images-idx3-ubyte.gz
-#>    8192/4422102 [..............................] - ETA: 0s 753664/4422102 [====>.........................] - ETA: 0s4422102/4422102 [==============================] - 0s 0us/step
+#>    8192/4422102 [..............................] - ETA: 0s4422102/4422102 [==============================] - 0s 0us/step
 train_imgs <- fashion_mnist$train$x[1:5,,]/255
 str(train_imgs)
 #>  num [1:5, 1:28, 1:28] 0 0 0 0 0 0 0 0 0 0 ...

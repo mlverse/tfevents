@@ -1,13 +1,12 @@
 pandoc: 3.1.11
-pkgdown: 2.0.9
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
-  hparams: hparams.html
-  images: images.html
-  read: read.html
-  torch: examples/torch.html
-last_built: 2024-06-27T13:06Z
+  articles/hparams: hparams.html
+  articles/images: images.html
+  articles/read: read.html
+  examples/torch: examples/torch.html
+last_built: 2026-04-27T18:30Z
 urls:
   reference: https://mlverse.github.io/tfevents/reference
   article: https://mlverse.github.io/tfevents/articles
-
